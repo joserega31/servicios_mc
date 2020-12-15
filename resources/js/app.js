@@ -24,7 +24,8 @@ Vue.component('servicio-component', require('./components/ServiciosComponent.vue
 Vue.component('clientes-component', require('./components/ClientesComponent.vue').default);
 Vue.component('supervisores-component', require('./components/SupervisoresComponent.vue').default);
 Vue.component('ingenios-component', require('./components/IngeniosComponent.vue').default);
-
+Vue.component('tarifarios-component', require('./components/TarifariosComponent.vue').default);
+Vue.component('lineasprod-component', require('./components/LineasProdComponent.vue').default);
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application

@@ -43,7 +43,6 @@ class IngeniosController extends Controller
     {
         try{
             $Ingenios = new Ingenios();
-            $Ingenios->id = $request->id;
             $Ingenios->nombre = $request->nombre;
             $Ingenios->save();
             return $Ingenios;
@@ -86,7 +85,6 @@ class IngeniosController extends Controller
     {
         try{
             $Ingenios = Ingenios::findOrFail($id);
-            $Ingenios->id = $request->id;
             $Ingenios->nombre = $request->nombre;
             $Ingenios->update();
         } catch (Exception $ex) {

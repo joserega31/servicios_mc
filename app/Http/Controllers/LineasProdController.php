@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\LineasProducto;
 use Illuminate\Http\Request;
+use Exception;
 
 class LineasProdController extends Controller
 {
@@ -16,7 +18,7 @@ class LineasProdController extends Controller
      */
     public function index()
     {
-        //
+        return LineasProducto::all();
     }
 
     /**
@@ -37,7 +39,14 @@ class LineasProdController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try{
+            $LineasProducto = new LineasProducto();
+            $LineasProducto->nombre = $request->nombre;
+            $LineasProducto->save();
+            return $LineasProducto;
+        } catch (Exception $ex) {
+            return $this->JsonResponseError($ex, 'exception');
+        }
     }
 
     /**
@@ -48,7 +57,8 @@ class LineasProdController extends Controller
      */
     public function show($id)
     {
-        //
+        $LineasProducto = LineasProducto::where('id', $id)->first(); 
+        return $LineasProducto; 
     }
 
     /**
@@ -71,7 +81,13 @@ class LineasProdController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        try{
+            $LineasProducto = LineasProducto::findOrFail($id);
+            $LineasProducto->nombre = $request->nombre;
+            $LineasProducto->update();
+        } catch (Exception $ex) {
+            return $this->JsonResponseError($ex, 'exception');
+        }
     }
 
     /**
@@ -82,6 +98,7 @@ class LineasProdController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $LineasProducto = LineasProducto::find($id);
+        $LineasProducto->delete();
     }
 }

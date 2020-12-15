@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Tarifario;
 use Illuminate\Http\Request;
+use Exception;
 
 class TarifariosController extends Controller
 {
@@ -18,7 +20,7 @@ class TarifariosController extends Controller
      */
     public function index()
     {
-        //
+        return Tarifario::all();
     }
 
     /**
@@ -39,7 +41,17 @@ class TarifariosController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try{
+            $Tarifario = new Tarifario();
+            $Tarifario->lineas_producto_id = $request->lineas_producto_id;
+            $Tarifario->clientes_id = $request->clientes_id;
+            $Tarifario->precio = $request->precio;
+            $Tarifario->unidad = $request->unidad;
+            $Tarifario->save();
+            return $Tarifario;
+        } catch (Exception $ex) {
+            return $this->JsonResponseError($ex, 'exception');
+        }
     }
 
     /**
@@ -73,7 +85,17 @@ class TarifariosController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        try{
+            $Tarifario = Tarifario::findOrFail($id);
+            $Tarifario->lineas_producto_id = $request->lineas_producto_id;
+            $Tarifario->clientes_id = $request->clientes_id;
+            $Tarifario->precio = $request->precio;
+            $Tarifario->unidad = $request->unidad;
+            $Tarifario->update();
+            return $Tarifario;
+        } catch (Exception $ex) {
+            return $this->JsonResponseError($ex, 'exception');
+        }
     }
 
     /**
@@ -84,6 +106,7 @@ class TarifariosController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $Tarifario = Tarifario::find($id);
+        $Tarifario->delete();
     }
 }
