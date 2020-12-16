@@ -22,6 +22,14 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::resource('servicios', 'App\Http\Controllers\ServicioController'::class);
 Route::resource('clientes', 'App\Http\Controllers\ClientesController'::class);
+
+
+
 Route::resource('supervisores', 'App\Http\Controllers\SupervisoresController'::class);
 Route::resource('ingenios', 'App\Http\Controllers\IngeniosController'::class);
 Route::resource('LineasProd', 'App\Http\Controllers\LineasProdController'::class);
+Route::resource('metpagos', 'App\Http\Controllers\MetPagosController'::class);
+Route::resource('estpagos', 'App\Http\Controllers\EstPagosController'::class);
+Route::resource('tiposserv', 'App\Http\Controllers\TiposServController'::class);
+Route::resource('tarifarios', 'App\Http\Controllers\TarifariosController'::class);
+Route::resource('designaciones', 'App\Http\Controllers\DesignacionesController'::class);

@@ -11,4 +11,33 @@
     font-size: 20px;
     color: #5a5c69!important;
 }
-
+.autocomplete {
+    background-color: #ffffff;
+    position: relative;
+    display: inline-block;
+    position: absolute;
+    border: 1px solid #d4d4d4;
+    border-top: none;
+    z-index: 99999;
+    top: 100%;
+    left: 0;
+    right: 0;
+    list-style: none;
+    padding: 0;
+  }
+  .autocomplete > li{
+      padding: 5px;
+      text-decoration: none;
+  }
+  .autocomplete > li:hover{
+      background-color: #e6f1fb;
+  }
+  .autocomplete > li > div{
+      cursor: pointer;
+  }
+.hidden{
+    display: none;
+}
+.mostrar{
+    display: inline-block;
+}

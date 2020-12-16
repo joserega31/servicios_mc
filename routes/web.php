@@ -33,3 +33,4 @@ Route::get('/estpagos', [App\Http\Controllers\EstPagosController::class, 'vistaE
 Route::get('/tiposserv', [App\Http\Controllers\TiposServController::class, 'vistaTserv'])->name('tiposserv');
 Route::get('/designaciones', [App\Http\Controllers\DesignacionesController::class, 'vistaDesig'])->name('designaciones');
 
+Route::get('buscarCliente/{buscar}', ['App\Http\Controllers\ClientesController'::class, 'buscarCliente']);

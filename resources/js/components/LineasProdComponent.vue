@@ -103,7 +103,6 @@ export default {
         if (this.editmodo==false){
             axios.post(`/api/LineasProd/`, this.LineasProducto).then((res) => {
                 this.LineasProductos.push(LineasProducto);
-                this.LineasProducto= { id: 0, nombre: ""};
                 alert('Se ha creado Exitosamente');
             });
         }else{
@@ -111,11 +110,10 @@ export default {
                 .then(res=>{
                 const index = this.LineasProductos.findIndex(item => item.id === LineasProducto.id);
                 this.LineasProducto[index] = res.data;
-                this.editmodo=false;
-                this.LineasProducto= { id: 0, nombre: ""};
                 alert('Se ha actualizado Exitosamente');
             });
         }
+        this.limpiarFormulario();
     },
     eliminar: function(LineasProducto, index){
         const confirmacion = confirm(`Eliminar la linea de producto: ${LineasProducto.nombre}`);
@@ -128,6 +126,7 @@ export default {
         }
     },
     limpiarFormulario: function(){
+        this.editmodo= false;
         this.LineasProducto= { id: 0, nombre: ""};
     }
 

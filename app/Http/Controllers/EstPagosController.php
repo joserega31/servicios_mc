@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\EstadosPago;
 use Illuminate\Http\Request;
+use Exception;
 
 class EstPagosController extends Controller
 {
@@ -17,7 +19,7 @@ class EstPagosController extends Controller
      */
     public function index()
     {
-        //
+        return EstadosPago::all();
     }
 
     /**
@@ -38,7 +40,14 @@ class EstPagosController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try{
+            $EstadosPago = new EstadosPago();
+            $EstadosPago->nombre = $request->nombre;
+            $EstadosPago->save();
+            return $EstadosPago;
+        } catch (Exception $ex) {
+            return $this->JsonResponseError($ex, 'exception');
+        }
     }
 
     /**
@@ -49,7 +58,8 @@ class EstPagosController extends Controller
      */
     public function show($id)
     {
-        //
+        $EstadosPago = EstadosPago::where('id', $id)->first(); 
+        return $EstadosPago; 
     }
 
     /**
@@ -60,7 +70,7 @@ class EstPagosController extends Controller
      */
     public function edit($id)
     {
-        //
+
     }
 
     /**
@@ -72,7 +82,13 @@ class EstPagosController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        try{
+            $EstadosPago = EstadosPago::findOrFail($id);
+            $EstadosPago->nombre = $request->nombre;
+            $EstadosPago->update();
+        } catch (Exception $ex) {
+            return $this->JsonResponseError($ex, 'exception');
+        }
     }
 
     /**
@@ -83,6 +99,7 @@ class EstPagosController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $EstadosPago = EstadosPago::find($id);
+        $EstadosPago->delete();
     }
 }

@@ -104,7 +104,6 @@ export default {
         if (this.editmodo==false){
             axios.post(`/api/ingenios/`, this.ingenio).then((res) => {
                 this.ingenios.push(ingenio);
-                this.ingenio= { id: 0, nombre: ""};
                 alert('Se ha creado Exitosamente');
             });
         }else{
@@ -112,11 +111,10 @@ export default {
                 .then(res=>{
                 const index = this.ingenios.findIndex(item => item.id === ingenio.id);
                 this.ingenio[index] = res.data;
-                this.editmodo=false;
-                this.ingenio= { id: 0, nombre: ""};
                 alert('Se ha actualizado Exitosamente');
             });
         }
+        this.limpiarFormulario();
     },
     eliminar: function(ingenio, index){
         const confirmacion = confirm(`Eliminar el ingenio ${ingenio.nombre}`);
@@ -129,6 +127,7 @@ export default {
         }
     },
     limpiarFormulario: function(){
+        this.editmodo= false;
         this.ingenio= { id: 0, nombre: ""};
     }
 

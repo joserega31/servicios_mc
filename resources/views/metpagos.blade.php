@@ -2,5 +2,6 @@
 
 @section('content')
 
+<metpagos-component></metpagos-component>
 
 @endsection

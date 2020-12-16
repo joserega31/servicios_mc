@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Designacione;
 use Illuminate\Http\Request;
+use Exception;
 
 class DesignacionesController extends Controller
 {
 
-    
-        
+           
     public function vistaDesig(){
         return view('designaciones');
     }
@@ -19,7 +20,7 @@ class DesignacionesController extends Controller
      */
     public function index()
     {
-        //
+        return Designacione::all();
     }
 
     /**
@@ -29,7 +30,7 @@ class DesignacionesController extends Controller
      */
     public function create()
     {
-        //
+
     }
 
     /**
@@ -40,7 +41,17 @@ class DesignacionesController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try{
+            $Designacione = new Designacione();
+            $Designacione->supervisores_id = $request->supervisores_id;
+            $Designacione->ingenios_id = $request->ingenios_id;
+            $Designacione->fecha_inicio = $request->fecha_inicio;
+            $Designacione->fecha_fin = $request->fecha_fin;
+            $Designacione->save();
+            return $Designacione;
+        } catch (Exception $ex) {
+            return $this->JsonResponseError($ex, 'exception');
+        }
     }
 
     /**
@@ -74,7 +85,17 @@ class DesignacionesController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        try{
+            $Designacione = Designacione::findOrFail($id);
+            $Designacione->supervisores_id = $request->supervisores_id;
+            $Designacione->ingenios_id = $request->ingenios_id;
+            $Designacione->fecha_inicio = $request->fecha_inicio;
+            $Designacione->fecha_fin = $request->fecha_fin;
+            $Designacione->update();
+            return $Designacione;
+        } catch (Exception $ex) {
+            return $this->JsonResponseError($ex, 'exception');
+        }
     }
 
     /**
@@ -85,6 +106,7 @@ class DesignacionesController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $Designacione = Designacione::find($id);
+        $Designacione->delete();
     }
 }

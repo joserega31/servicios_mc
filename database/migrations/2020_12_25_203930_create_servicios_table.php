@@ -16,7 +16,7 @@ class CreateServiciosTable extends Migration
         Schema::create('servicios', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('ingenio_id')->unsigned();
-           // $table->foreign('ingenio_id')->references('ingenios')->on('id');
+            $table->foreign('ingenio_id')->references('id')->on('ingenios');
             $table->string('empresa_transporte', 255);
             $table->string('conductor', 45);
             $table->string('placa_unidad', 45);
@@ -42,15 +42,15 @@ class CreateServiciosTable extends Migration
             $table->string('num_factura', 10);
             $table->boolean('operacion_cerrada');
             $table->integer('lineas_productos_id')->unsigned();   
-            //$table->foreign('lineas_productos_id')->references('id')->on('lineas_productos');
+            $table->foreign('lineas_productos_id')->references('id')->on('lineas_productos');
             $table->integer('estados_pago_id')->unsigned();   
-            //$table->foreign('estados_pago_id')->references('id')->on('estados_pagos');
+            $table->foreign('estados_pago_id')->references('id')->on('estados_pagos');
             $table->integer('cliente_id')->unsigned();   
-            //$table->foreign('cliente_id')->references('id')->on('clientes');
+            $table->foreign('cliente_id')->references('id')->on('clientes');
             $table->integer('tipo_servicio_id')->unsigned();   
-            //$table->foreign('tipo_servicio_id')->references('id')->on('tipo_servicios');
+            $table->foreign('tipo_servicio_id')->references('id')->on('tipo_servicios');
             $table->integer('modos_pagos_id')->unsigned(); 
-           // $table->foreign('modos_pagos_id')->references('id')->on('modo_pagos');
+            $table->foreign('modos_pagos_id')->references('id')->on('modo_pagos');
             $table->timestamps();
         });
     }

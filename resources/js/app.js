@@ -26,6 +26,11 @@ Vue.component('supervisores-component', require('./components/SupervisoresCompon
 Vue.component('ingenios-component', require('./components/IngeniosComponent.vue').default);
 Vue.component('tarifarios-component', require('./components/TarifariosComponent.vue').default);
 Vue.component('lineasprod-component', require('./components/LineasProdComponent.vue').default);
+Vue.component('metpagos-component', require('./components/MetpagosComponent.vue').default);
+Vue.component('estpagos-component', require('./components/EstpagosComponent.vue').default);
+Vue.component('tiposserv-component', require('./components/TiposServComponent.vue').default);
+Vue.component('designaciones-component', require('./components/DesignacionesComponent.vue').default);
+
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application

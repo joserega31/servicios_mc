@@ -1,6 +1,6 @@
 <template>
     <div class="container-fluid">
-        <h3 class="text-dark mb-4">Supervisores</h3>
+        <h3 class="text-dark mb-4">Designaciones</h3>
 
         <div class="card shadow">
             <div class="card-body">
@@ -9,16 +9,14 @@
                         <thead>
                             <tr>
                                 <th>Nro</th>
-                                <th>DNI</th>
-                                <th class="text-left">Nombre Apellido</th>
+                                <th class="text-left">Nombre</th>
                                 <th>Acci&oacute;n</th> 
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="(item, index) in supervisores" :key="index">
+                            <tr v-for="(item, index) in designaciones" :key="index">
                                 <td>{{ index + 1 }}</td>
-                                <td>{{ item.dni }}</td>
-                                <td>{{ item.nombres + " " + item.apellidos }}</td>
+                                <td>{{ item.nombre }}</td>
                                 <td>
                                     <button type="button" class="btn btn-warning" title="Editar" @click="editar(index)">
                                         <i class="far fa-edit"></i>
@@ -58,34 +56,29 @@
         
         <div class="card shadow">
             <div class="card-body">
-                    <form @submit.prevent="guardar(supervisor)">
+                    <form @submit.prevent="guardar(designacione)">
                         <div class="form-row">
-                            <div class="form-group col-md-4">
-                                <input type="hidden" class="form-control" id="id" required  v-model="supervisor.id">
-                                <label for="dni">DNI</label>
-                                <input type="text" class="form-control" id="dni" required  v-model="supervisor.dni">
+                            <div class="form-group col-md-6">
+                                <label for="supervisores_id">Supervisores</label>
+                                <select class="form-control" id="supervisores_id" required  v-model="designacione.supervisores_id">
+                                    <option v-for="(item, index) in Supervisores" :key="index" :value="item.id">{{ item.nombres + " " + item.apellidos}}</option>
+                                </select>
                             </div>
-                            <div class="form-group col-md-4">
-                                <label for="nombre">Nombres</label>
-                                <input type="text" class="form-control" id="nombre" required  v-model="supervisor.nombres">
-                            </div>
-                            <div class="form-group col-md-4">
-                                <label for="apellidos">Apellidos</label>
-                                <input type="text" class="form-control" id="apellidos" required  v-model="supervisor.apellidos">
+                            <div class="form-group col-md-6">
+                                <label for="ingenios_id">Ingenios</label>
+                                <select class="form-control" id="ingenios_id" required  v-model="designacione.ingenios_id">
+                                    <option v-for="(item, index) in Ingenios" :key="index" :value="item.id">{{ item.nombre }}</option>
+                                </select>
                             </div>
                         </div>
-                         <div class="form-row">
-                            <div class="form-group col-md-4">
-                                <label for="numcuenta">N&uacute;mero de Cuenta</label>
-                                <input type="text" class="form-control" id="numcuenta" required  v-model="supervisor.numcuenta">
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="fecha_inicio">Fecha Inicio</label>
+                                <input type="date" class="form-control" id="fecha_inicio"  required v-model="designacione.fecha_inicio">
                             </div>
-                            <div class="form-group col-md-4">
-                                <label for="cci">CCI</label>
-                                <input type="text" class="form-control" id="cci" required  v-model="supervisor.cci">
-                            </div>
-                            <div class="form-group col-md-4">
-                                <label for="banco">Banco</label>
-                                <input type="text" class="form-control" id="banco" required  v-model="supervisor.banco">
+                            <div class="form-group col-md-6">
+                                <label for="fecha_fin">Fecha Fin</label>
+                                <input type="date" class="form-control" id="fecha_fin" required  v-model="designacione.fecha_fin">
                             </div>
                         </div>
                         <button type="submit" class="btn btn-primary">Guardar</button>
@@ -101,20 +94,44 @@
 export default {
     data() {
         return {
-            supervisores: [],
-            supervisor: { id: 0, dni: "", nombres: "", apellidos: "", numcuenta: "", cci: "", banco: ""},
+            designaciones: [],
+            designacione: { id: 0, supervisores_id: null, ingenios_id: null, fecha_inicio:null, fecha_fin:null},
+            Supervisores: [],
+            Ingenios: [],
             editmodo:false
         };
     },
     created: function () {
         this.getKeeps();
+        this.cargarSupervisores();
+        this.cargarIngenios();
     },
   methods: {
     getKeeps: function () {
+      var url = "api/designaciones";
+      axios.get(url).then((res) => {
+        if (res.data[0].id){
+          this.designaciones = res.data;
+        }else{
+          console.log("No se encontro registros");
+        }
+      });
+    },
+    cargarSupervisores: function () {
       var url = "api/supervisores";
       axios.get(url).then((res) => {
         if (res.data[0].id){
-          this.supervisores = res.data;
+          this.Supervisores = res.data;
+        }else{
+          console.log("No se encontro registros");
+        }
+      });
+    },
+    cargarIngenios: function () {
+      var url = "api/ingenios";
+      axios.get(url).then((res) => {
+        if (res.data[0].id){
+          this.Ingenios = res.data;
         }else{
           console.log("No se encontro registros");
         }
@@ -122,42 +139,37 @@ export default {
     },
     editar:function(id){
         this.editmodo= true;
-        this.supervisor= this.supervisores[id];
+        this.designacione= this.designaciones[id];
     },
-    guardar: function(supervisor){
-        if (supervisor.dni.length>8){
-            alert('DNI invalido');
+    guardar: function(designacione){
+        if (this.editmodo==false){
+            axios.post(`/api/designaciones/`, this.designacione).then((res) => {
+                this.designaciones.push(designacione);
+                alert('Se ha creado Exitosamente');
+            });
         }else{
-            if (this.editmodo==false){
-                axios.post(`/api/supervisores/`, this.supervisor).then((res) => {
-                    console.log(res.data);
-                    this.supervisores.push(supervisor);
-                    alert('Se ha creado Exitosamente');
-                });
-            }else{
-                axios.put(`/api/supervisores/${this.supervisor.id}`, supervisor)
-                    .then(res=>{
-                    const index = this.supervisores.findIndex(item => item.id === supervisor.id);
-                    this.supervisor[index] = res.data;
-                    alert('Se ha actualizado Exitosamente');
-                });
-            }
-            this.limpiarFormulario();
+            axios.put(`/api/designaciones/${this.designacione.id}`, designacione)
+                .then(res=>{
+                const index = this.designaciones.findIndex(item => item.id === designacione.id);
+                this.designacione[index] = res.data;
+                alert('Se ha actualizado Exitosamente');
+            });
         }
+        this.limpiarFormulario();
     },
-    eliminar: function(supervisor, index){
-        const confirmacion = confirm(`Eliminar el supervisor ${supervisor.nombres + " " + supervisor.apellidos}`);
+    eliminar: function(designacione, index){
+        const confirmacion = confirm(`Eliminar el designacion numero:  ${designacione.id}`);
         if(confirmacion){
-            axios.delete(`/api/supervisores/${supervisor.id}`)
+            axios.delete(`/api/designaciones/${designacione.id}`)
             .then(()=>{
-                this.supervisores.splice(index, 1);
+                this.designaciones.splice(index, 1);
                 alert('Se ha eliminado Exitosamente');
             });
         }
     },
     limpiarFormulario: function(){
         this.editmodo= false;
-        this.supervisor= { id: 0, dni: "", nombres: "", apellidos: "", numcuenta: "", cci: "", banco: ""};
+        this.designacione= { id: 0, supervisores_id: null, ingenios_id: null, fecha_inicio:null, fecha_fin:null}
     }
 
   },

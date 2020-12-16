@@ -8,4 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class Cliente extends Model
 {
     use HasFactory;
+
+    public function tarifarios()
+    {
+        return $this->hasMany(Tarifario::class);
+    }
 }

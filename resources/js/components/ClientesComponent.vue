@@ -110,7 +110,6 @@ export default {
         if (this.editmodo==false){
             axios.post(`/api/clientes/`, this.cliente).then((res) => {
                 this.clientes.push(cliente);
-                this.cliente= { id: 0, ruc: "", razon_social: "" };
                 alert('Se ha creado Exitosamente');
             });
         }else{
@@ -118,11 +117,10 @@ export default {
                 .then(res=>{
                 const index = this.clientes.findIndex(item => item.id === cliente.id);
                 this.cliente[index] = res.data;
-                this.editmodo=false;
-                this.cliente= { id: 0, ruc: "", razon_social: "" };
                 alert('Se ha actualizado Exitosamente');
             });
         }
+        this.limpiarFormulario();
     },
     eliminarCliente: function(cliente, index){
         const confirmacion = confirm(`Eliminar el cliente ${cliente.razon_social}`);
@@ -135,6 +133,7 @@ export default {
         }
     },
     limpiarFormulario: function(){
+        this.editmodo= false;
         this.cliente= { id: 0, ruc: "", razon_social: "" };
     }
 

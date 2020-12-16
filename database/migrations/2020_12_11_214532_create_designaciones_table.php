@@ -15,8 +15,10 @@ class CreateDesignacionesTable extends Migration
     {
         Schema::create('designaciones', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('supervisores_id');
-            $table->integer('ingenios_id');
+            $table->integer('supervisores_id')->unsigned();
+            $table->foreign('supervisores_id')->references('id')->on('supervisores');
+            $table->integer('ingenios_id')->unsigned();
+            $table->foreign('ingenios_id')->references('id')->on('ingenios');
             $table->date('fecha_inicio');
             $table->date('fecha_fin');
             $table->timestamps();

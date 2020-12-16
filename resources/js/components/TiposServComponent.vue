@@ -1,7 +1,6 @@
 <template>
     <div class="container-fluid">
-        <h3 class="text-dark mb-4">Supervisores</h3>
-
+        <h3 class="text-dark mb-4">Tipos de Servicios</h3>
         <div class="card shadow">
             <div class="card-body">
                 <div class="table-responsive table mt-2" id="dataTable" role="grid" aria-describedby="dataTable_info">
@@ -9,16 +8,14 @@
                         <thead>
                             <tr>
                                 <th>Nro</th>
-                                <th>DNI</th>
-                                <th class="text-left">Nombre Apellido</th>
+                                <th class="text-left">Nombre</th>
                                 <th>Acci&oacute;n</th> 
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="(item, index) in supervisores" :key="index">
+                            <tr v-for="(item, index) in TipoServicios" :key="index">
                                 <td>{{ index + 1 }}</td>
-                                <td>{{ item.dni }}</td>
-                                <td>{{ item.nombres + " " + item.apellidos }}</td>
+                                <td>{{ item.nombre }}</td>
                                 <td>
                                     <button type="button" class="btn btn-warning" title="Editar" @click="editar(index)">
                                         <i class="far fa-edit"></i>
@@ -58,34 +55,12 @@
         
         <div class="card shadow">
             <div class="card-body">
-                    <form @submit.prevent="guardar(supervisor)">
+                    <form @submit.prevent="guardar(TipoServicio)">
                         <div class="form-row">
-                            <div class="form-group col-md-4">
-                                <input type="hidden" class="form-control" id="id" required  v-model="supervisor.id">
-                                <label for="dni">DNI</label>
-                                <input type="text" class="form-control" id="dni" required  v-model="supervisor.dni">
-                            </div>
-                            <div class="form-group col-md-4">
+                            <div class="form-group col-md-12">
+                                <input type="hidden" class="form-control" id="id" required  v-model="TipoServicio.id">
                                 <label for="nombre">Nombres</label>
-                                <input type="text" class="form-control" id="nombre" required  v-model="supervisor.nombres">
-                            </div>
-                            <div class="form-group col-md-4">
-                                <label for="apellidos">Apellidos</label>
-                                <input type="text" class="form-control" id="apellidos" required  v-model="supervisor.apellidos">
-                            </div>
-                        </div>
-                         <div class="form-row">
-                            <div class="form-group col-md-4">
-                                <label for="numcuenta">N&uacute;mero de Cuenta</label>
-                                <input type="text" class="form-control" id="numcuenta" required  v-model="supervisor.numcuenta">
-                            </div>
-                            <div class="form-group col-md-4">
-                                <label for="cci">CCI</label>
-                                <input type="text" class="form-control" id="cci" required  v-model="supervisor.cci">
-                            </div>
-                            <div class="form-group col-md-4">
-                                <label for="banco">Banco</label>
-                                <input type="text" class="form-control" id="banco" required  v-model="supervisor.banco">
+                                <input type="text" class="form-control" id="nombre" required  v-model="TipoServicio.nombre">
                             </div>
                         </div>
                         <button type="submit" class="btn btn-primary">Guardar</button>
@@ -101,8 +76,8 @@
 export default {
     data() {
         return {
-            supervisores: [],
-            supervisor: { id: 0, dni: "", nombres: "", apellidos: "", numcuenta: "", cci: "", banco: ""},
+            TipoServicios: [],
+            TipoServicio: { id: 0, nombre: ""},
             editmodo:false
         };
     },
@@ -111,10 +86,10 @@ export default {
     },
   methods: {
     getKeeps: function () {
-      var url = "api/supervisores";
+      var url = "api/tiposserv";
       axios.get(url).then((res) => {
         if (res.data[0].id){
-          this.supervisores = res.data;
+          this.TipoServicios = res.data;
         }else{
           console.log("No se encontro registros");
         }
@@ -122,42 +97,38 @@ export default {
     },
     editar:function(id){
         this.editmodo= true;
-        this.supervisor= this.supervisores[id];
+        this.TipoServicio= this.TipoServicios[id];
     },
-    guardar: function(supervisor){
-        if (supervisor.dni.length>8){
-            alert('DNI invalido');
+    guardar: function(TipoServicio){
+        if (this.editmodo==false){
+            axios.post(`/api/tiposserv/`, this.TipoServicio).then((res) => {
+                this.TipoServicios.push(TipoServicio);
+                alert('Se ha creado Exitosamente');
+            });
         }else{
-            if (this.editmodo==false){
-                axios.post(`/api/supervisores/`, this.supervisor).then((res) => {
-                    console.log(res.data);
-                    this.supervisores.push(supervisor);
-                    alert('Se ha creado Exitosamente');
-                });
-            }else{
-                axios.put(`/api/supervisores/${this.supervisor.id}`, supervisor)
-                    .then(res=>{
-                    const index = this.supervisores.findIndex(item => item.id === supervisor.id);
-                    this.supervisor[index] = res.data;
-                    alert('Se ha actualizado Exitosamente');
-                });
-            }
-            this.limpiarFormulario();
+            axios.put(`/api/tiposserv/${this.TipoServicio.id}`, TipoServicio)
+                .then(res=>{
+                const index = this.TipoServicios.findIndex(item => item.id === TipoServicio.id);
+                this.TipoServicio[index] = res.data;
+                this.editmodo=false;
+                alert('Se ha actualizado Exitosamente');
+            });
         }
+        this.limpiarFormulario();
     },
-    eliminar: function(supervisor, index){
-        const confirmacion = confirm(`Eliminar el supervisor ${supervisor.nombres + " " + supervisor.apellidos}`);
+    eliminar: function(TipoServicio, index){
+        const confirmacion = confirm(`Eliminar el estado de pago: ${TipoServicio.nombre}`);
         if(confirmacion){
-            axios.delete(`/api/supervisores/${supervisor.id}`)
+            axios.delete(`/api/tiposserv/${TipoServicio.id}`)
             .then(()=>{
-                this.supervisores.splice(index, 1);
+                this.TipoServicios.splice(index, 1);
                 alert('Se ha eliminado Exitosamente');
             });
         }
     },
     limpiarFormulario: function(){
         this.editmodo= false;
-        this.supervisor= { id: 0, dni: "", nombres: "", apellidos: "", numcuenta: "", cci: "", banco: ""};
+        this.TipoServicio= { id: 0, nombre: ""};
     }
 
   },

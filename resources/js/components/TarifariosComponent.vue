@@ -61,7 +61,18 @@
                             <div class="form-group col-md-6">
                                 <input type="hidden" class="form-control" id="id" required  v-model="tarifario.id">
                                 <label for="cliente">Cliente</label>
-                                <input type="text" class="form-control" id="cliente" required  v-model="tarifario.clientes_id">
+                                <div class="input-group">
+                                    <input class="bg-light form-control small"  id="cliente" type="text" v-model="buscliente" @change="limpiarBusqueda()">
+                                    <ul id="lstbuscarcliente" class="autocomplete" :class="ocultar">
+                                        <li v-for="(item, index) in Clientes" :key="index" :value="item.id" @click="cargarIdClientes(item.id, item.razon_social)">{{ item.razon_social }}</li>
+                                    </ul>
+                                    <div class="input-group-append">
+                                        <button class="btn btn-primary py-0" type="button" @click="cargarClientes()">
+                                            <i class="fas fa-search" ></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <input type="hidden" class="form-control" id="clientes_id" required  v-model="tarifario.clientes_id">
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="lineas_producto_id">Lineas de Productos</label>
@@ -96,6 +107,9 @@ export default {
             tarifarios: [],
             tarifario: { id: 0, lineas_producto_id: null, clientes_id: null, precio:0, unidad:1},
             LineasProductos: [],
+            Clientes:[],
+            buscliente:"",
+            ocultar:"hidden",
             editmodo:false
         };
     },
@@ -107,6 +121,7 @@ export default {
     getKeeps: function () {
       var url = "api/tarifarios";
       axios.get(url).then((res) => {
+          console.log(res.data);
         if (res.data[0].id){
           this.tarifarios = res.data;
         }else{
@@ -124,15 +139,33 @@ export default {
         }
       });
     },
+    cargarClientes: function () {
+      axios.get(`api/buscarcliente/${this.buscliente}`, '0').then((res) => {
+        if (res.data[0].id){
+          this.Clientes = res.data;
+          this.ocultar= "mostrar";
+        }else{
+          console.log("No se encontro registros");
+        }
+      });
+    },
+    cargarIdClientes: function (id, cliente) {
+        this.tarifario.clientes_id= id;
+        this.buscliente= cliente;
+        this.ocultar= "hidden";
+    },
+    limpiarBusqueda: function () {
+        this.ocultar= "hidden";
+    },
     editar:function(id){
         this.editmodo= true;
         this.tarifario= this.tarifarios[id];
     },
     guardar: function(tarifario){
+        console.log(tarifario);
         if (this.editmodo==false){
             axios.post(`/api/tarifarios/`, this.tarifario).then((res) => {
                 this.tarifarios.push(tarifario);
-                this.tarifario= { id: 0, nombre: ""};
                 alert('Se ha creado Exitosamente');
             });
         }else{
@@ -140,11 +173,10 @@ export default {
                 .then(res=>{
                 const index = this.tarifarios.findIndex(item => item.id === tarifario.id);
                 this.tarifario[index] = res.data;
-                this.editmodo=false;
-                this.tarifario= { id: 0, nombre: ""};
                 alert('Se ha actualizado Exitosamente');
             });
         }
+        this.limpiarFormulario();
     },
     eliminar: function(tarifario, index){
         const confirmacion = confirm(`Eliminar el tarifario ${tarifario.nombre}`);
@@ -157,7 +189,10 @@ export default {
         }
     },
     limpiarFormulario: function(){
-        this.tarifario= { id: 0, nombre: ""};
+        this.editmodo= false;
+        this.buscliente="";
+        this.ocultar="hidden";
+        this.tarifario= { id: 0, lineas_producto_id: null, clientes_id: null, precio:0, unidad:1};
     }
 
   },

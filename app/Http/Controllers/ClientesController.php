@@ -58,12 +58,12 @@ class ClientesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+
+    public function show($buscar)
     {
-        $Cliente = Cliente::where('id', $id)->first(); 
+        $Cliente = Cliente::where('razon_social', 'like', '%' . $buscar . '%')->get(); 
         return $Cliente; 
     }
-
     /**
      * Show the form for editing the specified resource.
      *

@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ModoPago;
 use Illuminate\Http\Request;
+use Exception;
 
 class MetPagosController extends Controller
 {
@@ -17,7 +19,7 @@ class MetPagosController extends Controller
      */
     public function index()
     {
-        //
+        return ModoPago::all();
     }
 
     /**
@@ -38,7 +40,14 @@ class MetPagosController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try{
+            $ModoPago = new ModoPago();
+            $ModoPago->nombre = $request->nombre;
+            $ModoPago->save();
+            return $ModoPago;
+        } catch (Exception $ex) {
+            return $this->JsonResponseError($ex, 'exception');
+        }
     }
 
     /**
@@ -49,7 +58,8 @@ class MetPagosController extends Controller
      */
     public function show($id)
     {
-        //
+        $ModoPago = ModoPago::where('id', $id)->first(); 
+        return $ModoPago; 
     }
 
     /**
@@ -72,7 +82,13 @@ class MetPagosController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        try{
+            $ModoPago = ModoPago::findOrFail($id);
+            $ModoPago->nombre = $request->nombre;
+            $ModoPago->update();
+        } catch (Exception $ex) {
+            return $this->JsonResponseError($ex, 'exception');
+        }
     }
 
     /**
@@ -83,6 +99,7 @@ class MetPagosController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $ModoPago = ModoPago::find($id);
+        $ModoPago->delete();
     }
 }

@@ -47,6 +47,9 @@
                         <li class="nav-item" role="presentation"><a class="nav-link" href="{{ route('maestros') }}">
                             <i class="fa fa-user"></i><span>Maestros</span></a>
                         </li>
+                        <li class="nav-item" role="presentation"><a class="nav-link" href="">
+                            <i class="fa fa-file"></i><span>Reportes</span></a>
+                        </li>
                     </ul>
                     <div class="text-center d-none d-md-inline"><button class="btn rounded-circle border-0" id="sidebarToggle" type="button"></button></div>
                 </div>

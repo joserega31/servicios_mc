@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Cliente;
 use App\Models\Tarifario;
 use Illuminate\Http\Request;
 use Exception;
@@ -61,8 +62,15 @@ class TarifariosController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show($id)
-    {
-        //
+    {   
+        $Tarifario = Tarifario::where('id',$id)->first();    
+        $cliente = Cliente::where('id','=',$Tarifario->clientes_id)->get();
+
+        $data =[
+            'Tarifario'=>$Tarifario,
+            'cliente'=>$cliente
+        ];
+        return $data;
     }
 
     /**
