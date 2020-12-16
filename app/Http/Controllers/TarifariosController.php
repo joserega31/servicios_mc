@@ -6,6 +6,7 @@ use App\Models\Cliente;
 use App\Models\Tarifario;
 use Illuminate\Http\Request;
 use Exception;
+use Illuminate\Support\Facades\DB;
 
 class TarifariosController extends Controller
 {
@@ -21,7 +22,9 @@ class TarifariosController extends Controller
      */
     public function index()
     {
-        return Tarifario::all();
+       // $Tarifario= Tarifario::all();
+       $Tarifario= DB::select('select t.*, c.razon_social as cliente, lp.nombre as linea_prod from (tarifarios as t INNER JOIN clientes AS c ON t.clientes_id=c.id) INNER JOIN lineas_productos lp ON lp.id=t.lineas_producto_id');
+        return $Tarifario;
     }
 
     /**

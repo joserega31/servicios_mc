@@ -9,14 +9,16 @@
                         <thead>
                             <tr>
                                 <th>Nro</th>
-                                <th class="text-left">Nombre</th>
+                                <th class="text-left">Cliente</th>
+                                <th class="text-left">Linea de Producto </th>
                                 <th>Acci&oacute;n</th> 
                             </tr>
                         </thead>
                         <tbody>
                             <tr v-for="(item, index) in tarifarios" :key="index">
                                 <td>{{ index + 1 }}</td>
-                                <td>{{ item.nombre }}</td>
+                                <td>{{ item.cliente }}</td>
+                                <td>{{ item.linea_prod }}</td>
                                 <td>
                                     <button type="button" class="btn btn-warning" title="Editar" @click="editar(index)">
                                         <i class="far fa-edit"></i>
@@ -62,7 +64,7 @@
                                 <input type="hidden" class="form-control" id="id" required  v-model="tarifario.id">
                                 <label for="cliente">Cliente</label>
                                 <div class="input-group">
-                                    <input class="bg-light form-control small"  id="cliente" type="text" v-model="buscliente" @change="limpiarBusqueda()">
+                                    <input class="bg-light form-control small"  id="cliente" type="text" v-model="tarifario.cliente" @change="limpiarBusqueda()">
                                     <ul id="lstbuscarcliente" class="autocomplete" :class="ocultar">
                                         <li v-for="(item, index) in Clientes" :key="index" :value="item.id" @click="cargarIdClientes(item.id, item.razon_social)">{{ item.razon_social }}</li>
                                     </ul>
@@ -75,7 +77,7 @@
                                 <input type="hidden" class="form-control" id="clientes_id" required  v-model="tarifario.clientes_id">
                             </div>
                             <div class="form-group col-md-6">
-                                <label for="lineas_producto_id">Lineas de Productos</label>
+                                <label for="lineas_producto_id">Linea de Producto</label>
                                 <select class="form-control" id="lineas_producto_id" required  v-model="tarifario.lineas_producto_id">
                                     <option v-for="(item, index) in LineasProductos" :key="index" :value="item.id">{{ item.nombre}}</option>
                                 </select>
@@ -84,7 +86,7 @@
                         <div class="form-row">
                             <div class="form-group col-md-6">
                                 <label for="precio">Precio</label>
-                               <input type="number" class="form-control" id="precio" step="0.1" min="1" value="0.00" required>
+                               <input type="number" class="form-control" id="precio" step="0.1" min="1" value="0.00" required v-model="tarifario.precio">
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="unidad">Unidad</label>
@@ -105,7 +107,7 @@ export default {
     data() {
         return {
             tarifarios: [],
-            tarifario: { id: 0, lineas_producto_id: null, clientes_id: null, precio:0, unidad:1},
+            tarifario: { id: 0, lineas_producto_id: null, clientes_id: null, precio:0, unidad:1, cliente:""},
             LineasProductos: [],
             Clientes:[],
             buscliente:"",
@@ -124,6 +126,7 @@ export default {
           console.log(res.data);
         if (res.data[0].id){
           this.tarifarios = res.data;
+          this.buscliente= res.data.razon_social;
         }else{
           console.log("No se encontro registros");
         }
@@ -140,7 +143,7 @@ export default {
       });
     },
     cargarClientes: function () {
-      axios.get(`api/buscarcliente/${this.buscliente}`, '0').then((res) => {
+      axios.get(`api/clientes/${this.tarifario.cliente}`, '0').then((res) => {
         if (res.data[0].id){
           this.Clientes = res.data;
           this.ocultar= "mostrar";
@@ -151,7 +154,7 @@ export default {
     },
     cargarIdClientes: function (id, cliente) {
         this.tarifario.clientes_id= id;
-        this.buscliente= cliente;
+        this.tarifario.cliente= cliente;
         this.ocultar= "hidden";
     },
     limpiarBusqueda: function () {

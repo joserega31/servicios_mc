@@ -3471,6 +3471,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -3480,7 +3482,8 @@ __webpack_require__.r(__webpack_exports__);
         lineas_producto_id: null,
         clientes_id: null,
         precio: 0,
-        unidad: 1
+        unidad: 1,
+        cliente: ""
       },
       LineasProductos: [],
       Clientes: [],
@@ -3503,6 +3506,7 @@ __webpack_require__.r(__webpack_exports__);
 
         if (res.data[0].id) {
           _this.tarifarios = res.data;
+          _this.buscliente = res.data.razon_social;
         } else {
           console.log("No se encontro registros");
         }
@@ -3523,7 +3527,7 @@ __webpack_require__.r(__webpack_exports__);
     cargarClientes: function cargarClientes() {
       var _this3 = this;
 
-      axios.get("api/buscarcliente/".concat(this.buscliente), '0').then(function (res) {
+      axios.get("api/clientes/".concat(this.tarifario.cliente), '0').then(function (res) {
         if (res.data[0].id) {
           _this3.Clientes = res.data;
           _this3.ocultar = "mostrar";
@@ -3534,7 +3538,7 @@ __webpack_require__.r(__webpack_exports__);
     },
     cargarIdClientes: function cargarIdClientes(id, cliente) {
       this.tarifario.clientes_id = id;
-      this.buscliente = cliente;
+      this.tarifario.cliente = cliente;
       this.ocultar = "hidden";
     },
     limpiarBusqueda: function limpiarBusqueda() {
@@ -42258,7 +42262,9 @@ var render = function() {
                     return _c("tr", { key: index }, [
                       _c("td", [_vm._v(_vm._s(index + 1))]),
                       _vm._v(" "),
-                      _c("td", [_vm._v(_vm._s(item.nombre))]),
+                      _c("td", [_vm._v(_vm._s(item.cliente))]),
+                      _vm._v(" "),
+                      _c("td", [_vm._v(_vm._s(item.linea_prod))]),
                       _vm._v(" "),
                       _c("td", [
                         _c(
@@ -42353,13 +42359,13 @@ var render = function() {
                       {
                         name: "model",
                         rawName: "v-model",
-                        value: _vm.buscliente,
-                        expression: "buscliente"
+                        value: _vm.tarifario.cliente,
+                        expression: "tarifario.cliente"
                       }
                     ],
                     staticClass: "bg-light form-control small",
                     attrs: { id: "cliente", type: "text" },
-                    domProps: { value: _vm.buscliente },
+                    domProps: { value: _vm.tarifario.cliente },
                     on: {
                       change: function($event) {
                         return _vm.limpiarBusqueda()
@@ -42368,7 +42374,7 @@ var render = function() {
                         if ($event.target.composing) {
                           return
                         }
-                        _vm.buscliente = $event.target.value
+                        _vm.$set(_vm.tarifario, "cliente", $event.target.value)
                       }
                     }
                   }),
@@ -42447,7 +42453,7 @@ var render = function() {
               _vm._v(" "),
               _c("div", { staticClass: "form-group col-md-6" }, [
                 _c("label", { attrs: { for: "lineas_producto_id" } }, [
-                  _vm._v("Lineas de Productos")
+                  _vm._v("Linea de Producto")
                 ]),
                 _vm._v(" "),
                 _c(
@@ -42496,7 +42502,38 @@ var render = function() {
             ]),
             _vm._v(" "),
             _c("div", { staticClass: "form-row" }, [
-              _vm._m(3),
+              _c("div", { staticClass: "form-group col-md-6" }, [
+                _c("label", { attrs: { for: "precio" } }, [_vm._v("Precio")]),
+                _vm._v(" "),
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.tarifario.precio,
+                      expression: "tarifario.precio"
+                    }
+                  ],
+                  staticClass: "form-control",
+                  attrs: {
+                    type: "number",
+                    id: "precio",
+                    step: "0.1",
+                    min: "1",
+                    value: "0.00",
+                    required: ""
+                  },
+                  domProps: { value: _vm.tarifario.precio },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.$set(_vm.tarifario, "precio", $event.target.value)
+                    }
+                  }
+                })
+              ]),
               _vm._v(" "),
               _c("div", { staticClass: "form-group col-md-6" }, [
                 _c("label", { attrs: { for: "unidad" } }, [_vm._v("Unidad")]),
@@ -42567,7 +42604,9 @@ var staticRenderFns = [
       _c("tr", [
         _c("th", [_vm._v("Nro")]),
         _vm._v(" "),
-        _c("th", { staticClass: "text-left" }, [_vm._v("Nombre")]),
+        _c("th", { staticClass: "text-left" }, [_vm._v("Cliente")]),
+        _vm._v(" "),
+        _c("th", { staticClass: "text-left" }, [_vm._v("Linea de Producto ")]),
         _vm._v(" "),
         _c("th", [_vm._v("Acción")])
       ])
@@ -42651,26 +42690,6 @@ var staticRenderFns = [
           ]
         )
       ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "form-group col-md-6" }, [
-      _c("label", { attrs: { for: "precio" } }, [_vm._v("Precio")]),
-      _vm._v(" "),
-      _c("input", {
-        staticClass: "form-control",
-        attrs: {
-          type: "number",
-          id: "precio",
-          step: "0.1",
-          min: "1",
-          value: "0.00",
-          required: ""
-        }
-      })
     ])
   }
 ]
