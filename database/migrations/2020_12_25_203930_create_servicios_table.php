@@ -36,10 +36,10 @@ class CreateServiciosTable extends Migration
             $table->double('utilidad');
             $table->double('igv');
             $table->date('fecha_servicio');
-            $table->date('fecha_pago');
-            $table->date('fecha_liquidacion');
+            $table->date('fecha_pago')->nullable();
+            $table->date('fecha_liquidacion')->nullable();
             $table->boolean('fecturado');
-            $table->string('num_factura', 10);
+            $table->string('num_factura', 10)->nullable();
             $table->boolean('operacion_cerrada');
             $table->integer('lineas_productos_id')->unsigned();   
             $table->foreign('lineas_productos_id')->references('id')->on('lineas_productos');

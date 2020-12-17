@@ -43,7 +43,7 @@ class ServicioController extends Controller
     {
         try{
             $servicio = new Servicio();
-            $servicio->ingenieros_id = $request->ingenieros_id;
+            $servicio->ingenio_id = $request->ingenio_id;
             $servicio->empresa_transporte = $request->empresa_transporte;
             $servicio->conductor = $request->conductor;
             $servicio->placa_unidad = $request->placa_unidad;
@@ -51,7 +51,7 @@ class ServicioController extends Controller
             $servicio->guia_transportista = $request->guia_transportista;
             $servicio->almacen = $request->almacen;
             $servicio->cantidad = $request->cantidad;
-            $servicio->unidaad = $request->unidaad;
+            $servicio->unidad = $request->unidad;
             $servicio->costo_unitario_estiba = $request->costo_unitario_estiba;
             $servicio->costo_operativo_extra_estiba = $request->costo_operativo_extra_estiba;
             $servicio->costo_flat_estiba = $request->costo_flat_estiba;
@@ -60,7 +60,20 @@ class ServicioController extends Controller
             $servicio->precio_extra_estiba = $request->precio_extra_estiba;
             $servicio->precio_servicio = $request->precio_servicio;
             $servicio->precio_total_servicio = $request->precio_total_servicio;
-            $servicio->update();
+            $servicio->utilidad = $request->utilidad;
+            $servicio->igv = $request->igv;
+            $servicio->fecha_servicio = $request->fecha_servicio;
+            $servicio->fecha_pago = $request->fecha_pago;
+            $servicio->fecha_liquidacion = $request->fecha_liquidacion;
+            $servicio->fecturado = $request->fecturado;
+            $servicio->num_factura = $request->num_factura;
+            $servicio->operacion_cerrada = $request->operacion_cerrada;
+            $servicio->lineas_productos_id = $request->lineas_productos_id;
+            $servicio->estados_pago_id = $request->estados_pago_id;
+            $servicio->cliente_id = $request->cliente_id;
+            $servicio->tipo_servicio_id = $request->tipo_servicio_id;
+            $servicio->modos_pagos_id = $request->modos_pagos_id;
+            $servicio->save();
             return $servicio;
         } catch (Exception $ex) {
             return $this->JsonResponseError($ex, 'exception');
@@ -101,7 +114,7 @@ class ServicioController extends Controller
     {
         try{
             $servicio = Servicio::findOrFail($id);
-            $servicio->ingenieros_id = $request->ingenieros_id;
+            $servicio->ingenio_id = $request->ingenio_id;
             $servicio->empresa_transporte = $request->empresa_transporte;
             $servicio->conductor = $request->conductor;
             $servicio->placa_unidad = $request->placa_unidad;
@@ -109,7 +122,7 @@ class ServicioController extends Controller
             $servicio->guia_transportista = $request->guia_transportista;
             $servicio->almacen = $request->almacen;
             $servicio->cantidad = $request->cantidad;
-            $servicio->unidaad = $request->unidaad;
+            $servicio->unidad = $request->unidad;
             $servicio->costo_unitario_estiba = $request->costo_unitario_estiba;
             $servicio->costo_operativo_extra_estiba = $request->costo_operativo_extra_estiba;
             $servicio->costo_flat_estiba = $request->costo_flat_estiba;
@@ -118,6 +131,19 @@ class ServicioController extends Controller
             $servicio->precio_extra_estiba = $request->precio_extra_estiba;
             $servicio->precio_servicio = $request->precio_servicio;
             $servicio->precio_total_servicio = $request->precio_total_servicio;
+            $servicio->utilidad = $request->utilidad;
+            $servicio->igv = $request->igv;
+            $servicio->fecha_servicio = $request->fecha_servicio;
+            $servicio->fecha_pago = $request->fecha_pago;
+            $servicio->fecha_liquidacion = $request->fecha_liquidacion;
+            $servicio->fecturado = $request->fecturado;
+            $servicio->num_factura = $request->num_factura;
+            $servicio->operacion_cerrada = $request->operacion_cerrada;
+            $servicio->lineas_productos_id = $request->lineas_productos_id;
+            $servicio->estados_pago_id = $request->estados_pago_id;
+            $servicio->cliente_id = $request->cliente_id;
+            $servicio->tipo_servicio_id = $request->tipo_servicio_id;
+            $servicio->modos_pagos_id = $request->modos_pagos_id;
             $servicio->update();
             return $servicio;
         } catch (Exception $ex) {
@@ -133,7 +159,7 @@ class ServicioController extends Controller
      */
     public function destroy($id)
     {
-        Servicio::find($id)->delete();
-        return redirect()->route('servicio')->with('success','Registro eliminado satisfactoriamente');
+        $Servicio = Servicio::find($id);
+        $Servicio->delete();
     }
 }

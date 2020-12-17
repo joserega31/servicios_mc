@@ -57,13 +57,18 @@
     
     <div class="card shadow">
         <div class="card-body">
-                <form>
+                <form @submit.prevent="guardar(Servicio)">
                     <div class="form-row">
                         <div class="form-group col-md-4">
-                            <input type="hidden" class="form-control" id="modo" name="modo" value="N">
+                            <label for="cliente">Cliente</label>
+                            <div class="input-group">
+                                <input type="date" class="form-control" id="fecha_servicio" v-model="Servicio.fecha_servicio" >
+                            </div> 
+                        </div>
+                        <div class="form-group col-md-4">
                                 <label for="cliente">Cliente</label>
                                 <div class="input-group">
-                                    <input class="bg-light form-control small"  id="cliente" type="text" v-model="Servicio.cliente" @change="limpiarBusqueda()">
+                                    <input class="bg-light form-control small"  id="cliente" type="text" v-model="Servicio.cliente" @change="limpiarBusqueda()" autocomplete="off">
                                     <ul id="lstbuscarcliente" class="autocomplete" :class="ocultar">
                                         <li v-for="(item, index) in Clientes" :key="index" :value="item.id" @click="cargarIdClientes(item.id, item.razon_social)">{{ item.razon_social }}</li>
                                     </ul>
@@ -73,18 +78,18 @@
                                         </button>
                                     </div>
                                 </div>
-                                <input type="hidden" class="form-control" id="clientes_id" required  v-model="Servicio.clientes_id">
+                                <input type="hidden" class="form-control" id="clientes_id" required  v-model="Servicio.cliente_id">
                         </div>
                         <div class="form-group col-md-4">
                             <label for="empresa_transporte">Empresa de Transporte</label>
                             <input type="text" class="form-control" id="empresa_transporte" required  v-model="Servicio.empresa_transporte">
                         </div>
+                    </div>
+                    <div class="form-row">
                         <div class="form-group col-md-4">
                             <label for="conductor">Conductor</label>
                             <input type="text" class="form-control" id="conductor" required  v-model="Servicio.conductor">
                         </div>
-                    </div>
-                    <div class="form-row">
                         <div class="form-group col-md-4">
                             <label for="placa_unidad">Placa Unidad</label>
                             <input type="text" class="form-control" id="placa_unidad" required  v-model="Servicio.placa_unidad">
@@ -93,12 +98,12 @@
                             <label for="placa_carretera">Placa Carretera</label>
                             <input type="text" class="form-control" id="placa_carretera" required  v-model="Servicio.placa_carretera">
                         </div>
+                    </div>
+                    <div class="form-row">
                         <div class="form-group col-md-4">
                             <label for="guia">Gu&iacute;a Transport&iacute;sta</label>
                             <input type="text" class="form-control" id="guia" required  v-model="Servicio.guia_transportista">
                         </div>
-                    </div>
-                    <div class="form-row">
                         <div class="form-group col-md-4">
                             <label for="almacen">Almacen</label>
                             <input type="text" class="form-control" id="almacen" required v-model="Servicio.almacen">
@@ -107,18 +112,26 @@
                             <label for="cantidad">Cantidad</label>
                             <input type="number" class="form-control" id="cantidad" step="1" min="1" value="1" required v-model="Servicio.cantidad">
                         </div>
+                    </div>
+                    <div class="form-row">
                         <div class="form-group col-md-4">
                             <label for="unidad">Unidad</label>
                             <input type="text" class="form-control" id="unidad" required v-model="Servicio.unidad">
                         </div>
-                    </div>
-                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <label for="ingenio_id">Ingenios</label>
+                            <select class="form-control" id="ingenio_id" required  v-model="Servicio.ingenio_id">
+                                <option v-for="(item, index) in Ingenios" :key="index" :value="item.id">{{ item.nombre}}</option>
+                            </select>
+                        </div>
                         <div class="form-group col-md-4">
                             <label for="lineas_productos_id">Linea de Producto</label>
                             <select class="form-control" id="lineas_producto_id" required  v-model="Servicio.lineas_productos_id">
                                 <option v-for="(item, index) in LineasProductos" :key="index" :value="item.id">{{ item.nombre}}</option>
                             </select>
                         </div>
+                    </div>
+                    <div class="form-row">
                         <div class="form-group col-md-4">
                             <label for="tipo_servicio_id">Tipo de Servicio</label>
                             <select class="form-control" id="tipo_servicio_id" required  v-model="Servicio.tipo_servicio_id">
@@ -131,14 +144,14 @@
                                 <option v-for="(item, index) in EstadosPago" :key="index" :value="item.id">{{ item.nombre}}</option>
                             </select>
                         </div>
-                    </div>
-                    <div class="form-row">
                         <div class="form-group col-md-4">
                             <label for="modos_pagos_id">Modo de Pago</label>
                             <select class="form-control" id="modos_pagos_id" required  v-model="Servicio.modos_pagos_id">
                                 <option v-for="(item, index) in ModosPago" :key="index" :value="item.id">{{ item.nombre}}</option>
                             </select>
                         </div>
+                    </div>
+                    <div class="form-row">
                         <div class="form-group col-md-4">
                             <label for="costo_uni_est">Costo Unitario Estiba</label>
                             <input type="number" class="form-control" id="costo_uni_est" step="0.1" min="1" value="0.00" required v-model="Servicio.costo_unitario_estiba">
@@ -147,12 +160,12 @@
                             <label for="costo_opeext_est">Costo Operativo Extra Estiba</label>
                             <input type="number" class="form-control" id="costo_opeext_est" step="0.1" min="1" value="0.00" required v-model="Servicio.costo_operativo_extra_estiba">
                         </div>
-                    </div>
-                    <div class="form-row">
                         <div class="form-group col-md-4">
                             <label for="costo_extr_est">Costo Extra Estiba</label>
                             <input type="number" class="form-control" id="costo_extr_est" step="0.1" min="1" value="0.00" required v-model="Servicio.costo_extra_estiba">
                         </div>
+                    </div>
+                    <div class="form-row">
                         <div class="form-group col-md-4">
                             <label for="precio_extr_est">Precio Extra Estiba</label>
                             <input type="number" class="form-control" id="precio_extr_est" step="0.1" min="1" value="0.00" required v-model="Servicio.precio_extra_estiba">
@@ -161,12 +174,12 @@
                             <label for="precio_servicio">Precio Servicio</label>
                             <input type="number" class="form-control" id="precio_servicio" step="0.1" min="1" value="0.00" required v-model="Servicio.precio_servicio">
                         </div>
-                    </div>
-                    <div class="form-row">
                         <div class="form-group col-md-4">
                             <label for="precio_tot_serv">Precio Total Servicio</label>
                             <input type="number" class="form-control" id="precio_tot_serv" step="0.1" min="1" value="0.00" required v-model="Servicio.precio_total_servicio">
                         </div>
+                    </div>
+                    <div class="form-row">
                         <div class="form-group col-md-4">
                             <label for="costo_tot_serv">Costo Total Servicio</label>
                             <input type="number" class="form-control" id="costo_tot_serv" step="0.1" min="1" value="0.00" required v-model="Servicio.costo_total_servicio">
@@ -175,8 +188,6 @@
                             <label for="utilidad">Utilidad</label>
                             <input type="number" class="form-control" id="utilidad" step="0.1" min="1" value="0.00" required v-model="Servicio.utilidad">
                         </div>
-                    </div>
-                    <div class="form-row">
                         <div class="form-group col-md-4">
                             <label for="igv">IGV</label>
                             <input type="number" class="form-control" id="igv" step="0.1" min="1" value="0.00" required v-model="Servicio.igv">
@@ -204,6 +215,7 @@ export default {
             EstadosPago:[],
             ModosPago:[],
             Clientes:[],
+            Ingenios:[],
             buscliente:"",
             ocultar:"hidden",
             editmodo:false
@@ -215,6 +227,19 @@ export default {
         this.cargarTiposServicios();
         this.cargarEstadosPago();
         this.cargarModosPago();
+        this.cargaringenios();
+        
+        var fecha = new Date(); 
+        var mes = fecha.getMonth()+1; 
+        var dia = fecha.getDate(); 
+        var ano = fecha.getFullYear(); 
+        if(dia<10){
+            dia='0'+dia; 
+        }
+        if(mes<10){
+            mes='0'+mes;
+        }
+        this.Servicio.fecha_servicio= ano+"-"+mes+"-"+dia;
     },
   methods: {
     getKeeps: function () {
@@ -268,6 +293,16 @@ export default {
         }
       });
     },
+    cargaringenios: function () {
+      var url = "api/ingenios";
+      axios.get(url).then((res) => {
+        if (res.data[0].id){
+          this.Ingenios = res.data;
+        }else{
+          console.log("No se encontro registros");
+        }
+      });
+    },
     cargarClientes: function () {
       axios.get(`api/clientes/${this.Servicio.cliente}`, '0').then((res) => {
         if (res.data[0].id){
@@ -279,7 +314,7 @@ export default {
       });
     },
     cargarIdClientes: function (id, cliente) {
-        this.Servicio.clientes_id= id;
+        this.Servicio.cliente_id= id;
         this.Servicio.cliente= cliente;
         this.ocultar= "hidden";
     },

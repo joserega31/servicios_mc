@@ -30,6 +30,8 @@ Vue.component('metpagos-component', require('./components/MetpagosComponent.vue'
 Vue.component('estpagos-component', require('./components/EstpagosComponent.vue').default);
 Vue.component('tiposserv-component', require('./components/TiposServComponent.vue').default);
 Vue.component('designaciones-component', require('./components/DesignacionesComponent.vue').default);
+Vue.component('home-component', require('./components/HomeComponent.vue').default);
+
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

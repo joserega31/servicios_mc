@@ -30,3 +30,4 @@ Route::resource('estpagos', 'App\Http\Controllers\EstPagosController'::class);
 Route::resource('tiposserv', 'App\Http\Controllers\TiposServController'::class);
 Route::resource('tarifarios', 'App\Http\Controllers\TarifariosController'::class);
 Route::resource('designaciones', 'App\Http\Controllers\DesignacionesController'::class);
+Route::resource('home', 'App\Http\Controllers\HomeController'::class);

@@ -64,7 +64,7 @@
                                 <input type="hidden" class="form-control" id="id" required  v-model="tarifario.id">
                                 <label for="cliente">Cliente</label>
                                 <div class="input-group">
-                                    <input class="bg-light form-control small"  id="cliente" type="text" v-model="tarifario.cliente" @change="limpiarBusqueda()">
+                                    <input class="bg-light form-control small"  id="cliente" type="text" v-model="tarifario.cliente" @change="limpiarBusqueda()" autocomplete="off">
                                     <ul id="lstbuscarcliente" class="autocomplete" :class="ocultar">
                                         <li v-for="(item, index) in Clientes" :key="index" :value="item.id" @click="cargarIdClientes(item.id, item.razon_social)">{{ item.razon_social }}</li>
                                     </ul>
