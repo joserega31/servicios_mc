@@ -3355,7 +3355,7 @@ __webpack_require__.r(__webpack_exports__);
     eliminar: function eliminar(Servicio, index) {
       var _this8 = this;
 
-      var confirmacion = confirm("Eliminar el Servicio ".concat(Servicio.nombre));
+      var confirmacion = confirm("Eliminar el Servicio numero:  ".concat(Servicio.id));
 
       if (confirmacion) {
         axios["delete"]("/api/servicios/".concat(Servicio.id)).then(function () {
@@ -42579,18 +42579,10 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "row" }, [
       _c("div", { staticClass: "col-md-6 align-self-center" }, [
-        _c(
-          "p",
-          {
-            staticClass: "dataTables_info",
-            attrs: {
-              id: "dataTable_info",
-              role: "status",
-              "aria-live": "polite"
-            }
-          },
-          [_vm._v("Showing 1 to 10 of 27")]
-        )
+        _c("p", {
+          staticClass: "dataTables_info",
+          attrs: { id: "dataTable_info", role: "status", "aria-live": "polite" }
+        })
       ]),
       _vm._v(" "),
       _c("div", { staticClass: "col-md-6" }, [

@@ -36,7 +36,7 @@
 
                 <div class="row">
                     <div class="col-md-6 align-self-center">
-                        <p id="dataTable_info" class="dataTables_info" role="status" aria-live="polite">Showing 1 to 10 of 27</p>
+                        <p id="dataTable_info" class="dataTables_info" role="status" aria-live="polite"></p>
                     </div>
                     <div class="col-md-6">
                         <nav class="d-lg-flex justify-content-lg-end dataTables_paginate paging_simple_numbers">
@@ -308,7 +308,7 @@ export default {
         this.limpiarFormulario();
     },
     eliminar: function(Servicio, index){
-        const confirmacion = confirm(`Eliminar el Servicio ${Servicio.nombre}`);
+        const confirmacion = confirm(`Eliminar el Servicio numero:  ${Servicio.id}`);
         if(confirmacion){
             axios.delete(`/api/servicios/${Servicio.id}`)
             .then(()=>{
