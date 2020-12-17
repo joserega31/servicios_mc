@@ -24,7 +24,7 @@ class CreateServiciosTable extends Migration
             $table->string('guia_transportista', 45);
             $table->string('almacen', 100);
             $table->double('cantidad');
-            $table->string('unidaad', 5);
+            $table->string('unidad', 5);
             $table->double('costo_unitario_estiba');
             $table->double('costo_operativo_extra_estiba');
             $table->double('costo_flat_estiba');

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Designacione;
 use Illuminate\Http\Request;
 use Exception;
+use Illuminate\Support\Facades\DB;
 
 class DesignacionesController extends Controller
 {
@@ -20,7 +21,8 @@ class DesignacionesController extends Controller
      */
     public function index()
     {
-        return Designacione::all();
+        $designaciones= DB::select('select d.*, CONCAT(s.nombres, " ", s.apellidos) as supervisor, i.nombre as ingenio from (designaciones as d INNER JOIN supervisores as s ON d.supervisores_id= s.id) INNER JOIN ingenios as i ON d.ingenios_id=i.id');
+        return $designaciones;
     }
 
     /**

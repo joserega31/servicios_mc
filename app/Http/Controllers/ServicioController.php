@@ -5,9 +5,13 @@ namespace App\Http\Controllers;
 use App\Models\Servicio;
 use Illuminate\Http\Request;
 use Exception;
+use Illuminate\Support\Facades\DB;
 
 class ServicioController extends Controller
 {
+    public function vistaServicio(){
+        return view('servicio');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -15,7 +19,8 @@ class ServicioController extends Controller
      */
     public function index()
     {
-        return view('servicio');
+        $Servicio= DB::select('SELECT s.*, c.razon_social as cliente FROM servicios AS s INNER JOIN clientes as c ON s.cliente_id= c.id');
+        return $Servicio;
     }
 
     /**

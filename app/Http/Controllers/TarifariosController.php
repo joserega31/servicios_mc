@@ -22,9 +22,8 @@ class TarifariosController extends Controller
      */
     public function index()
     {
-       // $Tarifario= Tarifario::all();
        $Tarifario= DB::select('select t.*, c.razon_social as cliente, lp.nombre as linea_prod from (tarifarios as t INNER JOIN clientes AS c ON t.clientes_id=c.id) INNER JOIN lineas_productos lp ON lp.id=t.lineas_producto_id');
-        return $Tarifario;
+       return $Tarifario;
     }
 
     /**

@@ -1,5 +1,5 @@
 @extends('layouts.dashboard')
 
 @section('content')
-<designaciones-component><designaciones-component>
+<tiposserv-component><tiposserv-component>
 @endsection

@@ -21,7 +21,7 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-Route::get('/servicio', [App\Http\Controllers\ServicioController::class, 'index'])->name('servicio');
+Route::get('/servicio', [App\Http\Controllers\ServicioController::class, 'vistaServicio'])->name('servicio');
 Route::get('/clientes', [App\Http\Controllers\ClientesController::class, 'vistaCliente'])->name('clientes');
 Route::get('/maestros', [App\Http\Controllers\MestrosController::class, 'index'])->name('maestros');
 Route::get('/supervisores', [App\Http\Controllers\SupervisoresController::class, 'vistaSup'])->name('supervisores');
@@ -32,5 +32,3 @@ Route::get('/metpagos', [App\Http\Controllers\MetPagosController::class, 'vistaM
 Route::get('/estpagos', [App\Http\Controllers\EstPagosController::class, 'vistaEpagos'])->name('estpagos');
 Route::get('/tiposserv', [App\Http\Controllers\TiposServController::class, 'vistaTserv'])->name('tiposserv');
 Route::get('/designaciones', [App\Http\Controllers\DesignacionesController::class, 'vistaDesig'])->name('designaciones');
-
-Route::get('buscarCliente/{buscar}', ['App\Http\Controllers\ClientesController'::class, 'buscarCliente']);

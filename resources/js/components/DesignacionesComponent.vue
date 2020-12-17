@@ -9,14 +9,16 @@
                         <thead>
                             <tr>
                                 <th>Nro</th>
-                                <th class="text-left">Nombre</th>
+                                <th class="text-left">Supervisor</th>
+                                <th class="text-left">Ingenio</th>
                                 <th>Acci&oacute;n</th> 
                             </tr>
                         </thead>
                         <tbody>
                             <tr v-for="(item, index) in designaciones" :key="index">
                                 <td>{{ index + 1 }}</td>
-                                <td>{{ item.nombre }}</td>
+                                <td>{{ item.supervisor }}</td>
+                                <td>{{ item.ingenio }}</td>
                                 <td>
                                     <button type="button" class="btn btn-warning" title="Editar" @click="editar(index)">
                                         <i class="far fa-edit"></i>
@@ -95,7 +97,7 @@ export default {
     data() {
         return {
             designaciones: [],
-            designacione: { id: 0, supervisores_id: null, ingenios_id: null, fecha_inicio:null, fecha_fin:null},
+            designacione: { id: 0, supervisores_id: null, ingenios_id: null, fecha_inicio:null, fecha_fin:null, supervisor:"", ingenio:""},
             Supervisores: [],
             Ingenios: [],
             editmodo:false

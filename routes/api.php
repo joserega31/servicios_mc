@@ -22,9 +22,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::resource('servicios', 'App\Http\Controllers\ServicioController'::class);
 Route::resource('clientes', 'App\Http\Controllers\ClientesController'::class);
-
-
-
 Route::resource('supervisores', 'App\Http\Controllers\SupervisoresController'::class);
 Route::resource('ingenios', 'App\Http\Controllers\IngeniosController'::class);
 Route::resource('LineasProd', 'App\Http\Controllers\LineasProdController'::class);
