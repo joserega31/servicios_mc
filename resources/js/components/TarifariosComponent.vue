@@ -123,7 +123,6 @@ export default {
     getKeeps: function () {
       var url = "api/tarifarios";
       axios.get(url).then((res) => {
-          console.log(res.data);
         if (res.data[0].id){
           this.tarifarios = res.data;
           this.buscliente= res.data.razon_social;

@@ -2608,7 +2608,74 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-/* harmony default export */ __webpack_exports__["default"] = ({});
+/* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      servicios: [],
+      servicio: {
+        id: 0,
+        fecha_servicio: null,
+        ruc: "",
+        razon_social: ""
+      },
+      totptefacturar: 0,
+      totpago: 0,
+      totpagodet: 0,
+      totalservicio: 0,
+      totalfacturado: 0
+    };
+  },
+  created: function created() {
+    this.cargartotalservicio();
+    this.cargarServicios(0);
+  },
+  methods: {
+    cargarServicios: function cargarServicios(org) {
+      var _this = this;
+
+      var url = "api/serviciopte";
+
+      if (org == 1) {
+        url = "api/servicioptepago";
+      } else if (org == 2) {
+        url = "api/servicioptepagodet";
+      }
+
+      axios.get(url).then(function (res) {
+        if (res.data[0].id) {
+          _this.servicios = res.data;
+        } else {
+          console.log("No se encontro registros");
+        }
+      });
+    },
+    cargartotalservicio: function cargartotalservicio() {
+      var _this2 = this;
+
+      var url = "api/totalservicios";
+      axios.get(url).then(function (res) {
+        if (res.data) {
+          _this2.totptefacturar = res.data[0].totptefacturar;
+          _this2.totpago = res.data[0].totpago;
+          _this2.totpagodet = res.data[0].totpagodet;
+          _this2.totalservicio = res.data[0].totalservicio;
+          _this2.totalfacturado = res.data[0].totalfacturado;
+          console.log(res.data);
+        } else {
+          console.log("No se encontro registros");
+        }
+      });
+    },
+    emitirFactura: function emitirFactura(id) {
+      this.servicio = this.servicios[id];
+      alert('Facturar: ' + this.servicio);
+    },
+    emitirPago: function emitirPago(id) {
+      this.servicio = this.servicios[id];
+      alert('Pagar: ' + this.servicio);
+    }
+  }
+});
 
 /***/ }),
 
@@ -3348,7 +3415,7 @@ __webpack_require__.r(__webpack_exports__);
         fecha_servicio: null,
         fecha_pago: null,
         fecha_liquidacion: null,
-        fecturado: 0,
+        facturado: 0,
         num_factura: "",
         operacion_cerrada: 0,
         lineas_productos_id: null,
@@ -3554,7 +3621,7 @@ __webpack_require__.r(__webpack_exports__);
         fecha_servicio: null,
         fecha_pago: null,
         fecha_liquidacion: null,
-        fecturado: 0,
+        facturado: 0,
         num_factura: "",
         operacion_cerrada: 0,
         lineas_productos_id: null,
@@ -3920,8 +3987,6 @@ __webpack_require__.r(__webpack_exports__);
 
       var url = "api/tarifarios";
       axios.get(url).then(function (res) {
-        console.log(res.data);
-
         if (res.data[0].id) {
           _this.tarifarios = res.data;
           _this.buscliente = res.data.razon_social;
@@ -40836,213 +40901,176 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
-}
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "container-fluid" }, [
-      _c("div", { staticClass: "row" }, [
-        _c("h3", { staticClass: "text-dark" }, [_vm._v("Servicios")]),
-        _vm._v(" "),
-        _c("div", { staticClass: "tile_count" }, [
-          _c("div", { staticClass: "col-md-2  tile_stats_count" }, [
-            _c("span", { staticClass: "count_top" }, [
-              _c("i", { staticClass: "fa fa-file-invoice" }),
-              _vm._v(" Pendientes por Facturar")
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "count" }, [_vm._v("12")]),
-            _vm._v(" "),
-            _c("span", { staticClass: "count_bottom" }, [
-              _c("i", { staticClass: "green" }, [_vm._v("4% ")]),
-              _vm._v(" Esta semana")
-            ])
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "col-md-2  tile_stats_count" }, [
-            _c("span", { staticClass: "count_top" }, [
-              _c("i", { staticClass: "fas fa-money-bill-alt" }),
-              _vm._v(" Pendiente de pago")
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "count" }, [_vm._v("8")]),
-            _vm._v(" "),
-            _c("span", { staticClass: "count_bottom" }, [
-              _c("i", { staticClass: "green" }, [
-                _c("i", { staticClass: "fas fa-sort-up" }),
-                _vm._v("3% ")
-              ]),
-              _vm._v(" Esta semana")
-            ])
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "col-md-2  tile_stats_count" }, [
-            _c("span", { staticClass: "count_top" }, [
-              _c("i", { staticClass: "fas fa-money-bill-alt" }),
-              _vm._v(" Pendiente de pago detalle")
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "count green" }, [_vm._v("6")]),
-            _vm._v(" "),
-            _c("span", { staticClass: "count_bottom" }, [
-              _c("i", { staticClass: "green" }, [
-                _c("i", { staticClass: "fas fa-sort-up" }),
-                _vm._v("34% ")
-              ]),
-              _vm._v(" Esta semana")
-            ])
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "col-md-2  tile_stats_count" }, [
-            _c("span", { staticClass: "count_top" }, [
-              _c("i", { staticClass: "fa fa-dollar-sign" }),
-              _vm._v(" Total Costo Servicios")
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "count" }, [_vm._v("4,567")]),
-            _vm._v(" "),
-            _c("span", { staticClass: "count_bottom" }, [
-              _c("i", { staticClass: "red" }, [
-                _c("i", { staticClass: "fas fa-sort-down" }),
-                _vm._v("12% ")
-              ]),
-              _vm._v(" Esta semana")
-            ])
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "col-md-2  tile_stats_count" }, [
-            _c("span", { staticClass: "count_top" }, [
-              _c("i", { staticClass: "fa fa-dollar-sign" }),
-              _vm._v(" Total Facturas")
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "count" }, [_vm._v("2,315")]),
-            _vm._v(" "),
-            _c("span", { staticClass: "count_bottom" }, [
-              _c("i", { staticClass: "green" }, [
-                _c("i", { staticClass: "fas fa-sort-up" }),
-                _vm._v("34% ")
-              ]),
-              _vm._v(" Esta semana")
-            ])
-          ])
-        ])
-      ]),
+  return _c("div", { staticClass: "container-fluid" }, [
+    _c("div", { staticClass: "row" }, [
+      _c("h3", { staticClass: "text-dark" }, [_vm._v("Servicios")]),
       _vm._v(" "),
-      _c("div", { staticClass: "card shadow" }, [
-        _c("div", { staticClass: "card-body" }, [
-          _c("form", [
-            _c("div", { staticClass: "form-row" }, [
-              _c("div", { staticClass: "form-group col-md-3" }, [
-                _c("div", { staticClass: "dropdown" }, [
-                  _c(
-                    "button",
-                    {
-                      staticClass: "btn btn-primary dropdown-toggle",
-                      attrs: {
-                        "data-toggle": "dropdown",
-                        "aria-expanded": "false",
-                        type: "button"
-                      }
-                    },
-                    [_vm._v("SERVICIOS ")]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "div",
-                    {
-                      staticClass: "dropdown-menu",
-                      attrs: { role: "menu", "x-placement": "bottom-start" }
-                    },
-                    [
-                      _c(
-                        "a",
-                        {
-                          staticClass: "dropdown-item",
-                          attrs: { role: "presentation", href: "#" }
-                        },
-                        [_vm._v("Servicios pendiente de facturación")]
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "a",
-                        {
-                          staticClass: "dropdown-item",
-                          attrs: { role: "presentation", href: "#" }
-                        },
-                        [_vm._v("Pendiente de pago ")]
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "a",
-                        {
-                          staticClass: "dropdown-item",
-                          attrs: { role: "presentation", href: "#" }
-                        },
-                        [_vm._v("Pendiente de pago detalle")]
-                      )
-                    ]
-                  )
-                ])
+      _c("div", { staticClass: "tile_count" }, [
+        _c("div", { staticClass: "col-md-2  tile_stats_count" }, [
+          _vm._m(0),
+          _vm._v(" "),
+          _c("div", { staticClass: "count" }, [
+            _vm._v(_vm._s(_vm.totptefacturar))
+          ]),
+          _vm._v(" "),
+          _vm._m(1)
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "col-md-2  tile_stats_count" }, [
+          _vm._m(2),
+          _vm._v(" "),
+          _c("div", { staticClass: "count" }, [_vm._v(_vm._s(_vm.totpago))]),
+          _vm._v(" "),
+          _vm._m(3)
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "col-md-2  tile_stats_count" }, [
+          _vm._m(4),
+          _vm._v(" "),
+          _c("div", { staticClass: "count" }, [_vm._v(_vm._s(_vm.totpagodet))]),
+          _vm._v(" "),
+          _vm._m(5)
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "col-md-2  tile_stats_count" }, [
+          _vm._m(6),
+          _vm._v(" "),
+          _c("div", { staticClass: "count" }, [
+            _vm._v(_vm._s(_vm.totalservicio))
+          ]),
+          _vm._v(" "),
+          _vm._m(7)
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "col-md-2  tile_stats_count" }, [
+          _vm._m(8),
+          _vm._v(" "),
+          _c("div", { staticClass: "count" }, [
+            _vm._v(_vm._s(_vm.totalfacturado))
+          ]),
+          _vm._v(" "),
+          _vm._m(9)
+        ])
+      ])
+    ]),
+    _vm._v(" "),
+    _c("div", { staticClass: "card shadow" }, [
+      _c("div", { staticClass: "card-body" }, [
+        _c("form", [
+          _c("div", { staticClass: "form-row" }, [
+            _c("div", { staticClass: "form-group col-md-3" }, [
+              _c("div", { staticClass: "dropdown" }, [
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-primary dropdown-toggle",
+                    attrs: {
+                      "data-toggle": "dropdown",
+                      "aria-expanded": "false",
+                      type: "button"
+                    }
+                  },
+                  [_vm._v("Servicios pendiente de facturación")]
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  {
+                    staticClass: "dropdown-menu",
+                    attrs: { role: "menu", "x-placement": "bottom-start" }
+                  },
+                  [
+                    _c(
+                      "a",
+                      {
+                        staticClass: "dropdown-item",
+                        attrs: { role: "presentation" },
+                        on: {
+                          click: function($event) {
+                            return _vm.cargarServicios(0)
+                          }
+                        }
+                      },
+                      [_vm._v("Servicios pendiente de facturación")]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "a",
+                      {
+                        staticClass: "dropdown-item",
+                        attrs: { role: "presentation" },
+                        on: {
+                          click: function($event) {
+                            return _vm.cargarServicios(1)
+                          }
+                        }
+                      },
+                      [_vm._v("Pendiente de pago ")]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "a",
+                      {
+                        staticClass: "dropdown-item",
+                        attrs: { role: "presentation" },
+                        on: {
+                          click: function($event) {
+                            return _vm.cargarServicios(2)
+                          }
+                        }
+                      },
+                      [_vm._v("Pendiente de pago detalle")]
+                    )
+                  ]
+                )
               ])
             ])
-          ]),
-          _vm._v(" "),
-          _c(
-            "div",
-            {
-              staticClass: "table-responsive table mt-2",
-              attrs: {
-                id: "dataTable",
-                role: "grid",
-                "aria-describedby": "dataTable_info"
-              }
-            },
-            [
-              _c(
-                "table",
-                {
-                  staticClass: "table dataTable my-0",
-                  attrs: { id: "dataTable" }
-                },
-                [
-                  _c("thead", [
-                    _c("tr", [
-                      _c("th", [_vm._v("Servicio")]),
+          ])
+        ]),
+        _vm._v(" "),
+        _c(
+          "div",
+          {
+            staticClass: "table-responsive table mt-2",
+            attrs: {
+              id: "dataTable",
+              role: "grid",
+              "aria-describedby": "dataTable_info"
+            }
+          },
+          [
+            _c(
+              "table",
+              {
+                staticClass: "table dataTable my-0",
+                attrs: { id: "dataTable" }
+              },
+              [
+                _vm._m(10),
+                _vm._v(" "),
+                _c(
+                  "tbody",
+                  _vm._l(_vm.servicios, function(item, index) {
+                    return _c("tr", { key: index }, [
+                      _c("td", [_vm._v(_vm._s(item.id))]),
                       _vm._v(" "),
-                      _c("th", { staticClass: "text-left" }, [_vm._v("Ruc")]),
+                      _c("td", [_vm._v(_vm._s(item.ruc))]),
                       _vm._v(" "),
-                      _c("th", { staticClass: "text-left" }, [
-                        _vm._v("Razón Social")
-                      ]),
+                      _c("td", [_vm._v(_vm._s(item.razon_social))]),
                       _vm._v(" "),
-                      _c("th", { staticClass: "text-left" }, [
-                        _vm._v("Fecha Servicio")
-                      ]),
-                      _vm._v(" "),
-                      _c("th", [_vm._v("Acción")])
-                    ])
-                  ]),
-                  _vm._v(" "),
-                  _c("tbody", [
-                    _c("tr", [
-                      _c("td"),
-                      _vm._v(" "),
-                      _c("td"),
-                      _vm._v(" "),
-                      _c("td"),
-                      _vm._v(" "),
-                      _c("td"),
+                      _c("td", [_vm._v(_vm._s(item.fecha_servicio))]),
                       _vm._v(" "),
                       _c("td", [
                         _c(
                           "button",
                           {
                             staticClass: "btn btn-primary",
-                            attrs: { type: "button", title: "Emitir Factura" }
+                            attrs: { type: "button", title: "Emitir Factura" },
+                            on: {
+                              click: function($event) {
+                                return _vm.emitirFactura(index)
+                              }
+                            }
                           },
                           [_c("i", { staticClass: "fas fa-file-invoice" })]
                         ),
@@ -41051,105 +41079,235 @@ var staticRenderFns = [
                           "button",
                           {
                             staticClass: "btn btn-success",
-                            attrs: { type: "button", title: "Emitir Pago" }
+                            attrs: { type: "button", title: "Emitir Pago" },
+                            on: {
+                              click: function($event) {
+                                return _vm.emitirPago(index)
+                              }
+                            }
                           },
                           [_c("i", { staticClass: "fas fa-dollar-sign" })]
                         )
                       ])
                     ])
-                  ]),
-                  _vm._v(" "),
-                  _c("tfoot", [_c("tr")])
-                ]
-              )
-            ]
-          ),
-          _vm._v(" "),
-          _c("div", { staticClass: "row" }, [
-            _c("div", { staticClass: "col-md-6 align-self-center" }, [
-              _c("p", {
-                staticClass: "dataTables_info",
-                attrs: {
-                  id: "dataTable_info",
-                  role: "status",
-                  "aria-live": "polite"
-                }
-              })
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "col-md-6" }, [
-              _c(
-                "nav",
-                {
-                  staticClass:
-                    "d-lg-flex justify-content-lg-end dataTables_paginate paging_simple_numbers"
-                },
-                [
-                  _c("ul", { staticClass: "pagination" }, [
-                    _c("li", { staticClass: "page-item disabled" }, [
-                      _c(
-                        "a",
-                        {
-                          staticClass: "page-link",
-                          attrs: { href: "#", "aria-label": "Previous" }
-                        },
-                        [
-                          _c("span", { attrs: { "aria-hidden": "true" } }, [
-                            _vm._v("«")
-                          ])
-                        ]
-                      )
-                    ]),
-                    _vm._v(" "),
-                    _c("li", { staticClass: "page-item active" }, [
-                      _c(
-                        "a",
-                        { staticClass: "page-link", attrs: { href: "#" } },
-                        [_vm._v("1")]
-                      )
-                    ]),
-                    _vm._v(" "),
-                    _c("li", { staticClass: "page-item" }, [
-                      _c(
-                        "a",
-                        { staticClass: "page-link", attrs: { href: "#" } },
-                        [_vm._v("2")]
-                      )
-                    ]),
-                    _vm._v(" "),
-                    _c("li", { staticClass: "page-item" }, [
-                      _c(
-                        "a",
-                        { staticClass: "page-link", attrs: { href: "#" } },
-                        [_vm._v("3")]
-                      )
-                    ]),
-                    _vm._v(" "),
-                    _c("li", { staticClass: "page-item" }, [
-                      _c(
-                        "a",
-                        {
-                          staticClass: "page-link",
-                          attrs: { href: "#", "aria-label": "Next" }
-                        },
-                        [
-                          _c("span", { attrs: { "aria-hidden": "true" } }, [
-                            _vm._v("»")
-                          ])
-                        ]
-                      )
-                    ])
-                  ])
-                ]
-              )
-            ])
-          ])
-        ])
+                  }),
+                  0
+                ),
+                _vm._v(" "),
+                _vm._m(11)
+              ]
+            )
+          ]
+        ),
+        _vm._v(" "),
+        _vm._m(12)
+      ])
+    ]),
+    _vm._v(" "),
+    _c("br"),
+    _vm._v(" "),
+    _c("br")
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("span", { staticClass: "count_top" }, [
+      _c("i", { staticClass: "fa fa-file-invoice" }),
+      _vm._v(" Pendientes por Facturar")
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("span", { staticClass: "count_bottom" }, [
+      _c("i", { staticClass: "green" }, [_vm._v("4% ")]),
+      _vm._v(" Esta semana")
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("span", { staticClass: "count_top" }, [
+      _c("i", { staticClass: "fas fa-money-bill-alt" }),
+      _vm._v(" Pendiente de pago")
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("span", { staticClass: "count_bottom" }, [
+      _c("i", { staticClass: "green" }, [
+        _c("i", { staticClass: "fas fa-sort-up" }),
+        _vm._v("3% ")
+      ]),
+      _vm._v(" Esta semana")
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("span", { staticClass: "count_top" }, [
+      _c("i", { staticClass: "fas fa-money-bill-alt" }),
+      _vm._v(" Pendiente de pago detalle")
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("span", { staticClass: "count_bottom" }, [
+      _c("i", { staticClass: "green" }, [
+        _c("i", { staticClass: "fas fa-sort-up" }),
+        _vm._v("34% ")
+      ]),
+      _vm._v(" Esta semana")
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("span", { staticClass: "count_top" }, [
+      _c("i", { staticClass: "fa fa-dollar-sign" }),
+      _vm._v(" Total Costo Servicios")
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("span", { staticClass: "count_bottom" }, [
+      _c("i", { staticClass: "red" }, [
+        _c("i", { staticClass: "fas fa-sort-down" }),
+        _vm._v("12% ")
+      ]),
+      _vm._v(" Esta semana")
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("span", { staticClass: "count_top" }, [
+      _c("i", { staticClass: "fa fa-dollar-sign" }),
+      _vm._v(" Total Facturado")
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("span", { staticClass: "count_bottom" }, [
+      _c("i", { staticClass: "green" }, [
+        _c("i", { staticClass: "fas fa-sort-up" }),
+        _vm._v("34% ")
+      ]),
+      _vm._v(" Esta semana")
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("thead", [
+      _c("tr", [
+        _c("th", [_vm._v("Servicio")]),
+        _vm._v(" "),
+        _c("th", { staticClass: "text-left" }, [_vm._v("Ruc")]),
+        _vm._v(" "),
+        _c("th", { staticClass: "text-left" }, [_vm._v("Razón Social")]),
+        _vm._v(" "),
+        _c("th", { staticClass: "text-left" }, [_vm._v("Fecha Servicio")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Acción")])
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("tfoot", [_c("tr")])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "row" }, [
+      _c("div", { staticClass: "col-md-6 align-self-center" }, [
+        _c("p", {
+          staticClass: "dataTables_info",
+          attrs: { id: "dataTable_info", role: "status", "aria-live": "polite" }
+        })
       ]),
       _vm._v(" "),
-      _c("br"),
-      _vm._v(" "),
-      _c("br")
+      _c("div", { staticClass: "col-md-6" }, [
+        _c(
+          "nav",
+          {
+            staticClass:
+              "d-lg-flex justify-content-lg-end dataTables_paginate paging_simple_numbers"
+          },
+          [
+            _c("ul", { staticClass: "pagination" }, [
+              _c("li", { staticClass: "page-item disabled" }, [
+                _c(
+                  "a",
+                  {
+                    staticClass: "page-link",
+                    attrs: { href: "#", "aria-label": "Previous" }
+                  },
+                  [
+                    _c("span", { attrs: { "aria-hidden": "true" } }, [
+                      _vm._v("«")
+                    ])
+                  ]
+                )
+              ]),
+              _vm._v(" "),
+              _c("li", { staticClass: "page-item active" }, [
+                _c("a", { staticClass: "page-link", attrs: { href: "#" } }, [
+                  _vm._v("1")
+                ])
+              ]),
+              _vm._v(" "),
+              _c("li", { staticClass: "page-item" }, [
+                _c("a", { staticClass: "page-link", attrs: { href: "#" } }, [
+                  _vm._v("2")
+                ])
+              ]),
+              _vm._v(" "),
+              _c("li", { staticClass: "page-item" }, [
+                _c("a", { staticClass: "page-link", attrs: { href: "#" } }, [
+                  _vm._v("3")
+                ])
+              ]),
+              _vm._v(" "),
+              _c("li", { staticClass: "page-item" }, [
+                _c(
+                  "a",
+                  {
+                    staticClass: "page-link",
+                    attrs: { href: "#", "aria-label": "Next" }
+                  },
+                  [
+                    _c("span", { attrs: { "aria-hidden": "true" } }, [
+                      _vm._v("»")
+                    ])
+                  ]
+                )
+              ])
+            ])
+          ]
+        )
+      ])
     ])
   }
 ]

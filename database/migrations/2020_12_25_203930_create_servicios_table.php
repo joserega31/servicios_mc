@@ -38,7 +38,7 @@ class CreateServiciosTable extends Migration
             $table->date('fecha_servicio');
             $table->date('fecha_pago')->nullable();
             $table->date('fecha_liquidacion')->nullable();
-            $table->boolean('fecturado');
+            $table->boolean('facturado');
             $table->string('num_factura', 10)->nullable();
             $table->boolean('operacion_cerrada');
             $table->integer('lineas_productos_id')->unsigned();   

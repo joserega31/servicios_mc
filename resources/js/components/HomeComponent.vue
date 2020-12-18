@@ -5,27 +5,27 @@
             <div class="tile_count">
                 <div class="col-md-2  tile_stats_count">
                     <span class="count_top"><i class="fa fa-file-invoice"></i> Pendientes por Facturar</span>
-                    <div class="count">12</div>
+                    <div class="count">{{totptefacturar}}</div>
                     <span class="count_bottom"><i class="green">4% </i> Esta semana</span>
                 </div>
                 <div class="col-md-2  tile_stats_count">
                     <span class="count_top"><i class="fas fa-money-bill-alt"></i> Pendiente de pago</span>
-                    <div class="count">8</div>
+                    <div class="count">{{totpago}}</div>
                     <span class="count_bottom"><i class="green"><i class="fas fa-sort-up"></i>3% </i> Esta semana</span>
                 </div>
                 <div class="col-md-2  tile_stats_count">
                     <span class="count_top"><i class="fas fa-money-bill-alt"></i> Pendiente de pago detalle</span>
-                    <div class="count green">6</div>
+                    <div class="count">{{totpagodet}}</div>
                     <span class="count_bottom"><i class="green"><i class="fas fa-sort-up"></i>34% </i> Esta semana</span>
                 </div>
                 <div class="col-md-2  tile_stats_count">
                     <span class="count_top"><i class="fa fa-dollar-sign"></i> Total Costo Servicios</span>
-                    <div class="count">4,567</div>
+                    <div class="count">{{totalservicio}}</div>
                     <span class="count_bottom"><i class="red"><i class="fas fa-sort-down"></i>12% </i> Esta semana</span>
                 </div>
                 <div class="col-md-2  tile_stats_count">
-                    <span class="count_top"><i class="fa fa-dollar-sign"></i> Total Facturas</span>
-                    <div class="count">2,315</div>
+                    <span class="count_top"><i class="fa fa-dollar-sign"></i> Total Facturado</span>
+                    <div class="count">{{totalfacturado}}</div>
                     <span class="count_bottom"><i class="green"><i class="fas fa-sort-up"></i>34% </i> Esta semana</span>
                 </div>
             </div>
@@ -38,11 +38,11 @@
                     <div class="form-row">
                         <div class="form-group col-md-3">
                             <div class="dropdown">
-                                <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false" type="button">SERVICIOS&nbsp;</button>
+                                <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false" type="button">Servicios pendiente de facturación</button>
                                 <div class="dropdown-menu" role="menu" x-placement="bottom-start">
-                                    <a class="dropdown-item" role="presentation" href="#">Servicios pendiente de facturación</a>
-                                    <a class="dropdown-item" role="presentation" href="#">Pendiente de pago </a>
-                                    <a class="dropdown-item" role="presentation" href="#">Pendiente de pago detalle</a>
+                                    <a class="dropdown-item" role="presentation" @click="cargarServicios(0)">Servicios pendiente de facturación</a>
+                                    <a class="dropdown-item" role="presentation" @click="cargarServicios(1)">Pendiente de pago </a>
+                                    <a class="dropdown-item" role="presentation" @click="cargarServicios(2)">Pendiente de pago detalle</a>
                                 </div>
                             </div>
                         </div>
@@ -61,16 +61,16 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr >
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
+                            <tr v-for="(item, index) in servicios" :key="index">
+                                <td>{{ item.id }}</td>
+                                <td>{{ item.ruc }}</td>
+                                <td>{{ item.razon_social }}</td>
+                                <td>{{ item.fecha_servicio }}</td>
                                 <td>
-                                    <button type="button" class="btn btn-primary" title="Emitir Factura">
+                                    <button type="button" class="btn btn-primary" title="Emitir Factura"  @click="emitirFactura(index)">
                                         <i class="fas fa-file-invoice"></i>
                                     </button>
-                                    <button type="button" class="btn btn-success" title="Emitir Pago">
+                                    <button type="button" class="btn btn-success" title="Emitir Pago" @click="emitirPago(index)">
                                         <i class="fas fa-dollar-sign"></i>
                                     </button>
                                 </td>
@@ -109,6 +109,61 @@
 
 <script>
 export default {
+    data() {
+        return {
+            servicios: [],
+            servicio:{id:0, fecha_servicio: null,ruc: "", razon_social: ""},
+            totptefacturar:0, 
+            totpago: 0,
+            totpagodet: 0, 
+            totalservicio: 0, 
+            totalfacturado: 0
+        };
+    },
+    created: function () {
+        this.cargartotalservicio();
+        this.cargarServicios(0);
+    },  
+    methods: {
+        cargarServicios: function (org) {
+            var url = "api/serviciopte";
+            if (org==1){
+                url = "api/servicioptepago";
+            }else if(org==2){
+               url = "api/servicioptepagodet";
+            }
+            axios.get(url).then((res) => {
+                if (res.data[0].id){
+                    this.servicios= res.data;
+                }else{
+                    console.log("No se encontro registros");
+                }
+            });
+        },
+        cargartotalservicio: function () {
+            var url = "api/totalservicios";
+            axios.get(url).then((res) => {
+                if (res.data){
+                    this.totptefacturar= res.data[0].totptefacturar; 
+                    this.totpago= res.data[0].totpago; 
+                    this.totpagodet= res.data[0].totpagodet; 
+                    this.totalservicio= res.data[0].totalservicio; 
+                    this.totalfacturado= res.data[0].totalfacturado; 
 
+                    console.log(res.data);
+                }else{
+                    console.log("No se encontro registros");
+                }
+            });
+        },
+        emitirFactura: function (id) {
+            this.servicio= this.servicios[id];
+            alert('Facturar: '+ this.servicio);
+        },
+         emitirPago: function (id) {
+            this.servicio= this.servicios[id];
+            alert('Pagar: '+ this.servicio);
+        },
+    }
 };
 </script>

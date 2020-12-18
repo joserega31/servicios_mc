@@ -209,7 +209,7 @@ export default {
     data() {
         return {
             Servicios: [],
-            Servicio: {id:0,ingenio_id:null,empresa_transporte:"",conductor:"",placa_unidad:"",placa_carretera:"",guia_transportista:"",almacen:"",cantidad:1,unidad:"",costo_unitario_estiba:0,costo_operativo_extra_estiba:0,costo_flat_estiba:0,costo_total_servicio:0,costo_extra_estiba:0,precio_extra_estiba:0,precio_servicio:0,precio_total_servicio:0,utilidad:0,igv:0,fecha_servicio:null,fecha_pago:null,fecha_liquidacion:null,fecturado:0,num_factura:"",operacion_cerrada:0,lineas_productos_id:null,estados_pago_id:null,cliente_id:null,tipo_servicio_id:null,modos_pagos_id:null, cliente:""},
+            Servicio: {id:0,ingenio_id:null,empresa_transporte:"",conductor:"",placa_unidad:"",placa_carretera:"",guia_transportista:"",almacen:"",cantidad:1,unidad:"",costo_unitario_estiba:0,costo_operativo_extra_estiba:0,costo_flat_estiba:0,costo_total_servicio:0,costo_extra_estiba:0,precio_extra_estiba:0,precio_servicio:0,precio_total_servicio:0,utilidad:0,igv:0,fecha_servicio:null,fecha_pago:null,fecha_liquidacion:null,facturado:0,num_factura:"",operacion_cerrada:0,lineas_productos_id:null,estados_pago_id:null,cliente_id:null,tipo_servicio_id:null,modos_pagos_id:null, cliente:""},
             LineasProductos: [],
             TiposServicios:[],
             EstadosPago:[],
@@ -356,7 +356,7 @@ export default {
         this.editmodo= false;
         this.buscliente="";
         this.ocultar="hidden";
-        this.Servicio= {id:0,ingenio_id:null,empresa_transporte:"",conductor:"",placa_unidad:"",placa_carretera:"",guia_transportista:"",almacen:"",cantidad:1,unidad:"",costo_unitario_estiba:0,costo_operativo_extra_estiba:0,costo_flat_estiba:0,costo_total_servicio:0,costo_extra_estiba:0,precio_extra_estiba:0,precio_servicio:0,precio_total_servicio:0,utilidad:0,igv:0,fecha_servicio:null,fecha_pago:null,fecha_liquidacion:null,fecturado:0,num_factura:"",operacion_cerrada:0,lineas_productos_id:null,estados_pago_id:null,cliente_id:null,tipo_servicio_id:null,modos_pagos_id:null, cliente:""};
+        this.Servicio= {id:0,ingenio_id:null,empresa_transporte:"",conductor:"",placa_unidad:"",placa_carretera:"",guia_transportista:"",almacen:"",cantidad:1,unidad:"",costo_unitario_estiba:0,costo_operativo_extra_estiba:0,costo_flat_estiba:0,costo_total_servicio:0,costo_extra_estiba:0,precio_extra_estiba:0,precio_servicio:0,precio_total_servicio:0,utilidad:0,igv:0,fecha_servicio:null,fecha_pago:null,fecha_liquidacion:null,facturado:0,num_factura:"",operacion_cerrada:0,lineas_productos_id:null,estados_pago_id:null,cliente_id:null,tipo_servicio_id:null,modos_pagos_id:null, cliente:""};
     }
 
   },

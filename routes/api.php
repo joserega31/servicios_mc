@@ -31,3 +31,8 @@ Route::resource('tiposserv', 'App\Http\Controllers\TiposServController'::class);
 Route::resource('tarifarios', 'App\Http\Controllers\TarifariosController'::class);
 Route::resource('designaciones', 'App\Http\Controllers\DesignacionesController'::class);
 Route::resource('home', 'App\Http\Controllers\HomeController'::class);
+
+Route::get('serviciopte', 'App\Http\Controllers\HomeController@serviciopte');
+Route::get('servicioptepago', 'App\Http\Controllers\HomeController@servicioptepago');
+Route::get('servicioptepagodet', 'App\Http\Controllers\HomeController@servicioptepagodet');
+Route::get('totalservicios', 'App\Http\Controllers\HomeController@totalservicios');
