@@ -34,16 +34,16 @@
                                                 </span>
                                             @enderror
                                         </div>
-                                        <div class="form-group">
+                                        <!--div class="form-group">
                                             <div class="custom-control custom-checkbox small">
                                                 <div class="form-check">
                                                 <input class="form-check-input custom-control-input" type="checkbox" id="formCheck-1"><label class="form-check-label custom-control-label" for="formCheck-1">Remember Me</label></div>
                                             </div>
-                                        </div>
+                                        </div-->
                                         <button type="submit" class="btn btn-primary btn-block text-white btn-user">
-                                            {{ __('Login') }}
+                                            Iniciar Sesi&oacute;n
                                         </button>
-                                        <hr>
+                                        <br>
                                     </form>
                                     <div class="text-center">
                                         @if (Route::has('password.request'))

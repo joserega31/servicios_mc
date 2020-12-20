@@ -1,7 +1,9 @@
 <template>
     <div class="container-fluid">
         <h3 class="text-dark mb-4">Tarifarios</h3>
-
+        <div class="alert alert-success w-100" role="alert" :class="mensaje">
+            {{textomensaje}}
+        </div>
         <div class="card shadow">
             <div class="card-body">
                 <div class="table-responsive table mt-2" id="dataTable" role="grid" aria-describedby="dataTable_info">
@@ -112,7 +114,9 @@ export default {
             Clientes:[],
             buscliente:"",
             ocultar:"hidden",
-            editmodo:false
+            editmodo:false,
+            mensaje:"hidden",
+            textomensaje:""
         };
     },
     created: function () {
@@ -168,14 +172,16 @@ export default {
         if (this.editmodo==false){
             axios.post(`/api/tarifarios/`, this.tarifario).then((res) => {
                 this.tarifarios.push(tarifario);
-                alert('Se ha creado Exitosamente');
+                this.textomensaje= "Se ha creado Exitosamente";
+                this.mensaje="mostrar";
             });
         }else{
             axios.put(`/api/tarifarios/${this.tarifario.id}`, tarifario)
                 .then(res=>{
                 const index = this.tarifarios.findIndex(item => item.id === tarifario.id);
                 this.tarifario[index] = res.data;
-                alert('Se ha actualizado Exitosamente');
+                this.textomensaje= "Se ha actualizado Exitosamente";
+                this.mensaje="mostrar";
             });
         }
         this.limpiarFormulario();
@@ -186,11 +192,14 @@ export default {
             axios.delete(`/api/tarifarios/${tarifario.id}`)
             .then(()=>{
                 this.tarifarios.splice(index, 1);
-                alert('Se ha eliminado Exitosamente');
+                this.textomensaje= "Se ha eliminado Exitosamente";
+                this.mensaje="mostrar";
             });
         }
     },
     limpiarFormulario: function(){
+        this.textomensaje= "";
+        this.mensaje="hidden";
         this.editmodo= false;
         this.buscliente="";
         this.ocultar="hidden";

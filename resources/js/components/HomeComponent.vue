@@ -6,27 +6,27 @@
                 <div class="col-md-2  tile_stats_count">
                     <span class="count_top"><i class="fa fa-file-invoice"></i> Pendientes por Facturar</span>
                     <div class="count">{{totptefacturar}}</div>
-                    <span class="count_bottom"><i class="green">4% </i> Esta semana</span>
+                    <!--span class="count_bottom"><i class="green">4% </i> Esta semana</span-->
                 </div>
                 <div class="col-md-2  tile_stats_count">
                     <span class="count_top"><i class="fas fa-money-bill-alt"></i> Pendiente de pago</span>
                     <div class="count">{{totpago}}</div>
-                    <span class="count_bottom"><i class="green"><i class="fas fa-sort-up"></i>3% </i> Esta semana</span>
+                    <!--span class="count_bottom"><i class="green"><i class="fas fa-sort-up"></i>3% </i> Esta semana</span-->
                 </div>
                 <div class="col-md-2  tile_stats_count">
                     <span class="count_top"><i class="fas fa-money-bill-alt"></i> Pendiente de pago detalle</span>
                     <div class="count">{{totpagodet}}</div>
-                    <span class="count_bottom"><i class="green"><i class="fas fa-sort-up"></i>34% </i> Esta semana</span>
+                    <!--span class="count_bottom"><i class="green"><i class="fas fa-sort-up"></i>34% </i> Esta semana</span-->
                 </div>
                 <div class="col-md-2  tile_stats_count">
                     <span class="count_top"><i class="fa fa-dollar-sign"></i> Total Costo Servicios</span>
                     <div class="count">{{totalservicio}}</div>
-                    <span class="count_bottom"><i class="red"><i class="fas fa-sort-down"></i>12% </i> Esta semana</span>
+                    <!--span class="count_bottom"><i class="red"><i class="fas fa-sort-down"></i>12% </i> Esta semana</span-->
                 </div>
                 <div class="col-md-2  tile_stats_count">
                     <span class="count_top"><i class="fa fa-dollar-sign"></i> Total Facturado</span>
                     <div class="count">{{totalfacturado}}</div>
-                    <span class="count_bottom"><i class="green"><i class="fas fa-sort-up"></i>34% </i> Esta semana</span>
+                    <!--span class="count_bottom"><i class="green"><i class="fas fa-sort-up"></i>34% </i> Esta semana</span-->
                 </div>
             </div>
         </div>
@@ -37,14 +37,11 @@
                 <form>
                     <div class="form-row">
                         <div class="form-group col-md-3">
-                            <div class="dropdown">
-                                <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false" type="button">Servicios pendiente de facturación</button>
-                                <div class="dropdown-menu" role="menu" x-placement="bottom-start">
-                                    <a class="dropdown-item" role="presentation" @click="cargarServicios(0)">Servicios pendiente de facturación</a>
-                                    <a class="dropdown-item" role="presentation" @click="cargarServicios(1)">Pendiente de pago </a>
-                                    <a class="dropdown-item" role="presentation" @click="cargarServicios(2)">Pendiente de pago detalle</a>
-                                </div>
-                            </div>
+                            <select class="btn btn-primary" @change="cargarServicios()" v-model="opcionFiltro">
+                                <option selected value="0">Servicios pendiente de facturación</option>
+                                <option value="1">Pendiente de pago </option>
+                                <option value="2">Pendiente por Liquidar </option>
+                            </select>
                         </div>
                     </div>
                 </form>
@@ -67,11 +64,14 @@
                                 <td>{{ item.razon_social }}</td>
                                 <td>{{ item.fecha_servicio }}</td>
                                 <td>
-                                    <button type="button" class="btn btn-primary" title="Emitir Factura"  @click="emitirFactura(index)">
+                                    <button type="button" class="btn btn-primary" title="Emitir Factura" data-toggle="modal" data-target="#emitirfactura" v-on:click.prevent="enviarid(index)" v-if="item.facturado==0">
                                         <i class="fas fa-file-invoice"></i>
                                     </button>
-                                    <button type="button" class="btn btn-success" title="Emitir Pago" @click="emitirPago(index)">
+                                    <button type="button" class="btn btn-success" title="Emitir Pago" data-toggle="modal" data-target="#emitirPago" v-on:click.prevent="enviarid(index)" v-if="item.facturado==1 && item.fecha_pago==null">
                                         <i class="fas fa-dollar-sign"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-warning" title="Liquidar Servicio" data-toggle="modal" data-target="#liquidarservicio" v-on:click.prevent="enviarid(index)" v-if="item.facturado==1 && item.fecha_pago!=null">
+                                        <i class="far fa-calendar-check"></i>
                                     </button>
                                 </td>
                             </tr>
@@ -103,6 +103,80 @@
         <br>
         <br>
         
+        <div class="modal fade" id="emitirfactura" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="emitirfacturaLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="emitirfacturaLabel">Emitir Factura</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="alert alert-success w-100" role="alert" :class="mensaje">
+                            {{textomensaje}}
+                        </div>
+                        <form @submit.prevent="emitirFactura(servicio)">
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <input type="hidden" class="form-control" id="id" required v-model="servicio.id">
+                                    <label for="nombre">Fecha</label>
+                                    <input type="date" class="form-control" id="fecha_factura" v-model="servicio.fecha_factura" required>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="nombre">Numero</label>
+                                    <input type="text" class="form-control" id="num_factura" v-model="servicio.num_factura" required>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="nombre">Monto</label>
+                                    <input type="number" class="form-control" id="monto_factura" v-model="servicio.monto_factura" min="0.00" required>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="buttom" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                <button type="submit" class="btn btn-primary">Emitir Factura</button>
+                            </div>
+
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="emitirPago" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="emitirPagoLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="emitirPagoLabel">Emitir Pago</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="alert alert-success w-100" role="alert" :class="mensaje">
+                            {{textomensaje}}
+                        </div>
+                        <form @submit.prevent="emitirPago(servicio)">
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <input type="hidden" class="form-control" id="id" required v-model="servicio.id">
+                                    <label for="nombre">Fecha</label>
+                                    <input type="date" class="form-control" id="fecha_pago" v-model="servicio.fecha_pago" required>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="buttom" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                <button type="submit" class="btn btn-primary">Emitir Pago</button>
+                            </div>
+
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
 
     </div>   
 </template>
@@ -112,12 +186,15 @@ export default {
     data() {
         return {
             servicios: [],
-            servicio:{id:0, fecha_servicio: null,ruc: "", razon_social: ""},
+            servicio:{id:0, fecha_servicio: null,ruc: "", razon_social: "", fecha_factura:null, num_factura:"", monto_factura:0, fecha_pago:null, facturado:0},
             totptefacturar:0, 
             totpago: 0,
             totpagodet: 0, 
             totalservicio: 0, 
-            totalfacturado: 0
+            totalfacturado: 0,
+            opcionFiltro:0,
+            mensaje:"hidden",
+            textomensaje:""
         };
     },
     created: function () {
@@ -125,12 +202,14 @@ export default {
         this.cargarServicios(0);
     },  
     methods: {
-        cargarServicios: function (org) {
+        cargarServicios: function () {
+            this.limpiarFormulario();
+            var org =this.opcionFiltro;
             var url = "api/serviciopte";
             if (org==1){
                 url = "api/servicioptepago";
             }else if(org==2){
-               url = "api/servicioptepagodet";
+                url = "api/serviciopteliq";
             }
             axios.get(url).then((res) => {
                 if (res.data[0].id){
@@ -149,21 +228,64 @@ export default {
                     this.totpagodet= res.data[0].totpagodet; 
                     this.totalservicio= res.data[0].totalservicio; 
                     this.totalfacturado= res.data[0].totalfacturado; 
-
-                    console.log(res.data);
+                    if (this.totalservicio== null){
+                        this.totalservicio=0;
+                    }
+                    if (this.totalfacturado== null){
+                        this.totalfacturado=0;
+                    }
                 }else{
                     console.log("No se encontro registros");
                 }
             });
         },
-        emitirFactura: function (id) {
-            this.servicio= this.servicios[id];
-            alert('Facturar: '+ this.servicio);
+        emitirFactura: function (servicio) {
+            this.facturado=0;
+            axios.put(`/api/home/${servicio.id}`, servicio)
+                .then(res=>{
+                const index = this.servicios.findIndex(item => item.id === servicio.id);
+                this.servicios[index] = res.data;
+                this.textomensaje= "Se ha actualizado Exitosamente";
+                this.mensaje="mostrar";
+                this.cargartotalservicio();
+                this.cargarServicios(0);
+            });
         },
-         emitirPago: function (id) {
-            this.servicio= this.servicios[id];
-            alert('Pagar: '+ this.servicio);
+        emitirPago: function (servicio) {
+            this.facturado=1;
+            axios.put(`/api/home/${servicio.id}`, servicio)
+                .then(res=>{
+                const index = this.servicios.findIndex(item => item.id === servicio.id);
+                this.servicios[index] = res.data;
+                this.textomensaje= "Se ha actualizado Exitosamente";
+                this.mensaje="mostrar";
+                this.cargarServicios(1);
+            });
         },
+        enviarid: function (id) {
+            this.servicio= this.servicios[id];
+
+            var fecha = new Date(); 
+            var mes = fecha.getMonth()+1; 
+            var dia = fecha.getDate(); 
+            var ano = fecha.getFullYear(); 
+            if(dia<10){
+                dia='0'+dia; 
+            }
+            if(mes<10){
+                mes='0'+mes;
+            }
+            this.servicio.fecha_factura= ano+"-"+mes+"-"+dia;
+            this.servicio.fecha_pago= ano+"-"+mes+"-"+dia;
+            this.textomensaje= "";
+            this.mensaje="hidden";
+        },
+        limpiarFormulario: function(){
+            this.textomensaje= "";
+            this.mensaje="hidden";
+            this.servicios= [],
+            this.servicio={id:0, fecha_servicio: null,ruc: "", razon_social: "", fecha_factura:null, num_factura:"", monto_factura:0, fecha_pago:null, facturado:0}
+        }
     }
 };
 </script>

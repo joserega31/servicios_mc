@@ -1,6 +1,9 @@
 <template>
     <div class="container-fluid">
         <h3 class="text-dark mb-4">L&iacute;neas de Productos</h3>
+        <div class="alert alert-success w-100" role="alert" :class="mensaje">
+            {{textomensaje}}
+        </div>
         <div class="card shadow">
             <div class="card-body">
                 <div class="table-responsive table mt-2" id="dataTable" role="grid" aria-describedby="dataTable_info">
@@ -78,7 +81,9 @@ export default {
         return {
             LineasProductos: [],
             LineasProducto: { id: 0, nombre: ""},
-            editmodo:false
+            editmodo:false,
+            mensaje:"hidden",
+            textomensaje:""
         };
     },
     created: function () {
@@ -103,14 +108,16 @@ export default {
         if (this.editmodo==false){
             axios.post(`/api/LineasProd/`, this.LineasProducto).then((res) => {
                 this.LineasProductos.push(LineasProducto);
-                alert('Se ha creado Exitosamente');
+                this.textomensaje= "Se ha actualizado Exitosamente";
+                this.mensaje="mostrar";
             });
         }else{
             axios.put(`/api/LineasProd/${this.LineasProducto.id}`, LineasProducto)
                 .then(res=>{
                 const index = this.LineasProductos.findIndex(item => item.id === LineasProducto.id);
                 this.LineasProducto[index] = res.data;
-                alert('Se ha actualizado Exitosamente');
+                this.textomensaje= "Se ha actualizado Exitosamente";
+                this.mensaje="mostrar";
             });
         }
         this.limpiarFormulario();
@@ -121,11 +128,14 @@ export default {
             axios.delete(`/api/LineasProd/${LineasProducto.id}`)
             .then(()=>{
                 this.LineasProductos.splice(index, 1);
-                alert('Se ha eliminado Exitosamente');
+                this.textomensaje= "Se ha eliminado Exitosamente";
+                this.mensaje="mostrar";
             });
         }
     },
     limpiarFormulario: function(){
+        this.textomensaje= "";
+        this.mensaje="hidden";
         this.editmodo= false;
         this.LineasProducto= { id: 0, nombre: ""};
     }

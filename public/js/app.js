@@ -1989,6 +1989,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -1998,7 +2000,9 @@ __webpack_require__.r(__webpack_exports__);
         ruc: "",
         razon_social: ""
       },
-      editmodo: false
+      editmodo: false,
+      mensaje: "hidden",
+      textomensaje: ""
     };
   },
   created: function created() {
@@ -2028,7 +2032,8 @@ __webpack_require__.r(__webpack_exports__);
         axios.post("/api/clientes/", this.cliente).then(function (res) {
           _this2.clientes.push(cliente);
 
-          alert('Se ha creado Exitosamente');
+          _this2.textomensaje = "Se ha creado Exitosamente";
+          _this2.mensaje = "mostrar";
         });
       } else {
         axios.put("/api/clientes/".concat(this.cliente.id), cliente).then(function (res) {
@@ -2037,7 +2042,8 @@ __webpack_require__.r(__webpack_exports__);
           });
 
           _this2.cliente[index] = res.data;
-          alert('Se ha actualizado Exitosamente');
+          _this2.textomensaje = "Se ha actualizado Exitosamente";
+          _this2.mensaje = "mostrar";
         });
       }
 
@@ -2052,11 +2058,14 @@ __webpack_require__.r(__webpack_exports__);
         axios["delete"]("/api/clientes/".concat(cliente.id)).then(function () {
           _this3.clientes.splice(index, 1);
 
-          alert('Se ha eliminado Exitosamente');
+          _this3.textomensaje = "Se ha eliminado Exitosamente";
+          _this3.mensaje = "mostrar";
         });
       }
     },
     limpiarFormulario: function limpiarFormulario() {
+      this.textomensaje = "";
+      this.mensaje = "hidden";
       this.editmodo = false;
       this.cliente = {
         id: 0,
@@ -2175,6 +2184,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2190,7 +2201,9 @@ __webpack_require__.r(__webpack_exports__);
       },
       Supervisores: [],
       Ingenios: [],
-      editmodo: false
+      editmodo: false,
+      mensaje: "hidden",
+      textomensaje: ""
     };
   },
   created: function created() {
@@ -2246,7 +2259,8 @@ __webpack_require__.r(__webpack_exports__);
         axios.post("/api/designaciones/", this.designacione).then(function (res) {
           _this4.designaciones.push(designacione);
 
-          alert('Se ha creado Exitosamente');
+          _this4.textomensaje = "Se ha creado Exitosamente";
+          _this4.mensaje = "mostrar";
         });
       } else {
         axios.put("/api/designaciones/".concat(this.designacione.id), designacione).then(function (res) {
@@ -2255,7 +2269,8 @@ __webpack_require__.r(__webpack_exports__);
           });
 
           _this4.designacione[index] = res.data;
-          alert('Se ha actualizado Exitosamente');
+          _this4.textomensaje = "Se ha actualizado Exitosamente";
+          _this4.mensaje = "mostrar";
         });
       }
 
@@ -2270,11 +2285,14 @@ __webpack_require__.r(__webpack_exports__);
         axios["delete"]("/api/designaciones/".concat(designacione.id)).then(function () {
           _this5.designaciones.splice(index, 1);
 
-          alert('Se ha eliminado Exitosamente');
+          _this5.textomensaje = "Se ha eliminado Exitosamente";
+          _this5.mensaje = "mostrar";
         });
       }
     },
     limpiarFormulario: function limpiarFormulario() {
+      this.textomensaje = "";
+      this.mensaje = "hidden";
       this.editmodo = false;
       this.designacione = {
         id: 0,
@@ -2375,6 +2393,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2383,7 +2404,9 @@ __webpack_require__.r(__webpack_exports__);
         id: 0,
         nombre: ""
       },
-      editmodo: false
+      editmodo: false,
+      mensaje: "hidden",
+      textomensaje: ""
     };
   },
   created: function created() {
@@ -2413,7 +2436,8 @@ __webpack_require__.r(__webpack_exports__);
         axios.post("/api/estpagos/", this.EstadosPago).then(function (res) {
           _this2.EstadosPagos.push(EstadosPago);
 
-          alert('Se ha creado Exitosamente');
+          _this2.textomensaje = "Se ha creado Exitosamente";
+          _this2.mensaje = "mostrar";
         });
       } else {
         axios.put("/api/estpagos/".concat(this.EstadosPago.id), EstadosPago).then(function (res) {
@@ -2423,7 +2447,8 @@ __webpack_require__.r(__webpack_exports__);
 
           _this2.EstadosPago[index] = res.data;
           _this2.editmodo = false;
-          alert('Se ha actualizado Exitosamente');
+          _this2.textomensaje = "Se ha actualizado Exitosamente";
+          _this2.mensaje = "mostrar";
         });
       }
 
@@ -2438,11 +2463,14 @@ __webpack_require__.r(__webpack_exports__);
         axios["delete"]("/api/estpagos/".concat(EstadosPago.id)).then(function () {
           _this3.EstadosPagos.splice(index, 1);
 
-          alert('Se ha eliminado Exitosamente');
+          _this3.textomensaje = "Se ha eliminado Exitosamente";
+          _this3.mensaje = "mostrar";
         });
       }
     },
     limpiarFormulario: function limpiarFormulario() {
+      this.textomensaje = "";
+      this.mensaje = "hidden";
       this.editmodo = false;
       this.EstadosPago = {
         id: 0,
@@ -2608,6 +2636,80 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2616,13 +2718,21 @@ __webpack_require__.r(__webpack_exports__);
         id: 0,
         fecha_servicio: null,
         ruc: "",
-        razon_social: ""
+        razon_social: "",
+        fecha_factura: null,
+        num_factura: "",
+        monto_factura: 0,
+        fecha_pago: null,
+        facturado: 0
       },
       totptefacturar: 0,
       totpago: 0,
       totpagodet: 0,
       totalservicio: 0,
-      totalfacturado: 0
+      totalfacturado: 0,
+      opcionFiltro: 0,
+      mensaje: "hidden",
+      textomensaje: ""
     };
   },
   created: function created() {
@@ -2630,15 +2740,17 @@ __webpack_require__.r(__webpack_exports__);
     this.cargarServicios(0);
   },
   methods: {
-    cargarServicios: function cargarServicios(org) {
+    cargarServicios: function cargarServicios() {
       var _this = this;
 
+      this.limpiarFormulario();
+      var org = this.opcionFiltro;
       var url = "api/serviciopte";
 
       if (org == 1) {
         url = "api/servicioptepago";
       } else if (org == 2) {
-        url = "api/servicioptepagodet";
+        url = "api/serviciopteliq";
       }
 
       axios.get(url).then(function (res) {
@@ -2660,19 +2772,87 @@ __webpack_require__.r(__webpack_exports__);
           _this2.totpagodet = res.data[0].totpagodet;
           _this2.totalservicio = res.data[0].totalservicio;
           _this2.totalfacturado = res.data[0].totalfacturado;
-          console.log(res.data);
+
+          if (_this2.totalservicio == null) {
+            _this2.totalservicio = 0;
+          }
+
+          if (_this2.totalfacturado == null) {
+            _this2.totalfacturado = 0;
+          }
         } else {
           console.log("No se encontro registros");
         }
       });
     },
-    emitirFactura: function emitirFactura(id) {
-      this.servicio = this.servicios[id];
-      alert('Facturar: ' + this.servicio);
+    emitirFactura: function emitirFactura(servicio) {
+      var _this3 = this;
+
+      this.facturado = 0;
+      axios.put("/api/home/".concat(servicio.id), servicio).then(function (res) {
+        var index = _this3.servicios.findIndex(function (item) {
+          return item.id === servicio.id;
+        });
+
+        _this3.servicios[index] = res.data;
+        _this3.textomensaje = "Se ha actualizado Exitosamente";
+        _this3.mensaje = "mostrar";
+
+        _this3.cargartotalservicio();
+
+        _this3.cargarServicios(0);
+      });
     },
-    emitirPago: function emitirPago(id) {
+    emitirPago: function emitirPago(servicio) {
+      var _this4 = this;
+
+      this.facturado = 1;
+      axios.put("/api/home/".concat(servicio.id), servicio).then(function (res) {
+        var index = _this4.servicios.findIndex(function (item) {
+          return item.id === servicio.id;
+        });
+
+        _this4.servicios[index] = res.data;
+        _this4.textomensaje = "Se ha actualizado Exitosamente";
+        _this4.mensaje = "mostrar";
+
+        _this4.cargarServicios(1);
+      });
+    },
+    enviarid: function enviarid(id) {
       this.servicio = this.servicios[id];
-      alert('Pagar: ' + this.servicio);
+      var fecha = new Date();
+      var mes = fecha.getMonth() + 1;
+      var dia = fecha.getDate();
+      var ano = fecha.getFullYear();
+
+      if (dia < 10) {
+        dia = '0' + dia;
+      }
+
+      if (mes < 10) {
+        mes = '0' + mes;
+      }
+
+      this.servicio.fecha_factura = ano + "-" + mes + "-" + dia;
+      this.servicio.fecha_pago = ano + "-" + mes + "-" + dia;
+      this.textomensaje = "";
+      this.mensaje = "hidden";
+    },
+    limpiarFormulario: function limpiarFormulario() {
+      this.textomensaje = "";
+      this.mensaje = "hidden";
+      this.servicios = [], this.servicio = {
+        id: 0,
+        fecha_servicio: null,
+        ruc: "",
+        razon_social: "",
+        fecha_factura: null,
+        num_factura: "",
+        monto_factura: 0,
+        fecha_pago: null,
+        facturado: 0
+      };
     }
   }
 });
@@ -2763,6 +2943,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2771,7 +2953,9 @@ __webpack_require__.r(__webpack_exports__);
         id: 0,
         nombre: ""
       },
-      editmodo: false
+      editmodo: false,
+      mensaje: "hidden",
+      textomensaje: ""
     };
   },
   created: function created() {
@@ -2801,7 +2985,8 @@ __webpack_require__.r(__webpack_exports__);
         axios.post("/api/ingenios/", this.ingenio).then(function (res) {
           _this2.ingenios.push(ingenio);
 
-          alert('Se ha creado Exitosamente');
+          _this2.textomensaje = "Se ha creado Exitosamente";
+          _this2.mensaje = "mostrar";
         });
       } else {
         axios.put("/api/ingenios/".concat(this.ingenio.id), ingenio).then(function (res) {
@@ -2810,7 +2995,8 @@ __webpack_require__.r(__webpack_exports__);
           });
 
           _this2.ingenio[index] = res.data;
-          alert('Se ha actualizado Exitosamente');
+          _this2.textomensaje = "Se ha actualizado Exitosamente";
+          _this2.mensaje = "mostrar";
         });
       }
 
@@ -2825,11 +3011,14 @@ __webpack_require__.r(__webpack_exports__);
         axios["delete"]("/api/ingenios/".concat(ingenio.id)).then(function () {
           _this3.ingenios.splice(index, 1);
 
-          alert('Se ha eliminado Exitosamente');
+          _this3.textomensaje = "Se ha eliminado Exitosamente";
+          _this3.mensaje = "mostrar";
         });
       }
     },
     limpiarFormulario: function limpiarFormulario() {
+      this.textomensaje = "";
+      this.mensaje = "hidden";
       this.editmodo = false;
       this.ingenio = {
         id: 0,
@@ -2927,6 +3116,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2935,7 +3127,9 @@ __webpack_require__.r(__webpack_exports__);
         id: 0,
         nombre: ""
       },
-      editmodo: false
+      editmodo: false,
+      mensaje: "hidden",
+      textomensaje: ""
     };
   },
   created: function created() {
@@ -2965,7 +3159,8 @@ __webpack_require__.r(__webpack_exports__);
         axios.post("/api/LineasProd/", this.LineasProducto).then(function (res) {
           _this2.LineasProductos.push(LineasProducto);
 
-          alert('Se ha creado Exitosamente');
+          _this2.textomensaje = "Se ha actualizado Exitosamente";
+          _this2.mensaje = "mostrar";
         });
       } else {
         axios.put("/api/LineasProd/".concat(this.LineasProducto.id), LineasProducto).then(function (res) {
@@ -2974,7 +3169,8 @@ __webpack_require__.r(__webpack_exports__);
           });
 
           _this2.LineasProducto[index] = res.data;
-          alert('Se ha actualizado Exitosamente');
+          _this2.textomensaje = "Se ha actualizado Exitosamente";
+          _this2.mensaje = "mostrar";
         });
       }
 
@@ -2989,11 +3185,14 @@ __webpack_require__.r(__webpack_exports__);
         axios["delete"]("/api/LineasProd/".concat(LineasProducto.id)).then(function () {
           _this3.LineasProductos.splice(index, 1);
 
-          alert('Se ha eliminado Exitosamente');
+          _this3.textomensaje = "Se ha eliminado Exitosamente";
+          _this3.mensaje = "mostrar";
         });
       }
     },
     limpiarFormulario: function limpiarFormulario() {
+      this.textomensaje = "";
+      this.mensaje = "hidden";
       this.editmodo = false;
       this.LineasProducto = {
         id: 0,
@@ -3091,6 +3290,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -3099,7 +3301,9 @@ __webpack_require__.r(__webpack_exports__);
         id: 0,
         nombre: ""
       },
-      editmodo: false
+      editmodo: false,
+      mensaje: "hidden",
+      textomensaje: ""
     };
   },
   created: function created() {
@@ -3129,7 +3333,8 @@ __webpack_require__.r(__webpack_exports__);
         axios.post("/api/metpagos/", this.ModoPago).then(function (res) {
           _this2.ModoPagos.push(ModoPago);
 
-          alert('Se ha creado Exitosamente');
+          _this2.textomensaje = "Se ha creado Exitosamente";
+          _this2.mensaje = "mostrar";
         });
       } else {
         axios.put("/api/metpagos/".concat(this.ModoPago.id), ModoPago).then(function (res) {
@@ -3138,7 +3343,8 @@ __webpack_require__.r(__webpack_exports__);
           });
 
           _this2.ModoPago[index] = res.data;
-          alert('Se ha actualizado Exitosamente');
+          _this2.textomensaje = "Se ha actualizado Exitosamente";
+          _this2.mensaje = "mostrar";
         });
       }
 
@@ -3153,11 +3359,14 @@ __webpack_require__.r(__webpack_exports__);
         axios["delete"]("/api/metpagos/".concat(ModoPago.id)).then(function () {
           _this3.ModoPagos.splice(index, 1);
 
-          alert('Se ha eliminado Exitosamente');
+          _this3.textomensaje = "Se ha eliminado Exitosamente";
+          _this3.mensaje = "mostrar";
         });
       }
     },
     limpiarFormulario: function limpiarFormulario() {
+      this.textomensaje = "";
+      this.mensaje = "hidden";
       this.editmodo = false;
       this.ModoPago = {
         id: 0,
@@ -3417,7 +3626,6 @@ __webpack_require__.r(__webpack_exports__);
         fecha_liquidacion: null,
         facturado: 0,
         num_factura: "",
-        operacion_cerrada: 0,
         lineas_productos_id: null,
         estados_pago_id: null,
         cliente_id: null,
@@ -3623,7 +3831,6 @@ __webpack_require__.r(__webpack_exports__);
         fecha_liquidacion: null,
         facturado: 0,
         num_factura: "",
-        operacion_cerrada: 0,
         lineas_productos_id: null,
         estados_pago_id: null,
         cliente_id: null,
@@ -3748,6 +3955,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -3761,7 +3970,9 @@ __webpack_require__.r(__webpack_exports__);
         cci: "",
         banco: ""
       },
-      editmodo: false
+      editmodo: false,
+      mensaje: "hidden",
+      textomensaje: ""
     };
   },
   created: function created() {
@@ -3796,7 +4007,8 @@ __webpack_require__.r(__webpack_exports__);
 
             _this2.supervisores.push(supervisor);
 
-            alert('Se ha creado Exitosamente');
+            _this2.textomensaje = "Se ha creado Exitosamente";
+            _this2.mensaje = "mostrar";
           });
         } else {
           axios.put("/api/supervisores/".concat(this.supervisor.id), supervisor).then(function (res) {
@@ -3805,7 +4017,8 @@ __webpack_require__.r(__webpack_exports__);
             });
 
             _this2.supervisor[index] = res.data;
-            alert('Se ha actualizado Exitosamente');
+            _this2.textomensaje = "Se ha actualizado Exitosamente";
+            _this2.mensaje = "mostrar";
           });
         }
 
@@ -3821,11 +4034,14 @@ __webpack_require__.r(__webpack_exports__);
         axios["delete"]("/api/supervisores/".concat(supervisor.id)).then(function () {
           _this3.supervisores.splice(index, 1);
 
-          alert('Se ha eliminado Exitosamente');
+          _this3.textomensaje = "Se ha eliminado Exitosamente";
+          _this3.mensaje = "mostrar";
         });
       }
     },
     limpiarFormulario: function limpiarFormulario() {
+      this.textomensaje = "";
+      this.mensaje = "hidden";
       this.editmodo = false;
       this.supervisor = {
         id: 0,
@@ -3958,6 +4174,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -3974,7 +4192,9 @@ __webpack_require__.r(__webpack_exports__);
       Clientes: [],
       buscliente: "",
       ocultar: "hidden",
-      editmodo: false
+      editmodo: false,
+      mensaje: "hidden",
+      textomensaje: ""
     };
   },
   created: function created() {
@@ -4040,7 +4260,8 @@ __webpack_require__.r(__webpack_exports__);
         axios.post("/api/tarifarios/", this.tarifario).then(function (res) {
           _this4.tarifarios.push(tarifario);
 
-          alert('Se ha creado Exitosamente');
+          _this4.textomensaje = "Se ha creado Exitosamente";
+          _this4.mensaje = "mostrar";
         });
       } else {
         axios.put("/api/tarifarios/".concat(this.tarifario.id), tarifario).then(function (res) {
@@ -4049,7 +4270,8 @@ __webpack_require__.r(__webpack_exports__);
           });
 
           _this4.tarifario[index] = res.data;
-          alert('Se ha actualizado Exitosamente');
+          _this4.textomensaje = "Se ha actualizado Exitosamente";
+          _this4.mensaje = "mostrar";
         });
       }
 
@@ -4064,11 +4286,14 @@ __webpack_require__.r(__webpack_exports__);
         axios["delete"]("/api/tarifarios/".concat(tarifario.id)).then(function () {
           _this5.tarifarios.splice(index, 1);
 
-          alert('Se ha eliminado Exitosamente');
+          _this5.textomensaje = "Se ha eliminado Exitosamente";
+          _this5.mensaje = "mostrar";
         });
       }
     },
     limpiarFormulario: function limpiarFormulario() {
+      this.textomensaje = "";
+      this.mensaje = "hidden";
       this.editmodo = false;
       this.buscliente = "";
       this.ocultar = "hidden";
@@ -4171,6 +4396,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -4179,7 +4407,9 @@ __webpack_require__.r(__webpack_exports__);
         id: 0,
         nombre: ""
       },
-      editmodo: false
+      editmodo: false,
+      mensaje: "hidden",
+      textomensaje: ""
     };
   },
   created: function created() {
@@ -4209,7 +4439,8 @@ __webpack_require__.r(__webpack_exports__);
         axios.post("/api/tiposserv/", this.TipoServicio).then(function (res) {
           _this2.TipoServicios.push(TipoServicio);
 
-          alert('Se ha creado Exitosamente');
+          _this2.textomensaje = "Se ha creado Exitosamente";
+          _this2.mensaje = "mostrar";
         });
       } else {
         axios.put("/api/tiposserv/".concat(this.TipoServicio.id), TipoServicio).then(function (res) {
@@ -4219,7 +4450,8 @@ __webpack_require__.r(__webpack_exports__);
 
           _this2.TipoServicio[index] = res.data;
           _this2.editmodo = false;
-          alert('Se ha actualizado Exitosamente');
+          _this2.textomensaje = "Se ha actualizado Exitosamente";
+          _this2.mensaje = "mostrar";
         });
       }
 
@@ -4234,11 +4466,14 @@ __webpack_require__.r(__webpack_exports__);
         axios["delete"]("/api/tiposserv/".concat(TipoServicio.id)).then(function () {
           _this3.TipoServicios.splice(index, 1);
 
-          alert('Se ha eliminado Exitosamente');
+          _this3.textomensaje = "Se ha eliminado Exitosamente";
+          _this3.mensaje = "mostrar";
         });
       }
     },
     limpiarFormulario: function limpiarFormulario() {
+      this.textomensaje = "";
+      this.mensaje = "hidden";
       this.editmodo = false;
       this.TipoServicio = {
         id: 0,
@@ -39838,6 +40073,16 @@ var render = function() {
   return _c("div", { staticClass: "container-fluid" }, [
     _c("h3", { staticClass: "text-dark mb-4" }, [_vm._v("Clientes")]),
     _vm._v(" "),
+    _c(
+      "div",
+      {
+        staticClass: "alert alert-success w-100",
+        class: _vm.mensaje,
+        attrs: { role: "alert" }
+      },
+      [_vm._v("\n        " + _vm._s(_vm.textomensaje) + "\n    ")]
+    ),
+    _vm._v(" "),
     _c("div", { staticClass: "card shadow" }, [
       _c("div", { staticClass: "card-body" }, [
         _c(
@@ -40158,6 +40403,16 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "container-fluid" }, [
     _c("h3", { staticClass: "text-dark mb-4" }, [_vm._v("Designaciones")]),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        staticClass: "alert alert-success w-100",
+        class: _vm.mensaje,
+        attrs: { role: "alert" }
+      },
+      [_vm._v("\n        " + _vm._s(_vm.textomensaje) + "\n    ")]
+    ),
     _vm._v(" "),
     _c("div", { staticClass: "card shadow" }, [
       _c("div", { staticClass: "card-body" }, [
@@ -40568,6 +40823,16 @@ var render = function() {
   return _c("div", { staticClass: "container-fluid" }, [
     _c("h3", { staticClass: "text-dark mb-4" }, [_vm._v("Estados de Pago")]),
     _vm._v(" "),
+    _c(
+      "div",
+      {
+        staticClass: "alert alert-success w-100",
+        class: _vm.mensaje,
+        attrs: { role: "alert" }
+      },
+      [_vm._v("\n        " + _vm._s(_vm.textomensaje) + "\n    ")]
+    ),
+    _vm._v(" "),
     _c("div", { staticClass: "card shadow" }, [
       _c("div", { staticClass: "card-body" }, [
         _c(
@@ -40911,45 +41176,35 @@ var render = function() {
           _vm._v(" "),
           _c("div", { staticClass: "count" }, [
             _vm._v(_vm._s(_vm.totptefacturar))
-          ]),
+          ])
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "col-md-2  tile_stats_count" }, [
+          _vm._m(1),
           _vm._v(" "),
-          _vm._m(1)
+          _c("div", { staticClass: "count" }, [_vm._v(_vm._s(_vm.totpago))])
         ]),
         _vm._v(" "),
         _c("div", { staticClass: "col-md-2  tile_stats_count" }, [
           _vm._m(2),
           _vm._v(" "),
-          _c("div", { staticClass: "count" }, [_vm._v(_vm._s(_vm.totpago))]),
+          _c("div", { staticClass: "count" }, [_vm._v(_vm._s(_vm.totpagodet))])
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "col-md-2  tile_stats_count" }, [
+          _vm._m(3),
           _vm._v(" "),
-          _vm._m(3)
+          _c("div", { staticClass: "count" }, [
+            _vm._v(_vm._s(_vm.totalservicio))
+          ])
         ]),
         _vm._v(" "),
         _c("div", { staticClass: "col-md-2  tile_stats_count" }, [
           _vm._m(4),
           _vm._v(" "),
-          _c("div", { staticClass: "count" }, [_vm._v(_vm._s(_vm.totpagodet))]),
-          _vm._v(" "),
-          _vm._m(5)
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "col-md-2  tile_stats_count" }, [
-          _vm._m(6),
-          _vm._v(" "),
-          _c("div", { staticClass: "count" }, [
-            _vm._v(_vm._s(_vm.totalservicio))
-          ]),
-          _vm._v(" "),
-          _vm._m(7)
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "col-md-2  tile_stats_count" }, [
-          _vm._m(8),
-          _vm._v(" "),
           _c("div", { staticClass: "count" }, [
             _vm._v(_vm._s(_vm.totalfacturado))
-          ]),
-          _vm._v(" "),
-          _vm._m(9)
+          ])
         ])
       ])
     ]),
@@ -40959,71 +41214,53 @@ var render = function() {
         _c("form", [
           _c("div", { staticClass: "form-row" }, [
             _c("div", { staticClass: "form-group col-md-3" }, [
-              _c("div", { staticClass: "dropdown" }, [
-                _c(
-                  "button",
-                  {
-                    staticClass: "btn btn-primary dropdown-toggle",
-                    attrs: {
-                      "data-toggle": "dropdown",
-                      "aria-expanded": "false",
-                      type: "button"
+              _c(
+                "select",
+                {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.opcionFiltro,
+                      expression: "opcionFiltro"
                     }
-                  },
-                  [_vm._v("Servicios pendiente de facturación")]
-                ),
-                _vm._v(" "),
-                _c(
-                  "div",
-                  {
-                    staticClass: "dropdown-menu",
-                    attrs: { role: "menu", "x-placement": "bottom-start" }
-                  },
-                  [
-                    _c(
-                      "a",
-                      {
-                        staticClass: "dropdown-item",
-                        attrs: { role: "presentation" },
-                        on: {
-                          click: function($event) {
-                            return _vm.cargarServicios(0)
-                          }
-                        }
+                  ],
+                  staticClass: "btn btn-primary",
+                  on: {
+                    change: [
+                      function($event) {
+                        var $$selectedVal = Array.prototype.filter
+                          .call($event.target.options, function(o) {
+                            return o.selected
+                          })
+                          .map(function(o) {
+                            var val = "_value" in o ? o._value : o.value
+                            return val
+                          })
+                        _vm.opcionFiltro = $event.target.multiple
+                          ? $$selectedVal
+                          : $$selectedVal[0]
                       },
-                      [_vm._v("Servicios pendiente de facturación")]
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "a",
-                      {
-                        staticClass: "dropdown-item",
-                        attrs: { role: "presentation" },
-                        on: {
-                          click: function($event) {
-                            return _vm.cargarServicios(1)
-                          }
-                        }
-                      },
-                      [_vm._v("Pendiente de pago ")]
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "a",
-                      {
-                        staticClass: "dropdown-item",
-                        attrs: { role: "presentation" },
-                        on: {
-                          click: function($event) {
-                            return _vm.cargarServicios(2)
-                          }
-                        }
-                      },
-                      [_vm._v("Pendiente de pago detalle")]
-                    )
-                  ]
-                )
-              ])
+                      function($event) {
+                        return _vm.cargarServicios()
+                      }
+                    ]
+                  }
+                },
+                [
+                  _c("option", { attrs: { selected: "", value: "0" } }, [
+                    _vm._v("Servicios pendiente de facturación")
+                  ]),
+                  _vm._v(" "),
+                  _c("option", { attrs: { value: "1" } }, [
+                    _vm._v("Pendiente de pago ")
+                  ]),
+                  _vm._v(" "),
+                  _c("option", { attrs: { value: "2" } }, [
+                    _vm._v("Pendiente por Liquidar ")
+                  ])
+                ]
+              )
             ])
           ])
         ]),
@@ -41046,7 +41283,7 @@ var render = function() {
                 attrs: { id: "dataTable" }
               },
               [
-                _vm._m(10),
+                _vm._m(5),
                 _vm._v(" "),
                 _c(
                   "tbody",
@@ -41061,52 +41298,393 @@ var render = function() {
                       _c("td", [_vm._v(_vm._s(item.fecha_servicio))]),
                       _vm._v(" "),
                       _c("td", [
-                        _c(
-                          "button",
-                          {
-                            staticClass: "btn btn-primary",
-                            attrs: { type: "button", title: "Emitir Factura" },
-                            on: {
-                              click: function($event) {
-                                return _vm.emitirFactura(index)
-                              }
-                            }
-                          },
-                          [_c("i", { staticClass: "fas fa-file-invoice" })]
-                        ),
+                        item.facturado == 0
+                          ? _c(
+                              "button",
+                              {
+                                staticClass: "btn btn-primary",
+                                attrs: {
+                                  type: "button",
+                                  title: "Emitir Factura",
+                                  "data-toggle": "modal",
+                                  "data-target": "#emitirfactura"
+                                },
+                                on: {
+                                  click: function($event) {
+                                    $event.preventDefault()
+                                    return _vm.enviarid(index)
+                                  }
+                                }
+                              },
+                              [_c("i", { staticClass: "fas fa-file-invoice" })]
+                            )
+                          : _vm._e(),
                         _vm._v(" "),
-                        _c(
-                          "button",
-                          {
-                            staticClass: "btn btn-success",
-                            attrs: { type: "button", title: "Emitir Pago" },
-                            on: {
-                              click: function($event) {
-                                return _vm.emitirPago(index)
-                              }
-                            }
-                          },
-                          [_c("i", { staticClass: "fas fa-dollar-sign" })]
-                        )
+                        item.facturado == 1 && item.fecha_pago == null
+                          ? _c(
+                              "button",
+                              {
+                                staticClass: "btn btn-success",
+                                attrs: {
+                                  type: "button",
+                                  title: "Emitir Pago",
+                                  "data-toggle": "modal",
+                                  "data-target": "#emitirPago"
+                                },
+                                on: {
+                                  click: function($event) {
+                                    $event.preventDefault()
+                                    return _vm.enviarid(index)
+                                  }
+                                }
+                              },
+                              [_c("i", { staticClass: "fas fa-dollar-sign" })]
+                            )
+                          : _vm._e(),
+                        _vm._v(" "),
+                        item.facturado == 1 && item.fecha_pago != null
+                          ? _c(
+                              "button",
+                              {
+                                staticClass: "btn btn-warning",
+                                attrs: {
+                                  type: "button",
+                                  title: "Liquidar Servicio",
+                                  "data-toggle": "modal",
+                                  "data-target": "#liquidarservicio"
+                                },
+                                on: {
+                                  click: function($event) {
+                                    $event.preventDefault()
+                                    return _vm.enviarid(index)
+                                  }
+                                }
+                              },
+                              [
+                                _c("i", {
+                                  staticClass: "far fa-calendar-check"
+                                })
+                              ]
+                            )
+                          : _vm._e()
                       ])
                     ])
                   }),
                   0
                 ),
                 _vm._v(" "),
-                _vm._m(11)
+                _vm._m(6)
               ]
             )
           ]
         ),
         _vm._v(" "),
-        _vm._m(12)
+        _vm._m(7)
       ])
     ]),
     _vm._v(" "),
     _c("br"),
     _vm._v(" "),
-    _c("br")
+    _c("br"),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        staticClass: "modal fade",
+        attrs: {
+          id: "emitirfactura",
+          "data-backdrop": "static",
+          "data-keyboard": "false",
+          tabindex: "-1",
+          "aria-labelledby": "emitirfacturaLabel",
+          "aria-hidden": "true"
+        }
+      },
+      [
+        _c("div", { staticClass: "modal-dialog modal-lg" }, [
+          _c("div", { staticClass: "modal-content" }, [
+            _vm._m(8),
+            _vm._v(" "),
+            _c("div", { staticClass: "modal-body" }, [
+              _c(
+                "div",
+                {
+                  staticClass: "alert alert-success w-100",
+                  class: _vm.mensaje,
+                  attrs: { role: "alert" }
+                },
+                [
+                  _vm._v(
+                    "\n                        " +
+                      _vm._s(_vm.textomensaje) +
+                      "\n                    "
+                  )
+                ]
+              ),
+              _vm._v(" "),
+              _c(
+                "form",
+                {
+                  on: {
+                    submit: function($event) {
+                      $event.preventDefault()
+                      return _vm.emitirFactura(_vm.servicio)
+                    }
+                  }
+                },
+                [
+                  _c("div", { staticClass: "form-row" }, [
+                    _c("div", { staticClass: "form-group col-md-6" }, [
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.servicio.id,
+                            expression: "servicio.id"
+                          }
+                        ],
+                        staticClass: "form-control",
+                        attrs: { type: "hidden", id: "id", required: "" },
+                        domProps: { value: _vm.servicio.id },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.$set(_vm.servicio, "id", $event.target.value)
+                          }
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c("label", { attrs: { for: "nombre" } }, [
+                        _vm._v("Fecha")
+                      ]),
+                      _vm._v(" "),
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.servicio.fecha_factura,
+                            expression: "servicio.fecha_factura"
+                          }
+                        ],
+                        staticClass: "form-control",
+                        attrs: {
+                          type: "date",
+                          id: "fecha_factura",
+                          required: ""
+                        },
+                        domProps: { value: _vm.servicio.fecha_factura },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.$set(
+                              _vm.servicio,
+                              "fecha_factura",
+                              $event.target.value
+                            )
+                          }
+                        }
+                      })
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "form-group col-md-6" }, [
+                      _c("label", { attrs: { for: "nombre" } }, [
+                        _vm._v("Numero")
+                      ]),
+                      _vm._v(" "),
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.servicio.num_factura,
+                            expression: "servicio.num_factura"
+                          }
+                        ],
+                        staticClass: "form-control",
+                        attrs: {
+                          type: "text",
+                          id: "num_factura",
+                          required: ""
+                        },
+                        domProps: { value: _vm.servicio.num_factura },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.$set(
+                              _vm.servicio,
+                              "num_factura",
+                              $event.target.value
+                            )
+                          }
+                        }
+                      })
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "form-group col-md-6" }, [
+                      _c("label", { attrs: { for: "nombre" } }, [
+                        _vm._v("Monto")
+                      ]),
+                      _vm._v(" "),
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.servicio.monto_factura,
+                            expression: "servicio.monto_factura"
+                          }
+                        ],
+                        staticClass: "form-control",
+                        attrs: {
+                          type: "number",
+                          id: "monto_factura",
+                          min: "0.00",
+                          required: ""
+                        },
+                        domProps: { value: _vm.servicio.monto_factura },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.$set(
+                              _vm.servicio,
+                              "monto_factura",
+                              $event.target.value
+                            )
+                          }
+                        }
+                      })
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _vm._m(9)
+                ]
+              )
+            ])
+          ])
+        ])
+      ]
+    ),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        staticClass: "modal fade",
+        attrs: {
+          id: "emitirPago",
+          "data-backdrop": "static",
+          "data-keyboard": "false",
+          tabindex: "-1",
+          "aria-labelledby": "emitirPagoLabel",
+          "aria-hidden": "true"
+        }
+      },
+      [
+        _c("div", { staticClass: "modal-dialog modal-lg" }, [
+          _c("div", { staticClass: "modal-content" }, [
+            _vm._m(10),
+            _vm._v(" "),
+            _c("div", { staticClass: "modal-body" }, [
+              _c(
+                "div",
+                {
+                  staticClass: "alert alert-success w-100",
+                  class: _vm.mensaje,
+                  attrs: { role: "alert" }
+                },
+                [
+                  _vm._v(
+                    "\n                        " +
+                      _vm._s(_vm.textomensaje) +
+                      "\n                    "
+                  )
+                ]
+              ),
+              _vm._v(" "),
+              _c(
+                "form",
+                {
+                  on: {
+                    submit: function($event) {
+                      $event.preventDefault()
+                      return _vm.emitirPago(_vm.servicio)
+                    }
+                  }
+                },
+                [
+                  _c("div", { staticClass: "form-row" }, [
+                    _c("div", { staticClass: "form-group col-md-6" }, [
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.servicio.id,
+                            expression: "servicio.id"
+                          }
+                        ],
+                        staticClass: "form-control",
+                        attrs: { type: "hidden", id: "id", required: "" },
+                        domProps: { value: _vm.servicio.id },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.$set(_vm.servicio, "id", $event.target.value)
+                          }
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c("label", { attrs: { for: "nombre" } }, [
+                        _vm._v("Fecha")
+                      ]),
+                      _vm._v(" "),
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.servicio.fecha_pago,
+                            expression: "servicio.fecha_pago"
+                          }
+                        ],
+                        staticClass: "form-control",
+                        attrs: { type: "date", id: "fecha_pago", required: "" },
+                        domProps: { value: _vm.servicio.fecha_pago },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.$set(
+                              _vm.servicio,
+                              "fecha_pago",
+                              $event.target.value
+                            )
+                          }
+                        }
+                      })
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _vm._m(11)
+                ]
+              )
+            ])
+          ])
+        ])
+      ]
+    )
   ])
 }
 var staticRenderFns = [
@@ -41123,30 +41701,9 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("span", { staticClass: "count_bottom" }, [
-      _c("i", { staticClass: "green" }, [_vm._v("4% ")]),
-      _vm._v(" Esta semana")
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
     return _c("span", { staticClass: "count_top" }, [
       _c("i", { staticClass: "fas fa-money-bill-alt" }),
       _vm._v(" Pendiente de pago")
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("span", { staticClass: "count_bottom" }, [
-      _c("i", { staticClass: "green" }, [
-        _c("i", { staticClass: "fas fa-sort-up" }),
-        _vm._v("3% ")
-      ]),
-      _vm._v(" Esta semana")
     ])
   },
   function() {
@@ -41162,18 +41719,6 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("span", { staticClass: "count_bottom" }, [
-      _c("i", { staticClass: "green" }, [
-        _c("i", { staticClass: "fas fa-sort-up" }),
-        _vm._v("34% ")
-      ]),
-      _vm._v(" Esta semana")
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
     return _c("span", { staticClass: "count_top" }, [
       _c("i", { staticClass: "fa fa-dollar-sign" }),
       _vm._v(" Total Costo Servicios")
@@ -41183,33 +41728,9 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("span", { staticClass: "count_bottom" }, [
-      _c("i", { staticClass: "red" }, [
-        _c("i", { staticClass: "fas fa-sort-down" }),
-        _vm._v("12% ")
-      ]),
-      _vm._v(" Esta semana")
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
     return _c("span", { staticClass: "count_top" }, [
       _c("i", { staticClass: "fa fa-dollar-sign" }),
       _vm._v(" Total Facturado")
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("span", { staticClass: "count_bottom" }, [
-      _c("i", { staticClass: "green" }, [
-        _c("i", { staticClass: "fas fa-sort-up" }),
-        _vm._v("34% ")
-      ]),
-      _vm._v(" Esta semana")
     ])
   },
   function() {
@@ -41309,6 +41830,98 @@ var staticRenderFns = [
         )
       ])
     ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "modal-header" }, [
+      _c(
+        "h5",
+        { staticClass: "modal-title", attrs: { id: "emitirfacturaLabel" } },
+        [_vm._v("Emitir Factura")]
+      ),
+      _vm._v(" "),
+      _c(
+        "button",
+        {
+          staticClass: "close",
+          attrs: {
+            type: "button",
+            "data-dismiss": "modal",
+            "aria-label": "Close"
+          }
+        },
+        [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
+      )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "modal-footer" }, [
+      _c(
+        "button",
+        {
+          staticClass: "btn btn-secondary",
+          attrs: { type: "buttom", "data-dismiss": "modal" }
+        },
+        [_vm._v("Cerrar")]
+      ),
+      _vm._v(" "),
+      _c(
+        "button",
+        { staticClass: "btn btn-primary", attrs: { type: "submit" } },
+        [_vm._v("Emitir Factura")]
+      )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "modal-header" }, [
+      _c(
+        "h5",
+        { staticClass: "modal-title", attrs: { id: "emitirPagoLabel" } },
+        [_vm._v("Emitir Pago")]
+      ),
+      _vm._v(" "),
+      _c(
+        "button",
+        {
+          staticClass: "close",
+          attrs: {
+            type: "button",
+            "data-dismiss": "modal",
+            "aria-label": "Close"
+          }
+        },
+        [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
+      )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "modal-footer" }, [
+      _c(
+        "button",
+        {
+          staticClass: "btn btn-secondary",
+          attrs: { type: "buttom", "data-dismiss": "modal" }
+        },
+        [_vm._v("Cerrar")]
+      ),
+      _vm._v(" "),
+      _c(
+        "button",
+        { staticClass: "btn btn-primary", attrs: { type: "submit" } },
+        [_vm._v("Emitir Pago")]
+      )
+    ])
   }
 ]
 render._withStripped = true
@@ -41334,6 +41947,16 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "container-fluid" }, [
     _c("h3", { staticClass: "text-dark mb-4" }, [_vm._v("Ingenios")]),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        staticClass: "alert alert-success w-100",
+        class: _vm.mensaje,
+        attrs: { role: "alert" }
+      },
+      [_vm._v("\n        " + _vm._s(_vm.textomensaje) + "\n    ")]
+    ),
     _vm._v(" "),
     _c("div", { staticClass: "card shadow" }, [
       _c("div", { staticClass: "card-body" }, [
@@ -41625,6 +42248,16 @@ var render = function() {
     _c("h3", { staticClass: "text-dark mb-4" }, [
       _vm._v("Líneas de Productos")
     ]),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        staticClass: "alert alert-success w-100",
+        class: _vm.mensaje,
+        attrs: { role: "alert" }
+      },
+      [_vm._v("\n        " + _vm._s(_vm.textomensaje) + "\n    ")]
+    ),
     _vm._v(" "),
     _c("div", { staticClass: "card shadow" }, [
       _c("div", { staticClass: "card-body" }, [
@@ -41918,6 +42551,16 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "container-fluid" }, [
     _c("h3", { staticClass: "text-dark mb-4" }, [_vm._v("Modos de Pago")]),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        staticClass: "alert alert-success w-100",
+        class: _vm.mensaje,
+        attrs: { role: "alert" }
+      },
+      [_vm._v("\n        " + _vm._s(_vm.textomensaje) + "\n    ")]
+    ),
     _vm._v(" "),
     _c("div", { staticClass: "card shadow" }, [
       _c("div", { staticClass: "card-body" }, [
@@ -43430,6 +44073,16 @@ var render = function() {
   return _c("div", { staticClass: "container-fluid" }, [
     _c("h3", { staticClass: "text-dark mb-4" }, [_vm._v("Supervisores")]),
     _vm._v(" "),
+    _c(
+      "div",
+      {
+        staticClass: "alert alert-success w-100",
+        class: _vm.mensaje,
+        attrs: { role: "alert" }
+      },
+      [_vm._v("\n        " + _vm._s(_vm.textomensaje) + "\n    ")]
+    ),
+    _vm._v(" "),
     _c("div", { staticClass: "card shadow" }, [
       _c("div", { staticClass: "card-body" }, [
         _c(
@@ -43860,6 +44513,16 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "container-fluid" }, [
     _c("h3", { staticClass: "text-dark mb-4" }, [_vm._v("Tarifarios")]),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        staticClass: "alert alert-success w-100",
+        class: _vm.mensaje,
+        attrs: { role: "alert" }
+      },
+      [_vm._v("\n        " + _vm._s(_vm.textomensaje) + "\n    ")]
+    ),
     _vm._v(" "),
     _c("div", { staticClass: "card shadow" }, [
       _c("div", { staticClass: "card-body" }, [
@@ -44343,6 +45006,16 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "container-fluid" }, [
     _c("h3", { staticClass: "text-dark mb-4" }, [_vm._v("Tipos de Servicios")]),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        staticClass: "alert alert-success w-100",
+        class: _vm.mensaje,
+        attrs: { role: "alert" }
+      },
+      [_vm._v("\n        " + _vm._s(_vm.textomensaje) + "\n    ")]
+    ),
     _vm._v(" "),
     _c("div", { staticClass: "card shadow" }, [
       _c("div", { staticClass: "card-body" }, [

@@ -67,7 +67,6 @@ class ServicioController extends Controller
             $servicio->fecha_liquidacion = $request->fecha_liquidacion;
             $servicio->facturado = $request->facturado;
             $servicio->num_factura = $request->num_factura;
-            $servicio->operacion_cerrada = $request->operacion_cerrada;
             $servicio->lineas_productos_id = $request->lineas_productos_id;
             $servicio->estados_pago_id = $request->estados_pago_id;
             $servicio->cliente_id = $request->cliente_id;
@@ -138,7 +137,6 @@ class ServicioController extends Controller
             $servicio->fecha_liquidacion = $request->fecha_liquidacion;
             $servicio->facturado = $request->facturado;
             $servicio->num_factura = $request->num_factura;
-            $servicio->operacion_cerrada = $request->operacion_cerrada;
             $servicio->lineas_productos_id = $request->lineas_productos_id;
             $servicio->estados_pago_id = $request->estados_pago_id;
             $servicio->cliente_id = $request->cliente_id;

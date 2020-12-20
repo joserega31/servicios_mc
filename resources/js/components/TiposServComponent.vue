@@ -1,6 +1,9 @@
 <template>
     <div class="container-fluid">
         <h3 class="text-dark mb-4">Tipos de Servicios</h3>
+        <div class="alert alert-success w-100" role="alert" :class="mensaje">
+            {{textomensaje}}
+        </div>
         <div class="card shadow">
             <div class="card-body">
                 <div class="table-responsive table mt-2" id="dataTable" role="grid" aria-describedby="dataTable_info">
@@ -78,7 +81,9 @@ export default {
         return {
             TipoServicios: [],
             TipoServicio: { id: 0, nombre: ""},
-            editmodo:false
+            editmodo:false,
+            mensaje:"hidden",
+            textomensaje:""
         };
     },
     created: function () {
@@ -103,7 +108,8 @@ export default {
         if (this.editmodo==false){
             axios.post(`/api/tiposserv/`, this.TipoServicio).then((res) => {
                 this.TipoServicios.push(TipoServicio);
-                alert('Se ha creado Exitosamente');
+                this.textomensaje= "Se ha creado Exitosamente";
+                this.mensaje="mostrar";
             });
         }else{
             axios.put(`/api/tiposserv/${this.TipoServicio.id}`, TipoServicio)
@@ -111,7 +117,8 @@ export default {
                 const index = this.TipoServicios.findIndex(item => item.id === TipoServicio.id);
                 this.TipoServicio[index] = res.data;
                 this.editmodo=false;
-                alert('Se ha actualizado Exitosamente');
+                this.textomensaje= "Se ha actualizado Exitosamente";
+                this.mensaje="mostrar";
             });
         }
         this.limpiarFormulario();
@@ -122,11 +129,14 @@ export default {
             axios.delete(`/api/tiposserv/${TipoServicio.id}`)
             .then(()=>{
                 this.TipoServicios.splice(index, 1);
-                alert('Se ha eliminado Exitosamente');
+                this.textomensaje= "Se ha eliminado Exitosamente";
+                this.mensaje="mostrar";
             });
         }
     },
     limpiarFormulario: function(){
+        this.textomensaje= "";
+        this.mensaje="hidden";
         this.editmodo= false;
         this.TipoServicio= { id: 0, nombre: ""};
     }

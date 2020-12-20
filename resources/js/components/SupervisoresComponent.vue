@@ -1,7 +1,9 @@
 <template>
     <div class="container-fluid">
         <h3 class="text-dark mb-4">Supervisores</h3>
-
+        <div class="alert alert-success w-100" role="alert" :class="mensaje">
+            {{textomensaje}}
+        </div>
         <div class="card shadow">
             <div class="card-body">
                 <div class="table-responsive table mt-2" id="dataTable" role="grid" aria-describedby="dataTable_info">
@@ -103,7 +105,9 @@ export default {
         return {
             supervisores: [],
             supervisor: { id: 0, dni: "", nombres: "", apellidos: "", numcuenta: "", cci: "", banco: ""},
-            editmodo:false
+            editmodo:false,
+            mensaje:"hidden",
+            textomensaje:""
         };
     },
     created: function () {
@@ -132,14 +136,16 @@ export default {
                 axios.post(`/api/supervisores/`, this.supervisor).then((res) => {
                     console.log(res.data);
                     this.supervisores.push(supervisor);
-                    alert('Se ha creado Exitosamente');
+                    this.textomensaje= "Se ha creado Exitosamente";
+                    this.mensaje="mostrar";
                 });
             }else{
                 axios.put(`/api/supervisores/${this.supervisor.id}`, supervisor)
                     .then(res=>{
                     const index = this.supervisores.findIndex(item => item.id === supervisor.id);
                     this.supervisor[index] = res.data;
-                    alert('Se ha actualizado Exitosamente');
+                    this.textomensaje= "Se ha actualizado Exitosamente";
+                    this.mensaje="mostrar";
                 });
             }
             this.limpiarFormulario();
@@ -151,11 +157,14 @@ export default {
             axios.delete(`/api/supervisores/${supervisor.id}`)
             .then(()=>{
                 this.supervisores.splice(index, 1);
-                alert('Se ha eliminado Exitosamente');
+                this.textomensaje= "Se ha eliminado Exitosamente";
+                this.mensaje="mostrar";
             });
         }
     },
     limpiarFormulario: function(){
+        this.textomensaje= "";
+        this.mensaje="hidden";
         this.editmodo= false;
         this.supervisor= { id: 0, dni: "", nombres: "", apellidos: "", numcuenta: "", cci: "", banco: ""};
     }

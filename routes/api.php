@@ -35,4 +35,5 @@ Route::resource('home', 'App\Http\Controllers\HomeController'::class);
 Route::get('serviciopte', 'App\Http\Controllers\HomeController@serviciopte');
 Route::get('servicioptepago', 'App\Http\Controllers\HomeController@servicioptepago');
 Route::get('servicioptepagodet', 'App\Http\Controllers\HomeController@servicioptepagodet');
+Route::get('serviciopteliq', 'App\Http\Controllers\HomeController@serviciopteliq');
 Route::get('totalservicios', 'App\Http\Controllers\HomeController@totalservicios');

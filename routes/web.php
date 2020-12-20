@@ -32,3 +32,5 @@ Route::get('/metpagos', [App\Http\Controllers\MetPagosController::class, 'vistaM
 Route::get('/estpagos', [App\Http\Controllers\EstPagosController::class, 'vistaEpagos'])->name('estpagos');
 Route::get('/tiposserv', [App\Http\Controllers\TiposServController::class, 'vistaTserv'])->name('tiposserv');
 Route::get('/designaciones', [App\Http\Controllers\DesignacionesController::class, 'vistaDesig'])->name('designaciones');
+Route::get('/reportes', [App\Http\Controllers\ReportesController::class, 'index'])->name('reportes');
+Route::get('/configuracion', [App\Http\Controllers\ConfiguracionController::class, 'index'])->name('configuracion');

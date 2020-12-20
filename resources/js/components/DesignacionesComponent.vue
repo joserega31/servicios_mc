@@ -1,7 +1,9 @@
 <template>
     <div class="container-fluid">
         <h3 class="text-dark mb-4">Designaciones</h3>
-
+        <div class="alert alert-success w-100" role="alert" :class="mensaje">
+            {{textomensaje}}
+        </div>
         <div class="card shadow">
             <div class="card-body">
                 <div class="table-responsive table mt-2" id="dataTable" role="grid" aria-describedby="dataTable_info">
@@ -100,7 +102,9 @@ export default {
             designacione: { id: 0, supervisores_id: null, ingenios_id: null, fecha_inicio:null, fecha_fin:null, supervisor:"", ingenio:""},
             Supervisores: [],
             Ingenios: [],
-            editmodo:false
+            editmodo:false,
+            mensaje:"hidden",
+            textomensaje:""
         };
     },
     created: function () {
@@ -147,14 +151,16 @@ export default {
         if (this.editmodo==false){
             axios.post(`/api/designaciones/`, this.designacione).then((res) => {
                 this.designaciones.push(designacione);
-                alert('Se ha creado Exitosamente');
+                this.textomensaje= "Se ha creado Exitosamente";
+                this.mensaje="mostrar";
             });
         }else{
             axios.put(`/api/designaciones/${this.designacione.id}`, designacione)
                 .then(res=>{
                 const index = this.designaciones.findIndex(item => item.id === designacione.id);
                 this.designacione[index] = res.data;
-                alert('Se ha actualizado Exitosamente');
+                this.textomensaje= "Se ha actualizado Exitosamente";
+                this.mensaje="mostrar";
             });
         }
         this.limpiarFormulario();
@@ -165,11 +171,14 @@ export default {
             axios.delete(`/api/designaciones/${designacione.id}`)
             .then(()=>{
                 this.designaciones.splice(index, 1);
-                alert('Se ha eliminado Exitosamente');
+                this.textomensaje= "Se ha eliminado Exitosamente";
+                this.mensaje="mostrar";
             });
         }
     },
     limpiarFormulario: function(){
+        this.textomensaje= "";
+        this.mensaje="hidden";
         this.editmodo= false;
         this.designacione= { id: 0, supervisores_id: null, ingenios_id: null, fecha_inicio:null, fecha_fin:null}
     }
