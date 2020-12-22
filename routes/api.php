@@ -43,3 +43,4 @@ Route::get('servicioptepagodet', 'App\Http\Controllers\HomeController@serviciopt
 Route::get('serviciopteliq', 'App\Http\Controllers\HomeController@serviciopteliq');
 Route::get('totalservicios', 'App\Http\Controllers\HomeController@totalservicios');
 Route::get('submenuxusuario/{id}/{email}', 'App\Http\Controllers\HomeController@cargarSubmenuUsuario');
+Route::get('exportarservicio', 'App\Http\Controllers\HomeController@exportarServicio');

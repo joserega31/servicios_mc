@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\ServiciosExport;
 use App\Models\Servicio;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -9,6 +10,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
 use Exception;
+use Maatwebsite\Excel\Facades\Excel;
 
 class HomeController extends Controller
 {
@@ -56,6 +58,10 @@ class HomeController extends Controller
         return $submenu;
     }
 
+    public function exportarServicio() 
+    {
+        return Excel::download(new ServiciosExport, 'servicios.xlsx');
+    }
 
     /**
     * Update the specified resource in storage.

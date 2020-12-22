@@ -3,37 +3,31 @@
         <div class="row">
             <h3 class="text-dark">Servicios</h3>
             <div class="tile_count">
-                <div class="col-md-2  tile_stats_count">
-                    <span class="count_top"><i class="fa fa-file-invoice"></i> Pendientes por Facturar</span>
-                    <div class="count">{{totptefacturar}}</div>
-                    <!--span class="count_bottom"><i class="green">4% </i> Esta semana</span-->
-                </div>
-                <div class="col-md-2  tile_stats_count">
-                    <span class="count_top"><i class="fas fa-money-bill-alt"></i> Pendiente de pago</span>
-                    <div class="count">{{totpago}}</div>
-                    <!--span class="count_bottom"><i class="green"><i class="fas fa-sort-up"></i>3% </i> Esta semana</span-->
-                </div>
-                <div class="col-md-2  tile_stats_count">
-                    <span class="count_top"><i class="fas fa-money-bill-alt"></i> Pendiente de pago detalle</span>
-                    <div class="count">{{totpagodet}}</div>
-                    <!--span class="count_bottom"><i class="green"><i class="fas fa-sort-up"></i>34% </i> Esta semana</span-->
-                </div>
-                <div class="col-md-2  tile_stats_count">
-                    <span class="count_top"><i class="fa fa-dollar-sign"></i> Total Costo Servicios</span>
-                    <div class="count">{{totalservicio}}</div>
-                    <!--span class="count_bottom"><i class="red"><i class="fas fa-sort-down"></i>12% </i> Esta semana</span-->
-                </div>
-                <div class="col-md-2  tile_stats_count">
-                    <span class="count_top"><i class="fa fa-dollar-sign"></i> Total Facturado</span>
-                    <div class="count">{{totalfacturado}}</div>
-                    <!--span class="count_bottom"><i class="green"><i class="fas fa-sort-up"></i>34% </i> Esta semana</span-->
-                </div>
+                    <div class="col-md-2  tile_stats_count">
+                        <span class="count_top"><i class="fa fa-file-invoice"></i> Pendientes por Facturar</span>
+                        <div class="count">{{totptefacturar}}</div>
+                        <!--span class="count_bottom"><i class="green">4% </i> Esta semana</span-->
+                    </div>
+                    <div class="col-md-2  tile_stats_count">
+                        <span class="count_top"><i class="fas fa-money-bill-alt"></i> Pendiente de pago</span>
+                        <div class="count">{{totpago}}</div>
+                        <!--span class="count_bottom"><i class="green"><i class="fas fa-sort-up"></i>3% </i> Esta semana</span-->
+                    </div>
+                    <div class="col-md-2  tile_stats_count">
+                        <span class="count_top"><i class="fa fa-dollar-sign"></i> Total Costo Servicios</span>
+                        <div class="count">{{totalservicio}}</div>
+                        <!--span class="count_bottom"><i class="red"><i class="fas fa-sort-down"></i>12% </i> Esta semana</span-->
+                    </div>
+                    <div class="col-md-2  tile_stats_count">
+                        <span class="count_top"><i class="fa fa-dollar-sign"></i> Total Facturado</span>
+                        <div class="count">{{totalfacturado}}</div>
+                        <!--span class="count_bottom"><i class="green"><i class="fas fa-sort-up"></i>34% </i> Esta semana</span-->
+                    </div>
             </div>
         </div>
 
         <div class="card shadow">
             <div class="card-body">
-                
                 <form>
                     <div class="form-row">
                         <div class="form-group col-md-3">
@@ -42,6 +36,11 @@
                                 <option value="1">Pendiente de pago </option>
                                 <option value="2">Pendiente por Liquidar </option>
                             </select>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <button type="button" class="btn btn-success" title="Exportar" @click="exportarservicio()">
+                                <i class="far fa-file-excel"></i> Exportar
+                            </button>
                         </div>
                     </div>
                 </form>
@@ -202,6 +201,17 @@ export default {
         this.cargarServicios(0);
     },  
     methods: {
+        cargarTodosServicios: function () {
+            var url = "api/servicios";
+            axios.get(url).then((res) => {
+                if (res.data[0].id){
+                    this.Servicios = res.data;
+                    this.buscliente= res.data.razon_social;
+                }else{
+                    console.log("No se encontro registros");
+                }
+        });
+        },
         cargarServicios: function () {
             this.limpiarFormulario();
             var org =this.opcionFiltro;
@@ -261,6 +271,10 @@ export default {
                 this.mensaje="mostrar";
                 this.cargarServicios(1);
             });
+        },
+        exportarservicio: function () {
+            var url = "api/exportarservicio";
+            window.open(url);
         },
         enviarid: function (id) {
             this.servicio= this.servicios[id];

@@ -36,7 +36,7 @@ Vue.component('funcionrol-component', require('./components/FuncionRolComponent.
 Vue.component('configuracion-component', require('./components/ConfiguracionComponent.vue').default);
 Vue.component('usuarios-component', require('./components/UsuariosComponent.vue').default);
 Vue.component('maestros-component', require('./components/MaestrosComponent.vue').default);
-
+Vue.component('menu-component', require('./components/MenuComponent.vue').default);
 
 
 /**
