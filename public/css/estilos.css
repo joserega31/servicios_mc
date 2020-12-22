@@ -124,3 +124,7 @@
 .dark {
     color: #34495E
 }
+.checkbox{
+    width: 20px;
+    height: 20px;
+}

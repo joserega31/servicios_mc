@@ -57,6 +57,7 @@
                     <div class="text-center d-none d-md-inline"><button class="btn rounded-circle border-0" id="sidebarToggle" type="button"></button></div>
                 </div>
         </nav>
+        <menu-component></menu-component>
         <div class="d-flex flex-column" id="content-wrapper">
                 <div id="content">
                     <nav class="navbar navbar-light navbar-expand bg-white shadow mb-4 topbar static-top">
@@ -120,7 +121,7 @@
                                                 </div>
                                             </a>
                                             <a class="d-flex align-items-center dropdown-item" href="#">
-                                                <div class="dropdown-list-image mr-3"><img class="rounded-circle" src="assets/img/avatars/avatar2.jpeg">
+                                                <div class="dropdown-list-image mr-3"><img class="rounded-circle" src="">
                                                     <div class="status-indicator"></div>
                                                 </div>
                                                 <div class="font-weight-bold">
@@ -129,7 +130,7 @@
                                                 </div>
                                             </a>
                                             <a class="d-flex align-items-center dropdown-item" href="#">
-                                                <div class="dropdown-list-image mr-3"><img class="rounded-circle" src="assets/img/avatars/avatar3.jpeg">
+                                                <div class="dropdown-list-image mr-3"><img class="rounded-circle" src="">
                                                     <div class="bg-warning status-indicator"></div>
                                                 </div>
                                                 <div class="font-weight-bold">
@@ -138,7 +139,7 @@
                                                 </div>
                                             </a>
                                             <a class="d-flex align-items-center dropdown-item" href="#">
-                                                <div class="dropdown-list-image mr-3"><img class="rounded-circle" src="assets/img/avatars/avatar5.jpeg">
+                                                <div class="dropdown-list-image mr-3"><img class="rounded-circle" src="">
                                                     <div class="bg-success status-indicator"></div>
                                                 </div>
                                                 <div class="font-weight-bold">

@@ -52,7 +52,7 @@
                                             </a>
                                         @endif
                                     </div>
-                                    <a class="nav-link" href="{{ route('register') }}">Registrar</a>
+                                    <!--a class="nav-link" href="{{ route('register') }}">Registrar</a-->
                                     <div class="text-center"></div>
                                 </div>
                             </div>

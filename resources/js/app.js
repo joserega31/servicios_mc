@@ -31,6 +31,12 @@ Vue.component('estpagos-component', require('./components/EstpagosComponent.vue'
 Vue.component('tiposserv-component', require('./components/TiposServComponent.vue').default);
 Vue.component('designaciones-component', require('./components/DesignacionesComponent.vue').default);
 Vue.component('home-component', require('./components/HomeComponent.vue').default);
+Vue.component('roles-component', require('./components/RolesComponent.vue').default);
+Vue.component('funcionrol-component', require('./components/FuncionRolComponent.vue').default);
+Vue.component('configuracion-component', require('./components/ConfiguracionComponent.vue').default);
+Vue.component('usuarios-component', require('./components/UsuariosComponent.vue').default);
+Vue.component('maestros-component', require('./components/MaestrosComponent.vue').default);
+
 
 
 /**

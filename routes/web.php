@@ -34,3 +34,6 @@ Route::get('/tiposserv', [App\Http\Controllers\TiposServController::class, 'vist
 Route::get('/designaciones', [App\Http\Controllers\DesignacionesController::class, 'vistaDesig'])->name('designaciones');
 Route::get('/reportes', [App\Http\Controllers\ReportesController::class, 'index'])->name('reportes');
 Route::get('/configuracion', [App\Http\Controllers\ConfiguracionController::class, 'index'])->name('configuracion');
+Route::get('/usuarios', [App\Http\Controllers\UsuariosController::class, 'vistauser'])->name('usuarios');
+Route::get('/roles', [App\Http\Controllers\RolesController::class, 'vistaroles'])->name('roles');
+Route::get('/funcionrol', [App\Http\Controllers\FuncionRolesController::class, 'vistafuncionrol'])->name('funcionrol');
