@@ -110,6 +110,7 @@ export default {
                 this.ingenios.push(ingenio);
                 this.textomensaje= "Se ha creado Exitosamente";
                 this.mensaje="mostrar";
+                this.getKeeps();
             });
         }else{
             axios.put(`/api/ingenios/${this.ingenio.id}`, ingenio)
@@ -118,6 +119,7 @@ export default {
                 this.ingenio[index] = res.data;
                 this.textomensaje= "Se ha actualizado Exitosamente";
                 this.mensaje="mostrar";
+                this.getKeeps();
             });
         }
         this.limpiarFormulario();

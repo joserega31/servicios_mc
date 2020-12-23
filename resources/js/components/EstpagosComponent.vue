@@ -110,6 +110,7 @@ export default {
                 this.EstadosPagos.push(EstadosPago);
                 this.textomensaje= "Se ha creado Exitosamente";
                 this.mensaje="mostrar";
+                this.getKeeps();
             });
         }else{
             axios.put(`/api/estpagos/${this.EstadosPago.id}`, EstadosPago)
@@ -119,6 +120,7 @@ export default {
                 this.editmodo=false;
                 this.textomensaje= "Se ha actualizado Exitosamente";
                 this.mensaje="mostrar";
+                this.getKeeps();
             });
         }
         this.limpiarFormulario();

@@ -116,6 +116,7 @@ export default {
                 this.clientes.push(cliente);
                 this.textomensaje= "Se ha creado Exitosamente";
                 this.mensaje="mostrar";
+                this.getKeeps();
             });
         }else{
             axios.put(`/api/clientes/${this.cliente.id}`, cliente)
@@ -124,6 +125,7 @@ export default {
                 this.cliente[index] = res.data;
                 this.textomensaje= "Se ha actualizado Exitosamente";
                 this.mensaje="mostrar";
+                this.getKeeps();
             });
         }
         this.limpiarFormulario();

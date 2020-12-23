@@ -183,6 +183,7 @@ export default {
                 this.FunRoles.push(FunRol);
                 this.textomensaje= "Se ha creado Exitosamente";
                 this.mensaje="mostrar";
+                this.getKeeps();
             });
         }else{
             axios.put(`/api/funcionroles/${this.FunRol.id}`, FunRol)
@@ -191,9 +192,9 @@ export default {
                 this.FunRol[index] = res.data;
                 this.textomensaje= "Se ha actualizado Exitosamente";
                 this.mensaje="mostrar";
+                this.getKeeps();
             });
         }
-        this.getKeeps();
         this.limpiarFormulario();
     },
     eliminar: function(FunRol, index){

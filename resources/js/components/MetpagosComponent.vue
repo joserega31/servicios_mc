@@ -110,6 +110,7 @@ export default {
                 this.ModoPagos.push(ModoPago);
                 this.textomensaje= "Se ha creado Exitosamente";
                 this.mensaje="mostrar";
+                this.getKeeps();
             });
         }else{
             axios.put(`/api/metpagos/${this.ModoPago.id}`, ModoPago)
@@ -118,6 +119,7 @@ export default {
                 this.ModoPago[index] = res.data;
                 this.textomensaje= "Se ha actualizado Exitosamente";
                 this.mensaje="mostrar";
+                this.getKeeps();
             });
         }
         this.limpiarFormulario();

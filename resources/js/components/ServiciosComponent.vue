@@ -1,6 +1,9 @@
 <template>
 <div class="container-fluid">
     <h3 class="text-dark mb-4">Servicios</h3>
+    <div class="alert alert-success w-100" role="alert" :class="mensaje">
+        {{textomensaje}}
+    </div>
     <div class="card shadow">
         <div class="card-body">
             <div class="table-responsive table mt-2" id="dataTable" role="grid" aria-describedby="dataTable_info">
@@ -218,6 +221,8 @@ export default {
             Ingenios:[],
             buscliente:"",
             ocultar:"hidden",
+            textomensaje: "",
+            mensaje: "hidden",
             editmodo:false
         };
     },
@@ -330,14 +335,18 @@ export default {
         if (this.editmodo==false){
             axios.post(`/api/servicios/`, this.Servicio).then((res) => {
                 this.Servicios.push(Servicio);
-                alert('Se ha creado Exitosamente');
+                this.textomensaje= "Se ha creado Exitosamente";
+                this.mensaje="mostrar";
+                this.getKeeps();
             });
         }else{
             axios.put(`/api/servicios/${this.Servicio.id}`, Servicio)
                 .then(res=>{
                 const index = this.Servicios.findIndex(item => item.id === Servicio.id);
                 this.Servicio[index] = res.data;
-                alert('Se ha actualizado Exitosamente');
+                this.textomensaje= "Se ha actualizado Exitosamente";
+                this.mensaje="mostrar";
+                this.getKeeps();
             });
         }
         this.limpiarFormulario();
@@ -348,7 +357,8 @@ export default {
             axios.delete(`/api/servicios/${Servicio.id}`)
             .then(()=>{
                 this.Servicios.splice(index, 1);
-                alert('Se ha eliminado Exitosamente');
+                this.textomensaje= "Se ha eliminado Exitosamente";
+                this.mensaje="mostrar";
             });
         }
     },
@@ -356,6 +366,8 @@ export default {
         this.editmodo= false;
         this.buscliente="";
         this.ocultar="hidden";
+        this.textomensaje= "";
+        this.mensaje="hidden";
         this.Servicio= {id:0,ingenio_id:null,empresa_transporte:"",conductor:"",placa_unidad:"",placa_carretera:"",guia_transportista:"",almacen:"",cantidad:1,unidad:"",costo_unitario_estiba:0,costo_operativo_extra_estiba:0,costo_flat_estiba:0,costo_total_servicio:0,costo_extra_estiba:0,precio_extra_estiba:0,precio_servicio:0,precio_total_servicio:0,utilidad:0,igv:0,fecha_servicio:null,fecha_pago:null,fecha_liquidacion:null,facturado:0,num_factura:"",lineas_productos_id:null,estados_pago_id:null,cliente_id:null,tipo_servicio_id:null,modos_pagos_id:null, cliente:""};
     }
 

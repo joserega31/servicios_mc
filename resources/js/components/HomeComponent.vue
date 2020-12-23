@@ -301,7 +301,7 @@ export default {
                 this.servicios[index] = res.data;
                 this.textomensaje= "Se ha actualizado Exitosamente";
                 this.mensaje="mostrar";
-                this.cargarServicios(1);
+                this.cargarServicios(1); 
             });
         },
         liquidarservicio: function (servicio) {

@@ -110,6 +110,7 @@ export default {
                 this.LineasProductos.push(LineasProducto);
                 this.textomensaje= "Se ha actualizado Exitosamente";
                 this.mensaje="mostrar";
+                this.getKeeps();
             });
         }else{
             axios.put(`/api/LineasProd/${this.LineasProducto.id}`, LineasProducto)
@@ -118,6 +119,7 @@ export default {
                 this.LineasProducto[index] = res.data;
                 this.textomensaje= "Se ha actualizado Exitosamente";
                 this.mensaje="mostrar";
+                this.getKeeps();
             });
         }
         this.limpiarFormulario();

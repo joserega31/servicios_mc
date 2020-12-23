@@ -2034,6 +2034,8 @@ __webpack_require__.r(__webpack_exports__);
 
           _this2.textomensaje = "Se ha creado Exitosamente";
           _this2.mensaje = "mostrar";
+
+          _this2.getKeeps();
         });
       } else {
         axios.put("/api/clientes/".concat(this.cliente.id), cliente).then(function (res) {
@@ -2044,6 +2046,8 @@ __webpack_require__.r(__webpack_exports__);
           _this2.cliente[index] = res.data;
           _this2.textomensaje = "Se ha actualizado Exitosamente";
           _this2.mensaje = "mostrar";
+
+          _this2.getKeeps();
         });
       }
 
@@ -2329,6 +2333,8 @@ __webpack_require__.r(__webpack_exports__);
 
           _this4.textomensaje = "Se ha creado Exitosamente";
           _this4.mensaje = "mostrar";
+
+          _this4.getKeeps();
         });
       } else {
         axios.put("/api/designaciones/".concat(this.designacione.id), designacione).then(function (res) {
@@ -2339,6 +2345,8 @@ __webpack_require__.r(__webpack_exports__);
           _this4.designacione[index] = res.data;
           _this4.textomensaje = "Se ha actualizado Exitosamente";
           _this4.mensaje = "mostrar";
+
+          _this4.getKeeps();
         });
       }
 
@@ -2506,6 +2514,8 @@ __webpack_require__.r(__webpack_exports__);
 
           _this2.textomensaje = "Se ha creado Exitosamente";
           _this2.mensaje = "mostrar";
+
+          _this2.getKeeps();
         });
       } else {
         axios.put("/api/estpagos/".concat(this.EstadosPago.id), EstadosPago).then(function (res) {
@@ -2517,6 +2527,8 @@ __webpack_require__.r(__webpack_exports__);
           _this2.editmodo = false;
           _this2.textomensaje = "Se ha actualizado Exitosamente";
           _this2.mensaje = "mostrar";
+
+          _this2.getKeeps();
         });
       }
 
@@ -2802,6 +2814,8 @@ __webpack_require__.r(__webpack_exports__);
 
           _this5.textomensaje = "Se ha creado Exitosamente";
           _this5.mensaje = "mostrar";
+
+          _this5.getKeeps();
         });
       } else {
         axios.put("/api/funcionroles/".concat(this.FunRol.id), FunRol).then(function (res) {
@@ -2812,10 +2826,11 @@ __webpack_require__.r(__webpack_exports__);
           _this5.FunRol[index] = res.data;
           _this5.textomensaje = "Se ha actualizado Exitosamente";
           _this5.mensaje = "mostrar";
+
+          _this5.getKeeps();
         });
       }
 
-      this.getKeeps();
       this.limpiarFormulario();
     },
     eliminar: function eliminar(FunRol, index) {
@@ -3392,6 +3407,8 @@ __webpack_require__.r(__webpack_exports__);
 
           _this2.textomensaje = "Se ha creado Exitosamente";
           _this2.mensaje = "mostrar";
+
+          _this2.getKeeps();
         });
       } else {
         axios.put("/api/ingenios/".concat(this.ingenio.id), ingenio).then(function (res) {
@@ -3402,6 +3419,8 @@ __webpack_require__.r(__webpack_exports__);
           _this2.ingenio[index] = res.data;
           _this2.textomensaje = "Se ha actualizado Exitosamente";
           _this2.mensaje = "mostrar";
+
+          _this2.getKeeps();
         });
       }
 
@@ -3566,6 +3585,8 @@ __webpack_require__.r(__webpack_exports__);
 
           _this2.textomensaje = "Se ha actualizado Exitosamente";
           _this2.mensaje = "mostrar";
+
+          _this2.getKeeps();
         });
       } else {
         axios.put("/api/LineasProd/".concat(this.LineasProducto.id), LineasProducto).then(function (res) {
@@ -3576,6 +3597,8 @@ __webpack_require__.r(__webpack_exports__);
           _this2.LineasProducto[index] = res.data;
           _this2.textomensaje = "Se ha actualizado Exitosamente";
           _this2.mensaje = "mostrar";
+
+          _this2.getKeeps();
         });
       }
 
@@ -3856,6 +3879,8 @@ __webpack_require__.r(__webpack_exports__);
 
           _this2.textomensaje = "Se ha creado Exitosamente";
           _this2.mensaje = "mostrar";
+
+          _this2.getKeeps();
         });
       } else {
         axios.put("/api/metpagos/".concat(this.ModoPago.id), ModoPago).then(function (res) {
@@ -3866,6 +3891,8 @@ __webpack_require__.r(__webpack_exports__);
           _this2.ModoPago[index] = res.data;
           _this2.textomensaje = "Se ha actualizado Exitosamente";
           _this2.mensaje = "mostrar";
+
+          _this2.getKeeps();
         });
       }
 
@@ -4030,6 +4057,8 @@ __webpack_require__.r(__webpack_exports__);
 
           _this2.textomensaje = "Se ha creado Exitosamente";
           _this2.mensaje = "mostrar";
+
+          _this2.getKeeps();
         });
       } else {
         axios.put("/api/roles/".concat(this.Rol.id), Rol).then(function (res) {
@@ -4040,6 +4069,8 @@ __webpack_require__.r(__webpack_exports__);
           _this2.Rol[index] = res.data;
           _this2.textomensaje = "Se ha actualizado Exitosamente";
           _this2.mensaje = "mostrar";
+
+          _this2.getKeeps();
         });
       }
 
@@ -4291,6 +4322,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -4336,6 +4370,8 @@ __webpack_require__.r(__webpack_exports__);
       Ingenios: [],
       buscliente: "",
       ocultar: "hidden",
+      textomensaje: "",
+      mensaje: "hidden",
       editmodo: false
     };
   },
@@ -4468,7 +4504,10 @@ __webpack_require__.r(__webpack_exports__);
         axios.post("/api/servicios/", this.Servicio).then(function (res) {
           _this8.Servicios.push(Servicio);
 
-          alert('Se ha creado Exitosamente');
+          _this8.textomensaje = "Se ha creado Exitosamente";
+          _this8.mensaje = "mostrar";
+
+          _this8.getKeeps();
         });
       } else {
         axios.put("/api/servicios/".concat(this.Servicio.id), Servicio).then(function (res) {
@@ -4477,7 +4516,10 @@ __webpack_require__.r(__webpack_exports__);
           });
 
           _this8.Servicio[index] = res.data;
-          alert('Se ha actualizado Exitosamente');
+          _this8.textomensaje = "Se ha actualizado Exitosamente";
+          _this8.mensaje = "mostrar";
+
+          _this8.getKeeps();
         });
       }
 
@@ -4492,7 +4534,8 @@ __webpack_require__.r(__webpack_exports__);
         axios["delete"]("/api/servicios/".concat(Servicio.id)).then(function () {
           _this9.Servicios.splice(index, 1);
 
-          alert('Se ha eliminado Exitosamente');
+          _this9.textomensaje = "Se ha eliminado Exitosamente";
+          _this9.mensaje = "mostrar";
         });
       }
     },
@@ -4500,6 +4543,8 @@ __webpack_require__.r(__webpack_exports__);
       this.editmodo = false;
       this.buscliente = "";
       this.ocultar = "hidden";
+      this.textomensaje = "";
+      this.mensaje = "hidden";
       this.Servicio = {
         id: 0,
         ingenio_id: null,
@@ -45106,6 +45151,16 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "container-fluid" }, [
     _c("h3", { staticClass: "text-dark mb-4" }, [_vm._v("Servicios")]),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        staticClass: "alert alert-success w-100",
+        class: _vm.mensaje,
+        attrs: { role: "alert" }
+      },
+      [_vm._v("\r\n        " + _vm._s(_vm.textomensaje) + "\r\n    ")]
+    ),
     _vm._v(" "),
     _c("div", { staticClass: "card shadow" }, [
       _c("div", { staticClass: "card-body" }, [

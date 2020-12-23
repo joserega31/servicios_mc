@@ -153,6 +153,7 @@ export default {
                 this.designaciones.push(designacione);
                 this.textomensaje= "Se ha creado Exitosamente";
                 this.mensaje="mostrar";
+                this.getKeeps();
             });
         }else{
             axios.put(`/api/designaciones/${this.designacione.id}`, designacione)
@@ -161,6 +162,7 @@ export default {
                 this.designacione[index] = res.data;
                 this.textomensaje= "Se ha actualizado Exitosamente";
                 this.mensaje="mostrar";
+                this.getKeeps();
             });
         }
         this.limpiarFormulario();

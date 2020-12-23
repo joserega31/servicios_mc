@@ -110,6 +110,7 @@ export default {
                 this.Roles.push(Rol);
                 this.textomensaje= "Se ha creado Exitosamente";
                 this.mensaje="mostrar";
+                this.getKeeps();
             });
         }else{
             axios.put(`/api/roles/${this.Rol.id}`, Rol)
@@ -118,6 +119,7 @@ export default {
                 this.Rol[index] = res.data;
                 this.textomensaje= "Se ha actualizado Exitosamente";
                 this.mensaje="mostrar";
+                this.getKeeps();
             });
         }
         this.limpiarFormulario();
