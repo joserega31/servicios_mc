@@ -61,6 +61,7 @@ class HomeController extends Controller
     public function exportarServicio() 
     {
         return Excel::download(new ServiciosExport, 'servicios.xlsx');
+        
     }
 
     /**
