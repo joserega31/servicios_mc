@@ -173,7 +173,6 @@ export default {
       });
     },
     editar:function(id, FunRol){
-        console.log(FunRol);
         this.editmodo= true;
         this.cargarSubmenu(FunRol.menu_id);
         this.FunRol= this.FunRoles[id];
