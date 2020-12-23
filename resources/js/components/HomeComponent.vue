@@ -176,6 +176,38 @@
             </div>
         </div>
 
+        <div class="modal fade" id="liquidarservicio" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="liquidarservicioLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="liquidarservicioLabel">Emitir Pago</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="alert alert-success w-100" role="alert" :class="mensaje">
+                            {{textomensaje}}
+                        </div>
+                        <form @submit.prevent="liquidarservicio(servicio)">
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <input type="hidden" class="form-control" id="id" required v-model="servicio.id">
+                                    <label for="nombre">Fecha</label>
+                                    <input type="date" class="form-control" id="fecha_pago" v-model="servicio.fecha_pago" required>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="buttom" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                <button type="submit" class="btn btn-primary">Emitir Pago</button>
+                            </div>
+
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </div>
 
     </div>   
 </template>
@@ -185,7 +217,7 @@ export default {
     data() {
         return {
             servicios: [],
-            servicio:{id:0, fecha_servicio: null,ruc: "", razon_social: "", fecha_factura:null, num_factura:"", monto_factura:0, fecha_pago:null, facturado:0},
+            servicio:{id:0, fecha_servicio: null,ruc: "", razon_social: "", fecha_factura:null, num_factura:"", monto_factura:0, fecha_pago:null, facturado:0, fecha_factura1:null, fecha_pago1:null},
             totptefacturar:0, 
             totpago: 0,
             totpagodet: 0, 
@@ -289,8 +321,9 @@ export default {
             if(mes<10){
                 mes='0'+mes;
             }
-            this.servicio.fecha_factura= ano+"-"+mes+"-"+dia;
-            this.servicio.fecha_pago= ano+"-"+mes+"-"+dia;
+            this.servicio.fecha_factura1= ano+"-"+mes+"-"+dia;
+            this.servicio.fecha_pago1= ano+"-"+mes+"-"+dia;
+            
             this.textomensaje= "";
             this.mensaje="hidden";
         },
@@ -298,7 +331,7 @@ export default {
             this.textomensaje= "";
             this.mensaje="hidden";
             this.servicios= [],
-            this.servicio={id:0, fecha_servicio: null,ruc: "", razon_social: "", fecha_factura:null, num_factura:"", monto_factura:0, fecha_pago:null, facturado:0}
+            this.servicio={id:0, fecha_servicio: null,ruc: "", razon_social: "", fecha_factura:null, num_factura:"", monto_factura:0, fecha_pago:null, facturado:0, fecha_factura1:null, fecha_pago1:null}
         }
     }
 };

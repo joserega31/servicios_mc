@@ -2789,7 +2789,6 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     editar: function editar(id, FunRol) {
-      console.log(FunRol);
       this.editmodo = true;
       this.cargarSubmenu(FunRol.menu_id);
       this.FunRol = this.FunRoles[id];
@@ -3047,6 +3046,38 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -3060,7 +3091,9 @@ __webpack_require__.r(__webpack_exports__);
         num_factura: "",
         monto_factura: 0,
         fecha_pago: null,
-        facturado: 0
+        facturado: 0,
+        fecha_factura1: null,
+        fecha_pago1: null
       },
       totptefacturar: 0,
       totpago: 0,
@@ -3188,8 +3221,8 @@ __webpack_require__.r(__webpack_exports__);
         mes = '0' + mes;
       }
 
-      this.servicio.fecha_factura = ano + "-" + mes + "-" + dia;
-      this.servicio.fecha_pago = ano + "-" + mes + "-" + dia;
+      this.servicio.fecha_factura1 = ano + "-" + mes + "-" + dia;
+      this.servicio.fecha_pago1 = ano + "-" + mes + "-" + dia;
       this.textomensaje = "";
       this.mensaje = "hidden";
     },
@@ -3205,7 +3238,9 @@ __webpack_require__.r(__webpack_exports__);
         num_factura: "",
         monto_factura: 0,
         fecha_pago: null,
-        facturado: 0
+        facturado: 0,
+        fecha_factura1: null,
+        fecha_pago1: null
       };
     }
   }
@@ -43243,6 +43278,117 @@ var render = function() {
           ])
         ])
       ]
+    ),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        staticClass: "modal fade",
+        attrs: {
+          id: "liquidarservicio",
+          "data-backdrop": "static",
+          "data-keyboard": "false",
+          tabindex: "-1",
+          "aria-labelledby": "liquidarservicioLabel",
+          "aria-hidden": "true"
+        }
+      },
+      [
+        _c("div", { staticClass: "modal-dialog modal-lg" }, [
+          _c("div", { staticClass: "modal-content" }, [
+            _vm._m(11),
+            _vm._v(" "),
+            _c("div", { staticClass: "modal-body" }, [
+              _c(
+                "div",
+                {
+                  staticClass: "alert alert-success w-100",
+                  class: _vm.mensaje,
+                  attrs: { role: "alert" }
+                },
+                [
+                  _vm._v(
+                    "\n                        " +
+                      _vm._s(_vm.textomensaje) +
+                      "\n                    "
+                  )
+                ]
+              ),
+              _vm._v(" "),
+              _c(
+                "form",
+                {
+                  on: {
+                    submit: function($event) {
+                      $event.preventDefault()
+                      return _vm.liquidarservicio(_vm.servicio)
+                    }
+                  }
+                },
+                [
+                  _c("div", { staticClass: "form-row" }, [
+                    _c("div", { staticClass: "form-group col-md-6" }, [
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.servicio.id,
+                            expression: "servicio.id"
+                          }
+                        ],
+                        staticClass: "form-control",
+                        attrs: { type: "hidden", id: "id", required: "" },
+                        domProps: { value: _vm.servicio.id },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.$set(_vm.servicio, "id", $event.target.value)
+                          }
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c("label", { attrs: { for: "nombre" } }, [
+                        _vm._v("Fecha")
+                      ]),
+                      _vm._v(" "),
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.servicio.fecha_pago,
+                            expression: "servicio.fecha_pago"
+                          }
+                        ],
+                        staticClass: "form-control",
+                        attrs: { type: "date", id: "fecha_pago", required: "" },
+                        domProps: { value: _vm.servicio.fecha_pago },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.$set(
+                              _vm.servicio,
+                              "fecha_pago",
+                              $event.target.value
+                            )
+                          }
+                        }
+                      })
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _vm._m(12)
+                ]
+              )
+            ])
+          ])
+        ])
+      ]
     )
   ])
 }
@@ -43435,6 +43581,52 @@ var staticRenderFns = [
       _c(
         "h5",
         { staticClass: "modal-title", attrs: { id: "emitirPagoLabel" } },
+        [_vm._v("Emitir Pago")]
+      ),
+      _vm._v(" "),
+      _c(
+        "button",
+        {
+          staticClass: "close",
+          attrs: {
+            type: "button",
+            "data-dismiss": "modal",
+            "aria-label": "Close"
+          }
+        },
+        [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
+      )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "modal-footer" }, [
+      _c(
+        "button",
+        {
+          staticClass: "btn btn-secondary",
+          attrs: { type: "buttom", "data-dismiss": "modal" }
+        },
+        [_vm._v("Cerrar")]
+      ),
+      _vm._v(" "),
+      _c(
+        "button",
+        { staticClass: "btn btn-primary", attrs: { type: "submit" } },
+        [_vm._v("Emitir Pago")]
+      )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "modal-header" }, [
+      _c(
+        "h5",
+        { staticClass: "modal-title", attrs: { id: "liquidarservicioLabel" } },
         [_vm._v("Emitir Pago")]
       ),
       _vm._v(" "),

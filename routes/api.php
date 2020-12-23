@@ -1,7 +1,5 @@
 <?php
 
-use App\Models\comentarios;
-use App\Models\comercio;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -37,7 +35,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     Route::resource('menu', 'App\Http\Controllers\MenuController'::class);
     Route::resource('submenu', 'App\Http\Controllers\SubMenuController'::class);
     Route::resource('usuarios', 'App\Http\Controllers\UsuariosController'::class);
-
     Route::get('serviciopte', 'App\Http\Controllers\HomeController@serviciopte');
     Route::get('servicioptepago', 'App\Http\Controllers\HomeController@servicioptepago');
     Route::get('servicioptepagodet', 'App\Http\Controllers\HomeController@servicioptepagodet');
@@ -45,5 +42,4 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     Route::get('totalservicios', 'App\Http\Controllers\HomeController@totalservicios');
     Route::get('submenuxusuario/{id}/{email}', 'App\Http\Controllers\HomeController@cargarSubmenuUsuario');
     Route::get('exportarservicio', 'App\Http\Controllers\HomeController@exportarServicio');
-
 //});
