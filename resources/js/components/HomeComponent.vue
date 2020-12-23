@@ -180,7 +180,7 @@
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="liquidarservicioLabel">Emitir Pago</h5>
+                        <h5 class="modal-title" id="liquidarservicioLabel">Liquidar Servicio</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                         </button>
@@ -199,7 +199,7 @@
                             </div>
                             <div class="modal-footer">
                                 <button type="buttom" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                                <button type="submit" class="btn btn-primary">Emitir Pago</button>
+                                <button type="submit" class="btn btn-primary">Liquidar</button>
                             </div>
 
                         </form>
@@ -282,7 +282,7 @@ export default {
             });
         },
         emitirFactura: function (servicio) {
-            this.facturado=0;
+            servicio.facturado=1;
             axios.put(`/api/home/${servicio.id}`, servicio)
                 .then(res=>{
                 const index = this.servicios.findIndex(item => item.id === servicio.id);
@@ -294,7 +294,7 @@ export default {
             });
         },
         emitirPago: function (servicio) {
-            this.facturado=1;
+            servicio.facturado=0;
             axios.put(`/api/home/${servicio.id}`, servicio)
                 .then(res=>{
                 const index = this.servicios.findIndex(item => item.id === servicio.id);
@@ -302,6 +302,17 @@ export default {
                 this.textomensaje= "Se ha actualizado Exitosamente";
                 this.mensaje="mostrar";
                 this.cargarServicios(1);
+            });
+        },
+        liquidarservicio: function (servicio) {
+            servicio.facturado=2;
+            axios.put(`/api/home/${servicio.id}`, servicio)
+                .then(res=>{
+                const index = this.servicios.findIndex(item => item.id === servicio.id);
+                this.servicios[index] = res.data;
+                this.textomensaje= "Se ha actualizado Exitosamente";
+                this.mensaje="mostrar";
+                this.cargarServicios(2);
             });
         },
         exportarservicio: function () {

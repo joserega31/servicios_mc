@@ -3171,7 +3171,7 @@ __webpack_require__.r(__webpack_exports__);
     emitirFactura: function emitirFactura(servicio) {
       var _this4 = this;
 
-      this.facturado = 0;
+      servicio.facturado = 1;
       axios.put("/api/home/".concat(servicio.id), servicio).then(function (res) {
         var index = _this4.servicios.findIndex(function (item) {
           return item.id === servicio.id;
@@ -3189,7 +3189,7 @@ __webpack_require__.r(__webpack_exports__);
     emitirPago: function emitirPago(servicio) {
       var _this5 = this;
 
-      this.facturado = 1;
+      servicio.facturado = 0;
       axios.put("/api/home/".concat(servicio.id), servicio).then(function (res) {
         var index = _this5.servicios.findIndex(function (item) {
           return item.id === servicio.id;
@@ -3200,6 +3200,22 @@ __webpack_require__.r(__webpack_exports__);
         _this5.mensaje = "mostrar";
 
         _this5.cargarServicios(1);
+      });
+    },
+    liquidarservicio: function liquidarservicio(servicio) {
+      var _this6 = this;
+
+      servicio.facturado = 2;
+      axios.put("/api/home/".concat(servicio.id), servicio).then(function (res) {
+        var index = _this6.servicios.findIndex(function (item) {
+          return item.id === servicio.id;
+        });
+
+        _this6.servicios[index] = res.data;
+        _this6.textomensaje = "Se ha actualizado Exitosamente";
+        _this6.mensaje = "mostrar";
+
+        _this6.cargarServicios(2);
       });
     },
     exportarservicio: function exportarservicio() {
@@ -43627,7 +43643,7 @@ var staticRenderFns = [
       _c(
         "h5",
         { staticClass: "modal-title", attrs: { id: "liquidarservicioLabel" } },
-        [_vm._v("Emitir Pago")]
+        [_vm._v("Liquidar Servicio")]
       ),
       _vm._v(" "),
       _c(
@@ -43661,7 +43677,7 @@ var staticRenderFns = [
       _c(
         "button",
         { staticClass: "btn btn-primary", attrs: { type: "submit" } },
-        [_vm._v("Emitir Pago")]
+        [_vm._v("Liquidar")]
       )
     ])
   }

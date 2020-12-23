@@ -75,14 +75,15 @@ class HomeController extends Controller
     {
         try{
             $Servicio = Servicio::findOrFail($id);
-            if ($request->facturado==1){
+            if ($request->facturado==0){
                 $Servicio->fecha_pago = $request->fecha_pago;
-                $Servicio->fecha_liquidacion = new \DateTime();
-            }else{
+            }else if ($request->facturado==1){
                 $Servicio->fecha_factura = $request->fecha_factura;
                 $Servicio->num_factura = $request->num_factura;
                 $Servicio->monto_factura = $request->monto_factura;
                 $Servicio->facturado = 1;
+            }else if ($request->facturado==2){
+                $Servicio->fecha_liquidacion = new \DateTime();
             }
             $Servicio->update();
         } catch (Exception $ex) {
