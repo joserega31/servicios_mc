@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
-//Route::group(['middleware' => ['cors']], function () {
+Route::group(['middleware' => ['cors']], function () {
     //Rutas a las que se permitirá acceso
     Route::resource('servicios', 'App\Http\Controllers\ServicioController'::class);
     Route::resource('clientes', 'App\Http\Controllers\ClientesController'::class);
@@ -42,4 +42,4 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     Route::get('totalservicios', 'App\Http\Controllers\HomeController@totalservicios');
     Route::get('submenuxusuario/{id}/{email}', 'App\Http\Controllers\HomeController@cargarSubmenuUsuario');
     Route::get('exportarservicio', 'App\Http\Controllers\HomeController@exportarServicio');
-//});
+});
