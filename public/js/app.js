@@ -3686,8 +3686,6 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       axios.get("api/submenuxusuario/".concat(id, "/").concat(this.emailuser)).then(function (res) {
-        console.log(res.data);
-
         if (res.data) {
           _this.subnemu = res.data;
         } else {

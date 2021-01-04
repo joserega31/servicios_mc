@@ -39,7 +39,6 @@ export default {
   methods: {
     cargarSubmenu: function (id) {
       axios.get(`api/submenuxusuario/${id}/${this.emailuser}`).then((res) => {
-        console.log(res.data);
         if (res.data){
           this.subnemu = res.data;
         }else{
