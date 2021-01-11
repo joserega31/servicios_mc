@@ -2,7 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\ClientesExport;
+use App\Exports\RolesExport;
+use App\Exports\ServiciosExport;
+use App\Exports\SupervisoresExport;
+use App\Exports\UsersExport;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ReportesController extends Controller
 {
@@ -41,7 +47,7 @@ class ReportesController extends Controller
      * Display the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\Response 
      */
     public function show($id)
     {
@@ -81,4 +87,26 @@ class ReportesController extends Controller
     {
         //
     }
+
+    public function exportarServicio() 
+    {
+        return Excel::download(new ServiciosExport, 'Lista_Servicios.xlsx');
+    }
+    public function exportarlstcli() 
+    {
+        return Excel::download(new ClientesExport, 'Lista_Clientes.xlsx');
+    }
+    public function exportarlstsup() 
+    {
+        return Excel::download(new SupervisoresExport, 'Lista_Supervisores.xlsx');
+    }
+    public function exportarlstuser() 
+    {
+        return Excel::download(new UsersExport, 'Lista_users.xlsx');
+    }
+    public function exportarlstroles() 
+    {
+        return Excel::download(new RolesExport, 'Lista_roles.xlsx');
+    }
+    
 }

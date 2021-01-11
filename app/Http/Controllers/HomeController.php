@@ -58,12 +58,6 @@ class HomeController extends Controller
         return $submenu;
     }
 
-    public function exportarServicio() 
-    {
-        return Excel::download(new ServiciosExport, 'servicios.xlsx');
-        
-    }
-
     /**
     * Update the specified resource in storage.
     *

@@ -38,8 +38,10 @@
                 </div>
 
                     <div class="row">
-                        <div class="col-md-6 align-self-center">
-                            <p id="dataTable_info" class="dataTables_info" role="status" aria-live="polite"></p>
+                        <div class="form-group col-md-6">
+                            <button type="button" class="btn btn-success" title="Exportar" @click="exportar()">
+                                <i class="far fa-file-excel"></i> Exportar
+                            </button>
                         </div>
                         <div class="col-md-6">
                             <nav class="d-lg-flex justify-content-lg-end dataTables_paginate paging_simple_numbers">
@@ -174,6 +176,10 @@ export default {
                 this.mensaje="mostrar";
             });
         }
+    },
+    exportar: function () {
+      var url = "api/exportarlstuser";
+      window.open(url);
     },
     limpiarFormulario: function(){
         this.textomensaje= "";

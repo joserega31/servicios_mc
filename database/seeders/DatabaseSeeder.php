@@ -61,7 +61,7 @@ class DatabaseSeeder extends Seeder
         DB::table('sub_menus')->insert([
             'menu_id' => 2,
             'nombre' => 'Supervisores',
-            'icono' => 'fa fa-users',
+            'icono' => 'fas fa-user-tie',
             'url' => 'supervisores',
             'orden' => 2,
         ]);

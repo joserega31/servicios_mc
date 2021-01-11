@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
-Route::group(['middleware' => ['cors']], function () {
+Route::middleware('cors')->group(function(){
     //Rutas a las que se permitirá acceso
     Route::resource('servicios', 'App\Http\Controllers\ServicioController'::class);
     Route::resource('clientes', 'App\Http\Controllers\ClientesController'::class);
@@ -41,5 +41,11 @@ Route::group(['middleware' => ['cors']], function () {
     Route::get('serviciopteliq', 'App\Http\Controllers\HomeController@serviciopteliq');
     Route::get('totalservicios', 'App\Http\Controllers\HomeController@totalservicios');
     Route::get('submenuxusuario/{id}/{email}', 'App\Http\Controllers\HomeController@cargarSubmenuUsuario');
-    Route::get('exportarservicio', 'App\Http\Controllers\HomeController@exportarServicio');
+    
+    //REPORTES
+    Route::get('exportarservicio', 'App\Http\Controllers\ReportesController@exportarServicio');
+    Route::get('exportarlstcli', 'App\Http\Controllers\ReportesController@exportarlstcli');
+    Route::get('exportarlstsup', 'App\Http\Controllers\ReportesController@exportarlstsup');
+    Route::get('exportarlstuser', 'App\Http\Controllers\ReportesController@exportarlstuser');
+    Route::get('exportarlstroles', 'App\Http\Controllers\ReportesController@exportarlstroles');
 });
