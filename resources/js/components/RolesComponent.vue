@@ -109,6 +109,7 @@ export default {
     guardar: function(Rol){
         if (this.editmodo==false){
             axios.post(`/api/roles/`, this.Rol).then((res) => {
+                console.log(res);
                 this.Roles.push(Rol);
                 this.textomensaje= "Se ha creado Exitosamente";
                 this.mensaje="mostrar";
@@ -117,6 +118,7 @@ export default {
         }else{
             axios.put(`/api/roles/${this.Rol.id}`, Rol)
                 .then(res=>{
+                console.log(res);
                 const index = this.Roles.findIndex(item => item.id === Rol.id);
                 this.Rol[index] = res.data;
                 this.textomensaje= "Se ha actualizado Exitosamente";
