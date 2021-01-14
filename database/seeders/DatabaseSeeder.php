@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
@@ -15,7 +16,7 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         // \App\Models\User::factory(10)->create();
-
+        
         //Menus
         DB::table('menus')->insert([
             'nombre' => 'Servicio',
@@ -144,6 +145,14 @@ class DatabaseSeeder extends Seeder
         ]);
         DB::table('roles')->insert([
             'nombre' => 'Supervisor',
+        ]);
+
+        //USUARIO
+        DB::table('users')->insert([
+            'name' => 'Administrador',
+            'email' => 'webmaster@mcdigitalperu.com',
+            'password' => Hash::make('12345678'),
+            'rol_id' => 1,
         ]);
 
         //Estados del Pago
