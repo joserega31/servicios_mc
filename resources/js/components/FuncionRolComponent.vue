@@ -179,7 +179,7 @@ export default {
     },
     guardar: function(FunRol){
         if (this.editmodo==false){
-            axios.post(`/api/funcionroles/`, this.FunRol).then((res) => {
+            axios.post(`/api/funcionroles`, this.FunRol).then((res) => {
                 this.FunRoles.push(FunRol);
                 this.textomensaje= "Se ha creado Exitosamente";
                 this.mensaje="mostrar";

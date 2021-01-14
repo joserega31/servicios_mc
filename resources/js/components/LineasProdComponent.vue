@@ -106,7 +106,7 @@ export default {
     },
     guardar: function(LineasProducto){
         if (this.editmodo==false){
-            axios.post(`/api/LineasProd/`, this.LineasProducto).then((res) => {
+            axios.post(`/api/LineasProd`, this.LineasProducto).then((res) => {
                 this.LineasProductos.push(LineasProducto);
                 this.textomensaje= "Se ha actualizado Exitosamente";
                 this.mensaje="mostrar";

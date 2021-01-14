@@ -106,7 +106,7 @@ export default {
     },
     guardar: function(ingenio){
         if (this.editmodo==false){
-            axios.post(`/api/ingenios/`, this.ingenio).then((res) => {
+            axios.post(`/api/ingenios`, this.ingenio).then((res) => {
                 this.ingenios.push(ingenio);
                 this.textomensaje= "Se ha creado Exitosamente";
                 this.mensaje="mostrar";

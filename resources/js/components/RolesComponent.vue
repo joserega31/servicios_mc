@@ -108,7 +108,7 @@ export default {
     },
     guardar: function(Rol){
         if (this.editmodo==false){
-            axios.post(`/api/roles/`, this.Rol).then((res) => {
+            axios.post(`/api/roles`, this.Rol).then((res) => {
                 console.log(res);
                 this.Roles.push(Rol);
                 this.textomensaje= "Se ha creado Exitosamente";

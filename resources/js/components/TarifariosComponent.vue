@@ -170,7 +170,7 @@ export default {
     guardar: function(tarifario){
         console.log(tarifario);
         if (this.editmodo==false){
-            axios.post(`/api/tarifarios/`, this.tarifario).then((res) => {
+            axios.post(`/api/tarifarios`, this.tarifario).then((res) => {
                 this.tarifarios.push(tarifario);
                 this.textomensaje= "Se ha creado Exitosamente";
                 this.mensaje="mostrar";

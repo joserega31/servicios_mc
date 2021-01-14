@@ -106,7 +106,7 @@ export default {
     },
     guardar: function(EstadosPago){
         if (this.editmodo==false){
-            axios.post(`/api/estpagos/`, this.EstadosPago).then((res) => {
+            axios.post(`/api/estpagos`, this.EstadosPago).then((res) => {
                 this.EstadosPagos.push(EstadosPago);
                 this.textomensaje= "Se ha creado Exitosamente";
                 this.mensaje="mostrar";

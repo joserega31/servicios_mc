@@ -135,7 +135,7 @@ export default {
             alert('DNI invalido');
         }else{
             if (this.editmodo==false){
-                axios.post(`/api/supervisores/`, this.supervisor).then((res) => {
+                axios.post(`/api/supervisores`, this.supervisor).then((res) => {
                     console.log(res.data);
                     this.supervisores.push(supervisor);
                     this.textomensaje= "Se ha creado Exitosamente";

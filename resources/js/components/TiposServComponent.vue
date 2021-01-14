@@ -106,7 +106,7 @@ export default {
     },
     guardar: function(TipoServicio){
         if (this.editmodo==false){
-            axios.post(`/api/tiposserv/`, this.TipoServicio).then((res) => {
+            axios.post(`/api/tiposserv`, this.TipoServicio).then((res) => {
                 this.TipoServicios.push(TipoServicio);
                 this.textomensaje= "Se ha creado Exitosamente";
                 this.mensaje="mostrar";

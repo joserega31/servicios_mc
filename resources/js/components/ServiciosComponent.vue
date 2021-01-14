@@ -333,7 +333,7 @@ export default {
     guardar: function(Servicio){
         console.log(Servicio);
         if (this.editmodo==false){
-            axios.post(`/api/servicios/`, this.Servicio).then((res) => {
+            axios.post(`/api/servicios`, this.Servicio).then((res) => {
                 this.Servicios.push(Servicio);
                 this.textomensaje= "Se ha creado Exitosamente";
                 this.mensaje="mostrar";

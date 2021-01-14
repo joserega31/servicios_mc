@@ -149,7 +149,7 @@ export default {
     },
     guardar: function(designacione){
         if (this.editmodo==false){
-            axios.post(`/api/designaciones/`, this.designacione).then((res) => {
+            axios.post(`/api/designaciones`, this.designacione).then((res) => {
                 this.designaciones.push(designacione);
                 this.textomensaje= "Se ha creado Exitosamente";
                 this.mensaje="mostrar";

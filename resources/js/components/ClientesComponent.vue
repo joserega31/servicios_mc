@@ -117,7 +117,7 @@ export default {
     },
     guardarCliente: function(cliente){
         if (this.editmodo==false){
-            axios.post(`/api/clientes/`, this.cliente).then((res) => {
+            axios.post(`/api/clientes`, this.cliente).then((res) => {
                 this.clientes.push(cliente);
                 this.textomensaje= "Se ha creado Exitosamente";
                 this.mensaje="mostrar";

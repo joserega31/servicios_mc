@@ -148,7 +148,7 @@ export default {
             this.mensaje="mostrar";
         }else{
             if (this.editmodo==false){
-                axios.post(`/api/usuarios/`, this.usuario).then((res) => {
+                axios.post(`/api/usuarios`, this.usuario).then((res) => {
                     console.log(res.data);
                     this.usuarios.push(usuario);
                     this.textomensaje= "Se ha creado Exitosamente";
