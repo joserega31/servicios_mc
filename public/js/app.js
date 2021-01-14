@@ -13,7 +13,7 @@
 /******/ 		var module = installedModules[moduleId] = {
 /******/ 			i: moduleId,
 /******/ 			l: false,
-/******/ 			exports: {}
+/******/ 			exports: {} 
 /******/ 		};
 /******/
 /******/ 		// Execute the module function
