@@ -67,29 +67,29 @@
                             <div class="form-group col-md-4">
                                 <input type="hidden" class="form-control" id="id" required  v-model="supervisor.id">
                                 <label for="dni">DNI</label>
-                                <input type="text" class="form-control" id="dni" required  v-model="supervisor.dni">
+                                <input type="text" class="form-control" id="dni" required  v-model="supervisor.dni" @input="supervisor.dni = $event.target.value.toUpperCase()">
                             </div>
                             <div class="form-group col-md-4">
                                 <label for="nombre">Nombres</label>
-                                <input type="text" class="form-control" id="nombre" required  v-model="supervisor.nombres">
+                                <input type="text" class="form-control" id="nombre" required  v-model="supervisor.nombres"  @input="supervisor.nombres = $event.target.value.toUpperCase()">
                             </div>
                             <div class="form-group col-md-4">
                                 <label for="apellidos">Apellidos</label>
-                                <input type="text" class="form-control" id="apellidos" required  v-model="supervisor.apellidos">
+                                <input type="text" class="form-control" id="apellidos" required  v-model="supervisor.apellidos" @input="supervisor.apellidos = $event.target.value.toUpperCase()">
                             </div>
                         </div>
                          <div class="form-row">
                             <div class="form-group col-md-4">
                                 <label for="numcuenta">N&uacute;mero de Cuenta</label>
-                                <input type="text" class="form-control" id="numcuenta" required  v-model="supervisor.numcuenta">
+                                <input type="text" class="form-control" id="numcuenta" required  v-model="supervisor.numcuenta" @input="supervisor.numcuenta = $event.target.value.toUpperCase()">
                             </div>
                             <div class="form-group col-md-4">
                                 <label for="cci">CCI</label>
-                                <input type="text" class="form-control" id="cci" required  v-model="supervisor.cci">
+                                <input type="text" class="form-control" id="cci" required  v-model="supervisor.cci" @input="supervisor.cci = $event.target.value.toUpperCase()">
                             </div>
                             <div class="form-group col-md-4">
                                 <label for="banco">Banco</label>
-                                <input type="text" class="form-control" id="banco" required  v-model="supervisor.banco">
+                                <input type="text" class="form-control" id="banco" required  v-model="supervisor.banco" @input="supervisor.banco = $event.target.value.toUpperCase()">
                             </div>
                         </div>
                         <button type="submit" class="btn btn-primary">Guardar</button>

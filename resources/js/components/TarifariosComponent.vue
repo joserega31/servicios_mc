@@ -92,7 +92,7 @@
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="unidad">Unidad</label>
-                                <input type="text" class="form-control" id="unidad" required  v-model="tarifario.unidad">
+                                <input type="text" class="form-control" id="unidad" required  v-model="tarifario.unidad" @input="tarifario.unidad = $event.target.value.toUpperCase()">
                             </div>
                         </div>
                         <button type="submit" class="btn btn-primary">Guardar</button>

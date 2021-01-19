@@ -17,6 +17,8 @@ class CreateClientesTable extends Migration
             $table->increments('id');
             $table->string('razon_social', 45);
             $table->string('ruc', 11);
+            $table->integer('tarifario_id')->unsigned();
+            $table->foreign('tarifario_id')->references('id')->on('tarifarios');
             $table->timestamps();
         });
     }

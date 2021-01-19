@@ -31,7 +31,7 @@
                 <form>
                     <div class="form-row">
                         <div class="form-group col-md-3">
-                            <select class="btn btn-primary" @change="cargarServicios()" v-model="opcionFiltro">
+                            <select class="btn btn-primary form-control" @change="cargarServicios()" v-model="opcionFiltro">
                                 <option selected value="0">Servicios pendiente de facturación</option>
                                 <option value="1">Pendiente de pago </option>
                                 <option value="2">Pendiente por Liquidar </option>

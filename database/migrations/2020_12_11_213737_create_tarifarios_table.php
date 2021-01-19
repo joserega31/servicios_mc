@@ -15,12 +15,8 @@ class CreateTarifariosTable extends Migration
     {
         Schema::create('tarifarios', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('lineas_producto_id')->unsigned();
-            $table->foreign('lineas_producto_id')->references('id')->on('lineas_productos');
-            $table->integer('clientes_id')->unsigned();
-            $table->foreign('clientes_id')->references('id')->on('clientes');
-            $table->double('precio');
-            $table->string('unidad', 10);
+            $table->boolean('vigente');
+            $table->string('nombre', 20);
             $table->timestamps();
         });
     }

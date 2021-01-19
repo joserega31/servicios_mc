@@ -70,11 +70,11 @@
                             <div class="form-group col-md-4">
                                 <input type="hidden" class="form-control" id="id" required  v-model="cliente.id">
                                 <label for="ruc">Ruc</label>
-                                <input type="text" class="form-control" id="ruc" required  v-model="cliente.ruc">
+                                <input type="text" class="form-control" id="ruc" required  v-model="cliente.ruc"  @input="cliente.ruc = $event.target.value.toUpperCase()">
                             </div>
                             <div class="form-group col-md-8">
                                 <label for="razon_social">Raz&oacute;n Social</label>
-                                <input type="text" class="form-control" id="razon_social" required  v-model="cliente.razon_social">
+                                <input type="text" class="form-control" id="razon_social" required  v-model="cliente.razon_social" @input="cliente.razon_social = $event.target.value.toUpperCase()">
                             </div>
                         </div>
                         <button type="submit" class="btn btn-primary">Guardar</button>

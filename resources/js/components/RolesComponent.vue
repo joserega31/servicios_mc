@@ -65,7 +65,7 @@
                             <div class="form-group col-md-12">
                                 <input type="hidden" class="form-control" id="id" required  v-model="Rol.id">
                                 <label for="nombre">Nombres</label>
-                                <input type="text" class="form-control" id="nombre" required  v-model="Rol.nombre">
+                                <input type="text" class="form-control" id="nombre" required  v-model="Rol.nombre" @input="Rol.nombre = $event.target.value.toUpperCase()">
                             </div>
                         </div>
                         <button type="submit" class="btn btn-primary">Guardar</button>

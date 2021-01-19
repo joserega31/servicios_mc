@@ -42,12 +42,16 @@ class CreateServiciosTable extends Migration
             $table->date('fecha_factura')->nullable();
             $table->string('num_factura', 10)->nullable();
             $table->double('monto_factura')->nullable();
+            $table->string('observaciones', 255);
+
             $table->integer('lineas_productos_id')->unsigned();   
             $table->foreign('lineas_productos_id')->references('id')->on('lineas_productos');
             $table->integer('estados_pago_id')->unsigned();   
             $table->foreign('estados_pago_id')->references('id')->on('estados_pagos');
-            $table->integer('cliente_id')->unsigned();   
-            $table->foreign('cliente_id')->references('id')->on('clientes');
+
+            $table->integer('ordenes_servicios_id')->unsigned();   
+            $table->foreign('ordenes_servicios_id')->references('id')->on('ordenes_servicios');
+
             $table->integer('tipo_servicio_id')->unsigned();   
             $table->foreign('tipo_servicio_id')->references('id')->on('tipo_servicios');
             $table->integer('modos_pagos_id')->unsigned(); 

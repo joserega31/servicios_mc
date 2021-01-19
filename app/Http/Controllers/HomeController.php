@@ -37,7 +37,7 @@ class HomeController extends Controller
     }
 
     public function serviciopte(){
-        $servicioPte= DB::select('SELECT s.id, s.fecha_servicio, s.facturado, c.ruc, c.razon_social FROM servicios as s INNER JOIN clientes as c ON s.cliente_id= c.id WHERE S.facturado=0');
+        $servicioPte= DB::select('SELECT s.id, s.fecha_servicio, s.facturado, c.ruc, c.razon_social FROM servicios as s INNER JOIN clientes as c ON s.cliente_id= c.id WHERE s.facturado=0');
         return $servicioPte;
     }
     public function servicioptepago(){
@@ -49,7 +49,7 @@ class HomeController extends Controller
         return $servicioPte;
     }
     public function totalservicios(){
-        $servicioPte= DB::select('SELECT COUNT(IF(facturado = 1, 1, NULL)) as totptefacturar, COUNT(IF(estados_pago_id = 1, 1, NULL)) as totpago, COUNT(IF(estados_pago_id = 2, 1, NULL)) as totpagodet, sum(precio_total_servicio) as totalservicio, sum(monto_factura) as totalfacturado, count(id) as totalGeneral  FROM servicios');
+        $servicioPte= DB::select('SELECT COUNT(IF(facturado = 0, 1, NULL)) as totptefacturar, COUNT(IF(estados_pago_id = 1, 1, NULL)) as totpago, COUNT(IF(estados_pago_id = 2, 1, NULL)) as totpagodet, sum(precio_total_servicio) as totalservicio, sum(monto_factura) as totalfacturado, count(id) as totalGeneral  FROM servicios');
         return $servicioPte;
     }
 

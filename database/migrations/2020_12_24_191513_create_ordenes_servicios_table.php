@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateObservacionesTable extends Migration
+class CreateOrdenesServiciosTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,12 @@ class CreateObservacionesTable extends Migration
      */
     public function up()
     {
-        Schema::create('observaciones', function (Blueprint $table) {
+        Schema::create('ordenes_servicios', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('observaciones', 255);
-            $table->timestamps();
+            $table->date('fecha'); 
+            $table->integer('cliente_id')->unsigned();   
+            $table->foreign('cliente_id')->references('id')->on('clientes');
+            $table->boolean('igv');
         });
     }
 
@@ -27,6 +29,6 @@ class CreateObservacionesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('observaciones');
+        Schema::dropIfExists('ordenes_servicios');
     }
 }
