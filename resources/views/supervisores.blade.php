@@ -2,6 +2,6 @@
 
 @section('content')
 
-<supervisores-component><supervisores-component>
+<supervisores-component :user="{{ Auth::user() }}"><supervisores-component>
 
 @endsection

@@ -24,10 +24,10 @@
                                 <td>{{ item.nommenu }}</td>
                                 <td>{{ item.nomsubmenu }}</td>
                                 <td>
-                                    <button type="button" class="btn btn-warning" title="Editar" @click="editar(index, item)">
+                                    <button type="button" class="btn btn-warning" title="Editar" @click="editar(index, item)" v-if="permiso_editar==1">
                                         <i class="far fa-edit"></i>
                                     </button>
-                                    <button type="button" class="btn btn-danger" title="Eliminar" @click="eliminar(item, index)">
+                                    <button type="button" class="btn btn-danger" title="Eliminar" @click="eliminar(item, index)" v-if="permiso_eliminar==1">
                                         <i class="far fa-trash-alt"></i>
                                     </button>
                                 </td>
@@ -103,7 +103,7 @@
                             </div>
                         </div>
                         <button type="submit" class="btn btn-primary">Guardar</button>
-                        <button type="buttom" class="btn btn-default" @click="limpiarFormulario()">Limpiar</button>
+                        <button type="buttom" class="btn btn-default" @click="limpiarFormulario(1)">Limpiar</button>
                     </form>
             </div>
         </div>
@@ -114,6 +114,7 @@
 
 <script>
 export default {
+    props : ['user'],
     data() {
         return {
             FunRoles: [],
@@ -123,10 +124,15 @@ export default {
             roles:[],
             editmodo:false,
             mensaje:"hidden",
-            textomensaje:""
+            textomensaje:"",
+            emailuser: this.user.email,
+            permiso_crear:0,
+            permiso_editar:0,
+            permiso_eliminar:0
         };
     },
     created: function () {
+        this.cargarPermisosUser();
         this.getKeeps();
         this.cargarRoles();
         this.cargarMenu();
@@ -137,7 +143,17 @@ export default {
       axios.get(url).then((res) => {
         if (res.data){
           this.FunRoles = res.data;
-          console.log(this.FunRoles);
+        }else{
+          console.log("No se encontro registros");
+        }
+      });
+    },
+    cargarPermisosUser: function () {
+      axios.get(`api/cargarPermisosUser/funcionrol/${this.emailuser}`).then((res) => {
+        if (res.data[0]){
+          this.permiso_crear = res.data[0].crear;
+          this.permiso_editar = res.data[0].editar;
+          this.permiso_eliminar = res.data[0].eliminar;
         }else{
           console.log("No se encontro registros");
         }
@@ -179,12 +195,17 @@ export default {
     },
     guardar: function(FunRol){
         if (this.editmodo==false){
-            axios.post(`/api/funcionroles`, this.FunRol).then((res) => {
-                this.FunRoles.push(FunRol);
-                this.textomensaje= "Se ha creado Exitosamente";
+            if (this.permiso_crear==0){
+                this.textomensaje= "No cuenta con los privilegios para realizar esta accion, consulte al administrador";
                 this.mensaje="mostrar";
-                this.getKeeps();
-            });
+            }else{
+                axios.post(`/api/funcionroles`, this.FunRol).then((res) => {
+                    this.FunRoles.push(FunRol);
+                    this.textomensaje= "Se ha creado Exitosamente";
+                    this.mensaje="mostrar";
+                    this.limpiarFormulario(0);
+                });
+            }
         }else{
             axios.put(`/api/funcionroles/${this.FunRol.id}`, FunRol)
                 .then(res=>{
@@ -192,10 +213,9 @@ export default {
                 this.FunRol[index] = res.data;
                 this.textomensaje= "Se ha actualizado Exitosamente";
                 this.mensaje="mostrar";
-                this.getKeeps();
+                this.limpiarFormulario(0);
             });
         }
-        this.limpiarFormulario();
     },
     eliminar: function(FunRol, index){
         const confirmacion = confirm(`Eliminar la funcion:  ${FunRol.nommenu} > ${FunRol.nomsubmenu}`);
@@ -208,11 +228,17 @@ export default {
             });
         }
     },
-    limpiarFormulario: function(){
-        this.textomensaje= "";
-        this.mensaje="hidden";
+    limpiarFormulario: function(org){
+        if (org>0){
+            this.textomensaje= "";
+            this.mensaje="hidden";
+        }
         this.editmodo= false;
         this.FunRol= { id: 0, nombre: "", menu_id:0, sub_menu_id:0, rol_id:0, crear:0, editar:0, eliminar:0};
+        this.cargarPermisosUser();
+        this.getKeeps();
+        this.cargarRoles();
+        this.cargarMenu();
     }
 
   },

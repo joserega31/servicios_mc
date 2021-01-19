@@ -2,6 +2,6 @@
 
 @section('content')
 
-<Clientes-component></Clientes-component>
+<Clientes-component :user="{{ Auth::user() }}"></Clientes-component>
 
 @endsection

@@ -58,6 +58,10 @@ class HomeController extends Controller
         return $submenu;
     }
 
+    public function cargarPermisosUser($url, $email){
+        $persmisos= DB::select('SELECT fr.crear, fr.editar, fr.eliminar FROM ((users as u INNER JOIN roles as r ON u.rol_id= r.id) INNER JOIN funcion_roles as fr ON r.id=fr.rol_id) INNER JOIN sub_menus as sb ON fr.sub_menu_id= sb.id WHERE sb.url="'.$url. '" and u.email="'.$email.'"');
+        return $persmisos;
+    }
     /**
     * Update the specified resource in storage.
     *

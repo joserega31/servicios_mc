@@ -22,7 +22,7 @@ class TarifariosController extends Controller
      */
     public function index()
     {
-       $Tarifario= DB::select('select t.*, c.razon_social as cliente, lp.nombre as linea_prod from (tarifarios as t INNER JOIN clientes AS c ON t.clientes_id=c.id) INNER JOIN lineas_productos lp ON lp.id=t.lineas_producto_id');
+       $Tarifario= DB::select('SELECT id, nombre, if(vigente=0, "NO", "SI") as vigented, vigente FROM tarifarios');
        return $Tarifario;
     }
 
@@ -46,10 +46,8 @@ class TarifariosController extends Controller
     {
         try{
             $Tarifario = new Tarifario();
-            $Tarifario->lineas_producto_id = $request->lineas_producto_id;
-            $Tarifario->clientes_id = $request->clientes_id;
-            $Tarifario->precio = $request->precio;
-            $Tarifario->unidad = $request->unidad;
+            $Tarifario->nombre = $request->nombre;
+            $Tarifario->vigente = $request->vigente;
             $Tarifario->save();
             return $Tarifario;
         } catch (Exception $ex) {
@@ -66,13 +64,13 @@ class TarifariosController extends Controller
     public function show($id)
     {   
         $Tarifario = Tarifario::where('id',$id)->first();    
-        $cliente = Cliente::where('id','=',$Tarifario->clientes_id)->get();
+        /*$cliente = Cliente::where('id','=',$Tarifario->clientes_id)->get();
 
         $data =[
             'Tarifario'=>$Tarifario,
             'cliente'=>$cliente
-        ];
-        return $data;
+        ];*/
+        return $Tarifario;
     }
 
     /**
@@ -97,10 +95,8 @@ class TarifariosController extends Controller
     {
         try{
             $Tarifario = Tarifario::findOrFail($id);
-            $Tarifario->lineas_producto_id = $request->lineas_producto_id;
-            $Tarifario->clientes_id = $request->clientes_id;
-            $Tarifario->precio = $request->precio;
-            $Tarifario->unidad = $request->unidad;
+            $Tarifario->nombre = $request->nombre;
+            $Tarifario->vigente = $request->vigente;
             $Tarifario->update();
             return $Tarifario;
         } catch (Exception $ex) {

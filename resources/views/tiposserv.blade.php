@@ -1,5 +1,5 @@
 @extends('layouts.dashboard')
 
 @section('content')
-<tiposserv-component><tiposserv-component>
+<tiposserv-component :user="{{ Auth::user() }}"><tiposserv-component>
 @endsection

@@ -40,6 +40,7 @@ Route::middleware('cors')->group(function(){
     Route::get('servicioptepagodet', 'App\Http\Controllers\HomeController@servicioptepagodet');
     Route::get('serviciopteliq', 'App\Http\Controllers\HomeController@serviciopteliq');
     Route::get('totalservicios', 'App\Http\Controllers\HomeController@totalservicios');
+    Route::get('cargarPermisosUser/{url}/{email}', 'App\Http\Controllers\HomeController@cargarPermisosUser');
     Route::get('submenuxusuario/{id}/{email}', 'App\Http\Controllers\HomeController@cargarSubmenuUsuario');
     
     //REPORTES
@@ -47,5 +48,5 @@ Route::middleware('cors')->group(function(){
     Route::get('exportarlstcli', 'App\Http\Controllers\ReportesController@exportarlstcli');
     Route::get('exportarlstsup', 'App\Http\Controllers\ReportesController@exportarlstsup');
     Route::get('exportarlstuser', 'App\Http\Controllers\ReportesController@exportarlstuser');
-    Route::get('exportarlstroles', 'App\Http\Controllers\ReportesController@exportarlstroles');
+    Route::get('exportarlstroles', 'App\Http\Controllers\ReportesController@exportarlstroles');   
 });

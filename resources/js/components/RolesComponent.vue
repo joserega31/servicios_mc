@@ -20,10 +20,11 @@
                                 <td>{{ index + 1 }}</td>
                                 <td>{{ item.nombre }}</td>
                                 <td>
-                                    <button type="button" class="btn btn-warning" title="Editar" @click="editar(index)">
+                                    {{permisos.editar}}
+                                    <button type="button" class="btn btn-warning" title="Editar" @click="editar(index)"  v-if="permiso_editar==1">
                                         <i class="far fa-edit"></i>
                                     </button>
-                                    <button type="button" class="btn btn-danger" title="Eliminar" @click="eliminar(item, index)">
+                                    <button type="button" class="btn btn-danger" title="Eliminar" @click="eliminar(item, index)" v-if="permiso_eliminar==1">
                                         <i class="far fa-trash-alt"></i>
                                     </button>
                                 </td>
@@ -69,7 +70,7 @@
                             </div>
                         </div>
                         <button type="submit" class="btn btn-primary">Guardar</button>
-                        <button type="buttom" class="btn btn-default" @click="limpiarFormulario()">Limpiar</button>
+                        <button type="buttom" class="btn btn-default" @click="limpiarFormulario(1)">Limpiar</button>
                     </form>
             </div>
         </div>
@@ -79,16 +80,22 @@
 
 <script>
 export default {
+    props : ['user'],
     data() {
         return {
             Roles: [],
-            Rol: { id: 0, nombre: ""},
+            Rol: { id: 0, nombre: ""}, 
             editmodo:false,
             mensaje:"hidden",
-            textomensaje:""
+            textomensaje:"",
+            emailuser: this.user.email,
+            permiso_crear:0,
+            permiso_editar:0,
+            permiso_eliminar:0
         };
     },
     created: function () {
+        this.cargarPermisosUser();
         this.getKeeps();
     },
   methods: {
@@ -102,31 +109,45 @@ export default {
         }
       });
     },
+    cargarPermisosUser: function () {
+      axios.get(`api/cargarPermisosUser/roles/${this.emailuser}`).then((res) => {
+        if (res.data[0]){
+          this.permiso_crear = res.data[0].crear;
+          this.permiso_editar = res.data[0].editar;
+          this.permiso_eliminar = res.data[0].eliminar;
+        }else{
+          console.log("No se encontro registros");
+        }
+      });
+    },
     editar:function(id){
         this.editmodo= true;
         this.Rol= this.Roles[id];
     },
     guardar: function(Rol){
         if (this.editmodo==false){
-            axios.post(`/api/roles`, this.Rol).then((res) => {
-                console.log(res);
-                this.Roles.push(Rol);
-                this.textomensaje= "Se ha creado Exitosamente";
+            if (this.permiso_crear==0){
+                this.textomensaje= "No cuenta con los privilegios para realizar esta accion, consulte al administrador";
                 this.mensaje="mostrar";
-                this.getKeeps();
-            });
+            }else{
+                axios.post(`/api/roles`, this.Rol).then((res) => {
+                    this.Roles.push(Rol);
+                    this.textomensaje= "Se ha creado Exitosamente";
+                    this.mensaje="mostrar";
+                    this.limpiarFormulario(0);
+                });
+            }
         }else{
             axios.put(`/api/roles/${this.Rol.id}`, Rol)
                 .then(res=>{
-                console.log(res);
                 const index = this.Roles.findIndex(item => item.id === Rol.id);
                 this.Rol[index] = res.data;
                 this.textomensaje= "Se ha actualizado Exitosamente";
                 this.mensaje="mostrar";
-                this.getKeeps();
+                this.limpiarFormulario(0);
             });
         }
-        this.limpiarFormulario();
+        
     },
     eliminar: function(Rol, index){
         const confirmacion = confirm(`Eliminar el Rol ${Rol.nombre}`);
@@ -143,11 +164,15 @@ export default {
       var url = "api/exportarlstroles";
       window.open(url);
     },
-    limpiarFormulario: function(){
-        this.textomensaje= "";
-        this.mensaje="hidden";
+    limpiarFormulario: function(org){
+        if (org>0){
+            this.textomensaje= "";
+            this.mensaje="hidden";
+        }
         this.editmodo= false;
         this.Rol= { id: 0, nombre: ""};
+        this.cargarPermisosUser();
+        this.getKeeps();
     }
 
   },

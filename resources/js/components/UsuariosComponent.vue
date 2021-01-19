@@ -22,10 +22,10 @@
                                 <td>{{ item.email }}</td>
                                 <td>{{ item.rol }}</td>
                                 <td>
-                                    <button type="button" class="btn btn-warning" title="Editar" @click="editar(index)">
+                                    <button type="button" class="btn btn-warning" title="Editar" @click="editar(index)" v-if="permiso_editar==1">
                                         <i class="far fa-edit"></i>
                                     </button>
-                                    <button type="button" class="btn btn-danger" title="Eliminar" @click="eliminar(item, index)">
+                                    <button type="button" class="btn btn-danger" title="Eliminar" @click="eliminar(item, index)" v-if="permiso_eliminar==1">
                                         <i class="far fa-trash-alt"></i>
                                     </button>
                                 </td>
@@ -101,6 +101,7 @@
 
 <script>
 export default {
+    props : ['user'],
     data() {
         return {
             usuarios: [],
@@ -108,12 +109,17 @@ export default {
             roles: [],
             editmodo:false,
             mensaje:"hidden",
-            textomensaje:""
+            textomensaje:"",
+            emailuser: this.user.email,
+            permiso_crear:0,
+            permiso_editar:0,
+            permiso_eliminar:0
         };
     },
     created: function () {
-        this.getKeeps();
+        this.cargarPermisosUser();
         this.cargarRoles();
+        this.getKeeps();
     },
   methods: {
     getKeeps: function () {
@@ -121,6 +127,17 @@ export default {
       axios.get(url).then((res) => {
         if (res.data[0].id){
           this.usuarios = res.data;
+        }else{
+          console.log("No se encontro registros");
+        }
+      });
+    },
+    cargarPermisosUser: function () {
+      axios.get(`api/cargarPermisosUser/usuarios/${this.emailuser}`).then((res) => {
+        if (res.data[0]){
+          this.permiso_crear = res.data[0].crear;
+          this.permiso_editar = res.data[0].editar;
+          this.permiso_eliminar = res.data[0].eliminar;
         }else{
           console.log("No se encontro registros");
         }
@@ -148,12 +165,18 @@ export default {
             this.mensaje="mostrar";
         }else{
             if (this.editmodo==false){
-                axios.post(`/api/usuarios`, this.usuario).then((res) => {
-                    console.log(res.data);
-                    this.usuarios.push(usuario);
-                    this.textomensaje= "Se ha creado Exitosamente";
+                if (this.permiso_crear==0){
+                    this.textomensaje= "No cuenta con los privilegios para realizar esta accion, consulte al administrador";
                     this.mensaje="mostrar";
-                });
+                }else{
+                    axios.post(`/api/usuarios`, this.usuario).then((res) => {
+                        console.log(res.data);
+                        this.usuarios.push(usuario);
+                        this.textomensaje= "Se ha creado Exitosamente";
+                        this.mensaje="mostrar";
+                    });
+                    this.limpiarFormulario();
+                }
             }else{
                 axios.put(`/api/usuarios/${this.usuario.id}`, usuario)
                     .then(res=>{
@@ -162,8 +185,8 @@ export default {
                     this.textomensaje= "Se ha actualizado Exitosamente";
                     this.mensaje="mostrar";
                 });
+                this.limpiarFormulario();
             }
-            this.limpiarFormulario();
         }
     },
     eliminar: function(usuario, index){
@@ -186,8 +209,10 @@ export default {
         this.mensaje="hidden";
         this.editmodo= false;
         this.usuario= { id: 0, name: "", email: "", rol_id: 0, rol:"", password:"", reppassword:""};
+        this.cargarPermisosUser();
+        this.cargarRoles();
+        this.getKeeps();
     }
-
   },
   mounted() {
     console.log("Component mounted.");

@@ -1,5 +1,5 @@
 @extends('layouts.dashboard')
 
 @section('content')
-<ingenios-component><ingenios-component>
+<ingenios-component :user="{{ Auth::user() }}"><ingenios-component>
 @endsection

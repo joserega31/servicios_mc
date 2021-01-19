@@ -45,6 +45,7 @@ class ClientesController extends Controller
             $Cliente = new Cliente();
             $Cliente->ruc = $request->ruc;
             $Cliente->razon_social = $request->razon_social;
+            $Cliente->tarifario_id = $request->tarifario_id;
             $Cliente->save();
             return $Cliente;
         } catch (Exception $ex) {
@@ -88,6 +89,7 @@ class ClientesController extends Controller
             $Cliente = Cliente::findOrFail($id);
             $Cliente->ruc = $request->ruc;
             $Cliente->razon_social = $request->razon_social;
+            $Cliente->tarifario_id = $request->tarifario_id;
             $Cliente->update();
             return $Cliente;
         } catch (Exception $ex) {

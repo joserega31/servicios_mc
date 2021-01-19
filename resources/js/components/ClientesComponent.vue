@@ -22,10 +22,10 @@
                                 <td>{{ item.ruc }}</td>
                                 <td>{{ item.razon_social }}</td>
                                 <td>
-                                    <button type="button" class="btn btn-warning" title="Editar" @click="editarCliente(index)">
+                                    <button type="button" class="btn btn-warning" title="Editar" @click="editarCliente(index)"  v-if="permiso_editar==1">
                                         <i class="far fa-edit"></i>
                                     </button>
-                                    <button type="button" class="btn btn-danger" title="Eliminar" @click="eliminarCliente(item, index)">
+                                    <button type="button" class="btn btn-danger" title="Eliminar" @click="eliminarCliente(item, index)" v-if="permiso_eliminar==1">
                                         <i class="far fa-trash-alt"></i>
                                     </button>
                                 </td>
@@ -67,18 +67,25 @@
             <div class="card-body">
                     <form @submit.prevent="guardarCliente(cliente)">
                         <div class="form-row">
-                            <div class="form-group col-md-4">
+                            <div class="form-group col-md-2">
                                 <input type="hidden" class="form-control" id="id" required  v-model="cliente.id">
                                 <label for="ruc">Ruc</label>
                                 <input type="text" class="form-control" id="ruc" required  v-model="cliente.ruc"  @input="cliente.ruc = $event.target.value.toUpperCase()">
                             </div>
-                            <div class="form-group col-md-8">
+                            <div class="form-group col-md-6">
                                 <label for="razon_social">Raz&oacute;n Social</label>
                                 <input type="text" class="form-control" id="razon_social" required  v-model="cliente.razon_social" @input="cliente.razon_social = $event.target.value.toUpperCase()">
                             </div>
+                            <div class="form-group col-md-4">
+                                <label for="tarifario_id">Tarifario</label>
+                                <select class="form-control" id="tarifario_id" required  v-model="cliente.tarifario_id">
+                                    <option v-for="(item, index) in Tarifarios" :key="index" :value="item.id">{{ item.nombre}}</option>
+                                </select>
+                            </div>
+
                         </div>
                         <button type="submit" class="btn btn-primary">Guardar</button>
-                        <button type="buttom" class="btn btn-default" @click="limpiarFormulario()">Limpiar</button>
+                        <button type="buttom" class="btn btn-default" @click="limpiarFormulario(1)">Limpiar</button>
                     </form>
             </div>
         </div>
@@ -88,17 +95,25 @@
 
 <script>
 export default {
+    props : ['user'],
     data() {
         return {
             clientes: [],
             cliente: { id: 0, ruc: "", razon_social: "" },
             editmodo:false,
+            Tarifarios: [],
             mensaje:"hidden",
-            textomensaje:""
+            textomensaje:"",
+            emailuser: this.user.email,
+            permiso_crear:0,
+            permiso_editar:0,
+            permiso_eliminar:0
         };
     },
     created: function () {
+        this.cargarPermisosUser();
         this.getKeeps();
+        this.cargaTarifarios();
     },
   methods: {
     getKeeps: function () {
@@ -111,18 +126,44 @@ export default {
         }
       });
     },
+    cargarPermisosUser: function () {
+      axios.get(`api/cargarPermisosUser/clientes/${this.emailuser}`).then((res) => {
+        if (res.data[0]){
+          this.permiso_crear = res.data[0].crear;
+          this.permiso_editar = res.data[0].editar;
+          this.permiso_eliminar = res.data[0].eliminar;
+        }else{
+          console.log("No se encontro registros");
+        }
+      });
+    },
+    cargaTarifarios: function () {
+      var url = "api/tarifarios";
+      axios.get(url).then((res) => {
+        if (res.data[0].id){
+          this.Tarifarios = res.data;
+        }else{
+          console.log("No se encontro registros");
+        }
+      });
+    },
     editarCliente:function(id){
         this.editmodo= true;
         this.cliente= this.clientes[id];
     },
     guardarCliente: function(cliente){
         if (this.editmodo==false){
-            axios.post(`/api/clientes`, this.cliente).then((res) => {
-                this.clientes.push(cliente);
-                this.textomensaje= "Se ha creado Exitosamente";
+            if (this.permiso_crear==0){
+                this.textomensaje= "No cuenta con los privilegios para realizar esta accion, consulte al administrador";
                 this.mensaje="mostrar";
-                this.getKeeps();
-            });
+            }else{
+                axios.post(`/api/clientes`, this.cliente).then((res) => {
+                    this.clientes.push(cliente);
+                    this.textomensaje= "Se ha creado Exitosamente";
+                    this.mensaje="mostrar";
+                    this.limpiarFormulario(0);
+                });
+            }
         }else{
             axios.put(`/api/clientes/${this.cliente.id}`, cliente)
                 .then(res=>{
@@ -130,10 +171,9 @@ export default {
                 this.cliente[index] = res.data;
                 this.textomensaje= "Se ha actualizado Exitosamente";
                 this.mensaje="mostrar";
-                this.getKeeps();
+                this.limpiarFormulario(0);
             });
         }
-        this.limpiarFormulario();
     },
     eliminarCliente: function(cliente, index){
         const confirmacion = confirm(`Eliminar el cliente ${cliente.razon_social}`);
@@ -150,11 +190,16 @@ export default {
       var url = "api/exportarlstcli";
       window.open(url);
     },
-    limpiarFormulario: function(){
-        this.textomensaje= "";
-        this.mensaje="hidden";
+    limpiarFormulario: function(org){
+        if (org>0){
+            this.textomensaje= "";
+            this.mensaje="hidden";
+        }
         this.editmodo= false;
         this.cliente= { id: 0, ruc: "", razon_social: "" };
+        this.cargarPermisosUser();
+        this.getKeeps();
+        this.cargaTarifarios();
     }
 
   },

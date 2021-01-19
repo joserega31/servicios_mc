@@ -1,5 +1,5 @@
 @extends('layouts.dashboard')
 
 @section('content')
-<usuarios-component></usuarios-component>
+<usuarios-component :user="{{ Auth::user() }}"></usuarios-component>
 @endsection

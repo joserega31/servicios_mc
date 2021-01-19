@@ -11,21 +11,21 @@
                         <thead>
                             <tr>
                                 <th>Nro</th>
-                                <th class="text-left">Cliente</th>
-                                <th class="text-left">Linea de Producto </th>
+                                <th class="text-left">Nombre</th>
+                                <th class="text-left">Vigente </th>
                                 <th>Acci&oacute;n</th> 
                             </tr>
                         </thead>
                         <tbody>
                             <tr v-for="(item, index) in tarifarios" :key="index">
                                 <td>{{ index + 1 }}</td>
-                                <td>{{ item.cliente }}</td>
-                                <td>{{ item.linea_prod }}</td>
+                                <td>{{ item.nombre }}</td>
+                                <td>{{ item.vigented }}</td>
                                 <td>
-                                    <button type="button" class="btn btn-warning" title="Editar" @click="editar(index)">
+                                    <button type="button" class="btn btn-warning" title="Editar" @click="editar(index)" v-if="permiso_editar==1">
                                         <i class="far fa-edit"></i>
                                     </button>
-                                    <button type="button" class="btn btn-danger" title="Eliminar" @click="eliminar(item, index)">
+                                    <button type="button" class="btn btn-danger" title="Eliminar" @click="eliminar(item, index)" v-if="permiso_eliminar==1">
                                         <i class="far fa-trash-alt"></i>
                                     </button>
                                 </td>
@@ -62,41 +62,21 @@
             <div class="card-body">
                     <form @submit.prevent="guardar(tarifario)">
                         <div class="form-row">
+                            <input type="hidden" class="form-control" id="id" required  v-model="tarifario.id">
                             <div class="form-group col-md-6">
-                                <input type="hidden" class="form-control" id="id" required  v-model="tarifario.id">
-                                <label for="cliente">Cliente</label>
-                                <div class="input-group">
-                                    <input class="bg-light form-control small"  id="cliente" type="text" v-model="tarifario.cliente" @change="limpiarBusqueda()" autocomplete="off">
-                                    <ul id="lstbuscarcliente" class="autocomplete" :class="ocultar">
-                                        <li v-for="(item, index) in Clientes" :key="index" :value="item.id" @click="cargarIdClientes(item.id, item.razon_social)">{{ item.razon_social }}</li>
-                                    </ul>
-                                    <div class="input-group-append">
-                                        <button class="btn btn-primary py-0" type="button" @click="cargarClientes()">
-                                            <i class="fas fa-search" ></i>
-                                        </button>
-                                    </div>
+                                <label for="nombre">Nombre</label>
+                               <input type="text" class="form-control" id="nombre" required v-model="tarifario.nombre" @input="tarifario.nombre = $event.target.value.toUpperCase()">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="nombre">&nbsp;&nbsp;</label>
+                                <div class="form-check">
+                                    <input type="checkbox" class="checkbox" id="vigente" v-model="tarifario.vigente">
+                                    <label class="form-check-label" for="vigente">Vigente</label>
                                 </div>
-                                <input type="hidden" class="form-control" id="clientes_id" required  v-model="tarifario.clientes_id">
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label for="lineas_producto_id">Linea de Producto</label>
-                                <select class="form-control" id="lineas_producto_id" required  v-model="tarifario.lineas_producto_id">
-                                    <option v-for="(item, index) in LineasProductos" :key="index" :value="item.id">{{ item.nombre}}</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group col-md-6">
-                                <label for="precio">Precio</label>
-                               <input type="number" class="form-control" id="precio" step="0.1" min="1" value="0.00" required v-model="tarifario.precio">
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label for="unidad">Unidad</label>
-                                <input type="text" class="form-control" id="unidad" required  v-model="tarifario.unidad" @input="tarifario.unidad = $event.target.value.toUpperCase()">
                             </div>
                         </div>
                         <button type="submit" class="btn btn-primary">Guardar</button>
-                        <button type="buttom" class="btn btn-default" @click="limpiarFormulario()">Limpiar</button>
+                        <button type="buttom" class="btn btn-default" @click="limpiarFormulario(1)">Limpiar</button>
                     </form>
             </div>
         </div>
@@ -106,22 +86,27 @@
 
 <script>
 export default {
+    props : ['user'],
     data() {
         return {
             tarifarios: [],
-            tarifario: { id: 0, lineas_producto_id: null, clientes_id: null, precio:0, unidad:1, cliente:""},
+            tarifario: { id: 0, nombre: null, vigente: null},
             LineasProductos: [],
             Clientes:[],
             buscliente:"",
             ocultar:"hidden",
             editmodo:false,
             mensaje:"hidden",
-            textomensaje:""
+            textomensaje:"",
+            emailuser: this.user.email,
+            permiso_crear:0,
+            permiso_editar:0,
+            permiso_eliminar:0
         };
     },
     created: function () {
+        this.cargarPermisosUser();
         this.getKeeps();
-        this.cargarLineasProd();
     },
   methods: {
     getKeeps: function () {
@@ -140,6 +125,17 @@ export default {
       axios.get(url).then((res) => {
         if (res.data[0].id){
           this.LineasProductos = res.data;
+        }else{
+          console.log("No se encontro registros");
+        }
+      });
+    },
+    cargarPermisosUser: function () {
+      axios.get(`api/cargarPermisosUser/tarifarios/${this.emailuser}`).then((res) => {
+        if (res.data[0]){
+          this.permiso_crear = res.data[0].crear;
+          this.permiso_editar = res.data[0].editar;
+          this.permiso_eliminar = res.data[0].eliminar;
         }else{
           console.log("No se encontro registros");
         }
@@ -170,11 +166,17 @@ export default {
     guardar: function(tarifario){
         console.log(tarifario);
         if (this.editmodo==false){
-            axios.post(`/api/tarifarios`, this.tarifario).then((res) => {
-                this.tarifarios.push(tarifario);
-                this.textomensaje= "Se ha creado Exitosamente";
+            if (this.permiso_crear==0){
+                this.textomensaje= "No cuenta con los privilegios para realizar esta accion, consulte al administrador";
                 this.mensaje="mostrar";
-            });
+            }else{
+                axios.post(`/api/tarifarios`, this.tarifario).then((res) => {
+                    this.tarifarios.push(tarifario);
+                    this.textomensaje= "Se ha creado Exitosamente";
+                    this.mensaje="mostrar";
+                    this.limpiarFormulario(0);
+                });
+            }
         }else{
             axios.put(`/api/tarifarios/${this.tarifario.id}`, tarifario)
                 .then(res=>{
@@ -182,9 +184,9 @@ export default {
                 this.tarifario[index] = res.data;
                 this.textomensaje= "Se ha actualizado Exitosamente";
                 this.mensaje="mostrar";
+                this.limpiarFormulario(0);
             });
         }
-        this.limpiarFormulario();
     },
     eliminar: function(tarifario, index){
         const confirmacion = confirm(`Eliminar el tarifario ${tarifario.nombre}`);
@@ -197,13 +199,17 @@ export default {
             });
         }
     },
-    limpiarFormulario: function(){
-        this.textomensaje= "";
-        this.mensaje="hidden";
+    limpiarFormulario: function(org){
+        if (org>0){
+            this.textomensaje= "";
+            this.mensaje="hidden";
+        }
         this.editmodo= false;
         this.buscliente="";
         this.ocultar="hidden";
         this.tarifario= { id: 0, lineas_producto_id: null, clientes_id: null, precio:0, unidad:1};
+        this.cargarPermisosUser();
+        this.getKeeps();
     }
 
   },

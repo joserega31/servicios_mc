@@ -1,5 +1,5 @@
 @extends('layouts.dashboard')
 
 @section('content')
-<lineasprod-component></lineasprod-component>
+<lineasprod-component :user="{{ Auth::user() }}"></lineasprod-component>
 @endsection

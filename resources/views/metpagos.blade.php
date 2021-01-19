@@ -2,6 +2,6 @@
 
 @section('content')
 
-<metpagos-component></metpagos-component>
+<metpagos-component :user="{{ Auth::user() }}"></metpagos-component>
 
 @endsection
