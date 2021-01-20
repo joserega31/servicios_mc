@@ -54,7 +54,7 @@ class HomeController extends Controller
     }
 
     public function cargarSubmenuUsuario($menu_id, $email){
-        $submenu= DB::select('SELECT sb.nombre, sb.icono, sb.url FROM ((users as u INNER JOIN roles as r ON u.rol_id= r.id) INNER JOIN funcion_roles as fr ON fr.rol_id= r.id) INNER JOIN sub_menus AS sb ON fr.sub_menu_id= sb.id where fr.menu_id= '.$menu_id.' and u.email="'.$email.'"');
+        $submenu= DB::select('SELECT sb.nombre, sb.icono, sb.url FROM ((users as u INNER JOIN roles as r ON u.rol_id= r.id) INNER JOIN funcion_roles as fr ON fr.rol_id= r.id) INNER JOIN sub_menus AS sb ON fr.sub_menu_id= sb.id where fr.menu_id= '.$menu_id.' and u.email="'.$email.'" ORDER BY sb.orden');
         return $submenu;
     }
 
