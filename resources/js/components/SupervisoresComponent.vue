@@ -22,10 +22,10 @@
                                 <td>{{ item.dni }}</td>
                                 <td>{{ item.nombres + " " + item.apellidos }}</td>
                                 <td>
-                                    <button type="button" class="btn btn-warning" title="Editar" @click="editar(index)">
+                                    <button type="button" class="btn btn-warning" title="Editar" @click="editar(index)" v-if="permiso_editar==1">
                                         <i class="far fa-edit"></i>
                                     </button>
-                                    <button type="button" class="btn btn-danger" title="Eliminar" @click="eliminar(item, index)">
+                                    <button type="button" class="btn btn-danger" title="Eliminar" @click="eliminar(item, index)" v-if="permiso_eliminar==1">
                                         <i class="far fa-trash-alt"></i>
                                     </button>
                                 </td>
@@ -93,7 +93,7 @@
                             </div>
                         </div>
                         <button type="submit" class="btn btn-primary">Guardar</button>
-                        <button type="buttom" class="btn btn-default" @click="limpiarFormulario()">Limpiar</button>
+                        <button type="buttom" class="btn btn-default" @click="limpiarFormulario(1)">Limpiar</button>
                     </form>
             </div>
         </div>
@@ -103,16 +103,22 @@
 
 <script>
 export default {
+    props : ['user'],
     data() {
         return {
             supervisores: [],
             supervisor: { id: 0, dni: "", nombres: "", apellidos: "", numcuenta: "", cci: "", banco: ""},
             editmodo:false,
             mensaje:"hidden",
-            textomensaje:""
+            textomensaje:"",
+            emailuser: this.user.email,
+            permiso_crear:0,
+            permiso_editar:0,
+            permiso_eliminar:0
         };
     },
     created: function () {
+        this.cargarPermisosUser();
         this.getKeeps();
     },
   methods: {
@@ -121,6 +127,17 @@ export default {
       axios.get(url).then((res) => {
         if (res.data[0].id){
           this.supervisores = res.data;
+        }else{
+          console.log("No se encontro registros");
+        }
+      });
+    },
+    cargarPermisosUser: function () {
+      axios.get(`api/cargarPermisosUser/supervisores/${this.emailuser}`).then((res) => {
+        if (res.data[0]){
+          this.permiso_crear = res.data[0].crear;
+          this.permiso_editar = res.data[0].editar;
+          this.permiso_eliminar = res.data[0].eliminar;
         }else{
           console.log("No se encontro registros");
         }
@@ -135,12 +152,17 @@ export default {
             alert('DNI invalido');
         }else{
             if (this.editmodo==false){
-                axios.post(`/api/supervisores`, this.supervisor).then((res) => {
-                    console.log(res.data);
-                    this.supervisores.push(supervisor);
-                    this.textomensaje= "Se ha creado Exitosamente";
+                if (this.permiso_crear==0){
+                    this.textomensaje= "No cuenta con los privilegios para realizar esta accion, consulte al administrador";
                     this.mensaje="mostrar";
-                });
+                }else{
+                    axios.post(`/api/supervisores`, this.supervisor).then((res) => {
+                        console.log(res.data);
+                        this.supervisores.push(supervisor);
+                        this.textomensaje= "Se ha creado Exitosamente";
+                        this.mensaje="mostrar";
+                    });
+                }
             }else{
                 axios.put(`/api/supervisores/${this.supervisor.id}`, supervisor)
                     .then(res=>{
@@ -150,7 +172,7 @@ export default {
                     this.mensaje="mostrar";
                 });
             }
-            this.limpiarFormulario();
+            this.limpiarFormulario(0);
         }
     },
     eliminar: function(supervisor, index){
@@ -168,9 +190,11 @@ export default {
       var url = "api/exportarlstsup";
       window.open(url);
     },
-    limpiarFormulario: function(){
-        this.textomensaje= "";
-        this.mensaje="hidden";
+    limpiarFormulario: function(org){
+        if (org>0){
+            this.textomensaje= "";
+            this.mensaje="hidden";
+        }
         this.editmodo= false;
         this.supervisor= { id: 0, dni: "", nombres: "", apellidos: "", numcuenta: "", cci: "", banco: ""};
     }

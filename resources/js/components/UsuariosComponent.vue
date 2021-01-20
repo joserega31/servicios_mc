@@ -91,7 +91,7 @@
                             </div>
                         </div>
                         <button type="submit" class="btn btn-primary">Guardar</button>
-                        <button type="buttom" class="btn btn-default" @click="limpiarFormulario()">Limpiar</button>
+                        <button type="buttom" class="btn btn-default" @click="limpiarFormulario(1)">Limpiar</button>
                     </form>
             </div>
         </div>
@@ -175,7 +175,6 @@ export default {
                         this.textomensaje= "Se ha creado Exitosamente";
                         this.mensaje="mostrar";
                     });
-                    this.limpiarFormulario();
                 }
             }else{
                 axios.put(`/api/usuarios/${this.usuario.id}`, usuario)
@@ -185,8 +184,8 @@ export default {
                     this.textomensaje= "Se ha actualizado Exitosamente";
                     this.mensaje="mostrar";
                 });
-                this.limpiarFormulario();
             }
+            this.limpiarFormulario(0);
         }
     },
     eliminar: function(usuario, index){
@@ -204,9 +203,11 @@ export default {
       var url = "api/exportarlstuser";
       window.open(url);
     },
-    limpiarFormulario: function(){
-        this.textomensaje= "";
-        this.mensaje="hidden";
+    limpiarFormulario: function(org){
+        if (org>0){
+            this.textomensaje= "";
+            this.mensaje="hidden";
+        }
         this.editmodo= false;
         this.usuario= { id: 0, name: "", email: "", rol_id: 0, rol:"", password:"", reppassword:""};
         this.cargarPermisosUser();

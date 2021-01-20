@@ -174,7 +174,6 @@ export default {
                     this.tarifarios.push(tarifario);
                     this.textomensaje= "Se ha creado Exitosamente";
                     this.mensaje="mostrar";
-                    this.limpiarFormulario(0);
                 });
             }
         }else{
@@ -184,9 +183,9 @@ export default {
                 this.tarifario[index] = res.data;
                 this.textomensaje= "Se ha actualizado Exitosamente";
                 this.mensaje="mostrar";
-                this.limpiarFormulario(0);
             });
         }
+        this.limpiarFormulario(0);
     },
     eliminar: function(tarifario, index){
         const confirmacion = confirm(`Eliminar el tarifario ${tarifario.nombre}`);

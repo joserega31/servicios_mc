@@ -2317,6 +2317,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
+  props: ['user'],
   data: function data() {
     return {
       designaciones: [],
@@ -2333,10 +2334,15 @@ __webpack_require__.r(__webpack_exports__);
       Ingenios: [],
       editmodo: false,
       mensaje: "hidden",
-      textomensaje: ""
+      textomensaje: "",
+      emailuser: this.user.email,
+      permiso_crear: 0,
+      permiso_editar: 0,
+      permiso_eliminar: 0
     };
   },
   created: function created() {
+    this.cargarPermisosUser();
     this.getKeeps();
     this.cargarSupervisores();
     this.cargarIngenios();
@@ -2354,25 +2360,38 @@ __webpack_require__.r(__webpack_exports__);
         }
       });
     },
-    cargarSupervisores: function cargarSupervisores() {
+    cargarPermisosUser: function cargarPermisosUser() {
       var _this2 = this;
+
+      axios.get("api/cargarPermisosUser/designaciones/".concat(this.emailuser)).then(function (res) {
+        if (res.data[0]) {
+          _this2.permiso_crear = res.data[0].crear;
+          _this2.permiso_editar = res.data[0].editar;
+          _this2.permiso_eliminar = res.data[0].eliminar;
+        } else {
+          console.log("No se encontro registros");
+        }
+      });
+    },
+    cargarSupervisores: function cargarSupervisores() {
+      var _this3 = this;
 
       var url = "api/supervisores";
       axios.get(url).then(function (res) {
         if (res.data[0].id) {
-          _this2.Supervisores = res.data;
+          _this3.Supervisores = res.data;
         } else {
           console.log("No se encontro registros");
         }
       });
     },
     cargarIngenios: function cargarIngenios() {
-      var _this3 = this;
+      var _this4 = this;
 
       var url = "api/ingenios";
       axios.get(url).then(function (res) {
         if (res.data[0].id) {
-          _this3.Ingenios = res.data;
+          _this4.Ingenios = res.data;
         } else {
           console.log("No se encontro registros");
         }
@@ -2383,50 +2402,54 @@ __webpack_require__.r(__webpack_exports__);
       this.designacione = this.designaciones[id];
     },
     guardar: function guardar(designacione) {
-      var _this4 = this;
+      var _this5 = this;
 
       if (this.editmodo == false) {
-        axios.post("/api/designaciones", this.designacione).then(function (res) {
-          _this4.designaciones.push(designacione);
+        if (this.permiso_crear == 0) {
+          this.textomensaje = "No cuenta con los privilegios para realizar esta accion, consulte al administrador";
+          this.mensaje = "mostrar";
+        } else {
+          axios.post("/api/designaciones", this.designacione).then(function (res) {
+            _this5.designaciones.push(designacione);
 
-          _this4.textomensaje = "Se ha creado Exitosamente";
-          _this4.mensaje = "mostrar";
-
-          _this4.getKeeps();
-        });
+            _this5.textomensaje = "Se ha creado Exitosamente";
+            _this5.mensaje = "mostrar";
+          });
+        }
       } else {
         axios.put("/api/designaciones/".concat(this.designacione.id), designacione).then(function (res) {
-          var index = _this4.designaciones.findIndex(function (item) {
+          var index = _this5.designaciones.findIndex(function (item) {
             return item.id === designacione.id;
           });
 
-          _this4.designacione[index] = res.data;
-          _this4.textomensaje = "Se ha actualizado Exitosamente";
-          _this4.mensaje = "mostrar";
-
-          _this4.getKeeps();
+          _this5.designacione[index] = res.data;
+          _this5.textomensaje = "Se ha actualizado Exitosamente";
+          _this5.mensaje = "mostrar";
         });
       }
 
-      this.limpiarFormulario();
+      this.limpiarFormulario(0);
     },
     eliminar: function eliminar(designacione, index) {
-      var _this5 = this;
+      var _this6 = this;
 
       var confirmacion = confirm("Eliminar el designacion numero:  ".concat(designacione.id));
 
       if (confirmacion) {
         axios["delete"]("/api/designaciones/".concat(designacione.id)).then(function () {
-          _this5.designaciones.splice(index, 1);
+          _this6.designaciones.splice(index, 1);
 
-          _this5.textomensaje = "Se ha eliminado Exitosamente";
-          _this5.mensaje = "mostrar";
+          _this6.textomensaje = "Se ha eliminado Exitosamente";
+          _this6.mensaje = "mostrar";
         });
       }
     },
-    limpiarFormulario: function limpiarFormulario() {
-      this.textomensaje = "";
-      this.mensaje = "hidden";
+    limpiarFormulario: function limpiarFormulario(org) {
+      if (org > 0) {
+        this.textomensaje = "";
+        this.mensaje = "hidden";
+      }
+
       this.editmodo = false;
       this.designacione = {
         id: 0,
@@ -2435,6 +2458,9 @@ __webpack_require__.r(__webpack_exports__);
         fecha_inicio: null,
         fecha_fin: null
       };
+      this.getKeeps();
+      this.cargarSupervisores();
+      this.cargarIngenios();
     }
   },
   mounted: function mounted() {
@@ -3477,6 +3503,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
+  props: ['user'],
   data: function data() {
     return {
       ingenios: [],
@@ -3486,10 +3513,15 @@ __webpack_require__.r(__webpack_exports__);
       },
       editmodo: false,
       mensaje: "hidden",
-      textomensaje: ""
+      textomensaje: "",
+      emailuser: this.user.email,
+      permiso_crear: 0,
+      permiso_editar: 0,
+      permiso_eliminar: 0
     };
   },
   created: function created() {
+    this.cargarPermisosUser();
     this.getKeeps();
   },
   methods: {
@@ -3505,55 +3537,76 @@ __webpack_require__.r(__webpack_exports__);
         }
       });
     },
+    cargarPermisosUser: function cargarPermisosUser() {
+      var _this2 = this;
+
+      axios.get("api/cargarPermisosUser/ingenios/".concat(this.emailuser)).then(function (res) {
+        if (res.data[0]) {
+          _this2.permiso_crear = res.data[0].crear;
+          _this2.permiso_editar = res.data[0].editar;
+          _this2.permiso_eliminar = res.data[0].eliminar;
+        } else {
+          console.log("No se encontro registros");
+        }
+      });
+    },
     editar: function editar(id) {
       this.editmodo = true;
       this.ingenio = this.ingenios[id];
     },
     guardar: function guardar(ingenio) {
-      var _this2 = this;
+      var _this3 = this;
 
       if (this.editmodo == false) {
-        axios.post("/api/ingenios", this.ingenio).then(function (res) {
-          _this2.ingenios.push(ingenio);
+        if (this.permiso_crear == 0) {
+          this.textomensaje = "No cuenta con los privilegios para realizar esta accion, consulte al administrador";
+          this.mensaje = "mostrar";
+        } else {
+          axios.post("/api/ingenios", this.ingenio).then(function (res) {
+            _this3.ingenios.push(ingenio);
 
-          _this2.textomensaje = "Se ha creado Exitosamente";
-          _this2.mensaje = "mostrar";
+            _this3.textomensaje = "Se ha creado Exitosamente";
+            _this3.mensaje = "mostrar";
 
-          _this2.getKeeps();
-        });
+            _this3.getKeeps();
+          });
+        }
       } else {
         axios.put("/api/ingenios/".concat(this.ingenio.id), ingenio).then(function (res) {
-          var index = _this2.ingenios.findIndex(function (item) {
+          var index = _this3.ingenios.findIndex(function (item) {
             return item.id === ingenio.id;
           });
 
-          _this2.ingenio[index] = res.data;
-          _this2.textomensaje = "Se ha actualizado Exitosamente";
-          _this2.mensaje = "mostrar";
+          _this3.ingenio[index] = res.data;
+          _this3.textomensaje = "Se ha actualizado Exitosamente";
+          _this3.mensaje = "mostrar";
 
-          _this2.getKeeps();
+          _this3.getKeeps();
         });
       }
 
-      this.limpiarFormulario();
+      this.limpiarFormulario(0);
     },
     eliminar: function eliminar(ingenio, index) {
-      var _this3 = this;
+      var _this4 = this;
 
       var confirmacion = confirm("Eliminar el ingenio ".concat(ingenio.nombre));
 
       if (confirmacion) {
         axios["delete"]("/api/ingenios/".concat(ingenio.id)).then(function () {
-          _this3.ingenios.splice(index, 1);
+          _this4.ingenios.splice(index, 1);
 
-          _this3.textomensaje = "Se ha eliminado Exitosamente";
-          _this3.mensaje = "mostrar";
+          _this4.textomensaje = "Se ha eliminado Exitosamente";
+          _this4.mensaje = "mostrar";
         });
       }
     },
-    limpiarFormulario: function limpiarFormulario() {
-      this.textomensaje = "";
-      this.mensaje = "hidden";
+    limpiarFormulario: function limpiarFormulario(org) {
+      if (org > 0) {
+        this.textomensaje = "";
+        this.mensaje = "hidden";
+      }
+
       this.editmodo = false;
       this.ingenio = {
         id: 0,
@@ -3655,6 +3708,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
+  props: ['user'],
   data: function data() {
     return {
       LineasProductos: [],
@@ -3664,10 +3718,15 @@ __webpack_require__.r(__webpack_exports__);
       },
       editmodo: false,
       mensaje: "hidden",
-      textomensaje: ""
+      textomensaje: "",
+      emailuser: this.user.email,
+      permiso_crear: 0,
+      permiso_editar: 0,
+      permiso_eliminar: 0
     };
   },
   created: function created() {
+    this.cargarPermisosUser();
     this.getKeeps();
   },
   methods: {
@@ -3683,55 +3742,76 @@ __webpack_require__.r(__webpack_exports__);
         }
       });
     },
+    cargarPermisosUser: function cargarPermisosUser() {
+      var _this2 = this;
+
+      axios.get("api/cargarPermisosUser/lineasprod/".concat(this.emailuser)).then(function (res) {
+        if (res.data[0]) {
+          _this2.permiso_crear = res.data[0].crear;
+          _this2.permiso_editar = res.data[0].editar;
+          _this2.permiso_eliminar = res.data[0].eliminar;
+        } else {
+          console.log("No se encontro registros");
+        }
+      });
+    },
     editar: function editar(id) {
       this.editmodo = true;
       this.LineasProducto = this.LineasProductos[id];
     },
     guardar: function guardar(LineasProducto) {
-      var _this2 = this;
+      var _this3 = this;
 
       if (this.editmodo == false) {
-        axios.post("/api/LineasProd", this.LineasProducto).then(function (res) {
-          _this2.LineasProductos.push(LineasProducto);
+        if (this.permiso_crear == 0) {
+          this.textomensaje = "No cuenta con los privilegios para realizar esta accion, consulte al administrador";
+          this.mensaje = "mostrar";
+        } else {
+          axios.post("/api/LineasProd", this.LineasProducto).then(function (res) {
+            _this3.LineasProductos.push(LineasProducto);
 
-          _this2.textomensaje = "Se ha actualizado Exitosamente";
-          _this2.mensaje = "mostrar";
+            _this3.textomensaje = "Se ha actualizado Exitosamente";
+            _this3.mensaje = "mostrar";
 
-          _this2.getKeeps();
-        });
+            _this3.getKeeps();
+          });
+        }
       } else {
         axios.put("/api/LineasProd/".concat(this.LineasProducto.id), LineasProducto).then(function (res) {
-          var index = _this2.LineasProductos.findIndex(function (item) {
+          var index = _this3.LineasProductos.findIndex(function (item) {
             return item.id === LineasProducto.id;
           });
 
-          _this2.LineasProducto[index] = res.data;
-          _this2.textomensaje = "Se ha actualizado Exitosamente";
-          _this2.mensaje = "mostrar";
+          _this3.LineasProducto[index] = res.data;
+          _this3.textomensaje = "Se ha actualizado Exitosamente";
+          _this3.mensaje = "mostrar";
 
-          _this2.getKeeps();
+          _this3.getKeeps();
         });
       }
 
-      this.limpiarFormulario();
+      this.limpiarFormulario(0);
     },
     eliminar: function eliminar(LineasProducto, index) {
-      var _this3 = this;
+      var _this4 = this;
 
       var confirmacion = confirm("Eliminar la linea de producto: ".concat(LineasProducto.nombre));
 
       if (confirmacion) {
         axios["delete"]("/api/LineasProd/".concat(LineasProducto.id)).then(function () {
-          _this3.LineasProductos.splice(index, 1);
+          _this4.LineasProductos.splice(index, 1);
 
-          _this3.textomensaje = "Se ha eliminado Exitosamente";
-          _this3.mensaje = "mostrar";
+          _this4.textomensaje = "Se ha eliminado Exitosamente";
+          _this4.mensaje = "mostrar";
         });
       }
     },
-    limpiarFormulario: function limpiarFormulario() {
-      this.textomensaje = "";
-      this.mensaje = "hidden";
+    limpiarFormulario: function limpiarFormulario(org) {
+      if (org > 0) {
+        this.textomensaje = "";
+        this.mensaje = "hidden";
+      }
+
       this.editmodo = false;
       this.LineasProducto = {
         id: 0,
@@ -3947,6 +4027,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
+  props: ['user'],
   data: function data() {
     return {
       ModoPagos: [],
@@ -3956,10 +4037,15 @@ __webpack_require__.r(__webpack_exports__);
       },
       editmodo: false,
       mensaje: "hidden",
-      textomensaje: ""
+      textomensaje: "",
+      emailuser: this.user.email,
+      permiso_crear: 0,
+      permiso_editar: 0,
+      permiso_eliminar: 0
     };
   },
   created: function created() {
+    this.cargarPermisosUser();
     this.getKeeps();
   },
   methods: {
@@ -3975,55 +4061,76 @@ __webpack_require__.r(__webpack_exports__);
         }
       });
     },
+    cargarPermisosUser: function cargarPermisosUser() {
+      var _this2 = this;
+
+      axios.get("api/cargarPermisosUser/metpagos/".concat(this.emailuser)).then(function (res) {
+        if (res.data[0]) {
+          _this2.permiso_crear = res.data[0].crear;
+          _this2.permiso_editar = res.data[0].editar;
+          _this2.permiso_eliminar = res.data[0].eliminar;
+        } else {
+          console.log("No se encontro registros");
+        }
+      });
+    },
     editar: function editar(id) {
       this.editmodo = true;
       this.ModoPago = this.ModoPagos[id];
     },
     guardar: function guardar(ModoPago) {
-      var _this2 = this;
+      var _this3 = this;
 
       if (this.editmodo == false) {
-        axios.post("/api/metpagos", this.ModoPago).then(function (res) {
-          _this2.ModoPagos.push(ModoPago);
+        if (this.permiso_crear == 0) {
+          this.textomensaje = "No cuenta con los privilegios para realizar esta accion, consulte al administrador";
+          this.mensaje = "mostrar";
+        } else {
+          axios.post("/api/metpagos", this.ModoPago).then(function (res) {
+            _this3.ModoPagos.push(ModoPago);
 
-          _this2.textomensaje = "Se ha creado Exitosamente";
-          _this2.mensaje = "mostrar";
+            _this3.textomensaje = "Se ha creado Exitosamente";
+            _this3.mensaje = "mostrar";
 
-          _this2.getKeeps();
-        });
+            _this3.getKeeps();
+          });
+        }
       } else {
         axios.put("/api/metpagos/".concat(this.ModoPago.id), ModoPago).then(function (res) {
-          var index = _this2.ModoPagos.findIndex(function (item) {
+          var index = _this3.ModoPagos.findIndex(function (item) {
             return item.id === ModoPago.id;
           });
 
-          _this2.ModoPago[index] = res.data;
-          _this2.textomensaje = "Se ha actualizado Exitosamente";
-          _this2.mensaje = "mostrar";
+          _this3.ModoPago[index] = res.data;
+          _this3.textomensaje = "Se ha actualizado Exitosamente";
+          _this3.mensaje = "mostrar";
 
-          _this2.getKeeps();
+          _this3.getKeeps();
         });
       }
 
-      this.limpiarFormulario();
+      this.limpiarFormulario(0);
     },
     eliminar: function eliminar(ModoPago, index) {
-      var _this3 = this;
+      var _this4 = this;
 
       var confirmacion = confirm("Eliminar el modo de pago: ".concat(ModoPago.nombre));
 
       if (confirmacion) {
         axios["delete"]("/api/metpagos/".concat(ModoPago.id)).then(function () {
-          _this3.ModoPagos.splice(index, 1);
+          _this4.ModoPagos.splice(index, 1);
 
-          _this3.textomensaje = "Se ha eliminado Exitosamente";
-          _this3.mensaje = "mostrar";
+          _this4.textomensaje = "Se ha eliminado Exitosamente";
+          _this4.mensaje = "mostrar";
         });
       }
     },
-    limpiarFormulario: function limpiarFormulario() {
-      this.textomensaje = "";
-      this.mensaje = "hidden";
+    limpiarFormulario: function limpiarFormulario(org) {
+      if (org > 0) {
+        this.textomensaje = "";
+        this.mensaje = "hidden";
+      }
+
       this.editmodo = false;
       this.ModoPago = {
         id: 0,
@@ -4928,6 +5035,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
+  props: ['user'],
   data: function data() {
     return {
       supervisores: [],
@@ -4942,10 +5050,15 @@ __webpack_require__.r(__webpack_exports__);
       },
       editmodo: false,
       mensaje: "hidden",
-      textomensaje: ""
+      textomensaje: "",
+      emailuser: this.user.email,
+      permiso_crear: 0,
+      permiso_editar: 0,
+      permiso_eliminar: 0
     };
   },
   created: function created() {
+    this.cargarPermisosUser();
     this.getKeeps();
   },
   methods: {
@@ -4961,51 +5074,69 @@ __webpack_require__.r(__webpack_exports__);
         }
       });
     },
+    cargarPermisosUser: function cargarPermisosUser() {
+      var _this2 = this;
+
+      axios.get("api/cargarPermisosUser/supervisores/".concat(this.emailuser)).then(function (res) {
+        if (res.data[0]) {
+          _this2.permiso_crear = res.data[0].crear;
+          _this2.permiso_editar = res.data[0].editar;
+          _this2.permiso_eliminar = res.data[0].eliminar;
+        } else {
+          console.log("No se encontro registros");
+        }
+      });
+    },
     editar: function editar(id) {
       this.editmodo = true;
       this.supervisor = this.supervisores[id];
     },
     guardar: function guardar(supervisor) {
-      var _this2 = this;
+      var _this3 = this;
 
       if (supervisor.dni.length > 8) {
         alert('DNI invalido');
       } else {
         if (this.editmodo == false) {
-          axios.post("/api/supervisores", this.supervisor).then(function (res) {
-            console.log(res.data);
+          if (this.permiso_crear == 0) {
+            this.textomensaje = "No cuenta con los privilegios para realizar esta accion, consulte al administrador";
+            this.mensaje = "mostrar";
+          } else {
+            axios.post("/api/supervisores", this.supervisor).then(function (res) {
+              console.log(res.data);
 
-            _this2.supervisores.push(supervisor);
+              _this3.supervisores.push(supervisor);
 
-            _this2.textomensaje = "Se ha creado Exitosamente";
-            _this2.mensaje = "mostrar";
-          });
+              _this3.textomensaje = "Se ha creado Exitosamente";
+              _this3.mensaje = "mostrar";
+            });
+          }
         } else {
           axios.put("/api/supervisores/".concat(this.supervisor.id), supervisor).then(function (res) {
-            var index = _this2.supervisores.findIndex(function (item) {
+            var index = _this3.supervisores.findIndex(function (item) {
               return item.id === supervisor.id;
             });
 
-            _this2.supervisor[index] = res.data;
-            _this2.textomensaje = "Se ha actualizado Exitosamente";
-            _this2.mensaje = "mostrar";
+            _this3.supervisor[index] = res.data;
+            _this3.textomensaje = "Se ha actualizado Exitosamente";
+            _this3.mensaje = "mostrar";
           });
         }
 
-        this.limpiarFormulario();
+        this.limpiarFormulario(0);
       }
     },
     eliminar: function eliminar(supervisor, index) {
-      var _this3 = this;
+      var _this4 = this;
 
       var confirmacion = confirm("Eliminar el supervisor ".concat(supervisor.nombres + " " + supervisor.apellidos));
 
       if (confirmacion) {
         axios["delete"]("/api/supervisores/".concat(supervisor.id)).then(function () {
-          _this3.supervisores.splice(index, 1);
+          _this4.supervisores.splice(index, 1);
 
-          _this3.textomensaje = "Se ha eliminado Exitosamente";
-          _this3.mensaje = "mostrar";
+          _this4.textomensaje = "Se ha eliminado Exitosamente";
+          _this4.mensaje = "mostrar";
         });
       }
     },
@@ -5013,9 +5144,12 @@ __webpack_require__.r(__webpack_exports__);
       var url = "api/exportarlstsup";
       window.open(url);
     },
-    limpiarFormulario: function limpiarFormulario() {
-      this.textomensaje = "";
-      this.mensaje = "hidden";
+    limpiarFormulario: function limpiarFormulario(org) {
+      if (org > 0) {
+        this.textomensaje = "";
+        this.mensaje = "hidden";
+      }
+
       this.editmodo = false;
       this.supervisor = {
         id: 0,
@@ -5235,8 +5369,6 @@ __webpack_require__.r(__webpack_exports__);
 
             _this5.textomensaje = "Se ha creado Exitosamente";
             _this5.mensaje = "mostrar";
-
-            _this5.limpiarFormulario(0);
           });
         }
       } else {
@@ -5248,10 +5380,10 @@ __webpack_require__.r(__webpack_exports__);
           _this5.tarifario[index] = res.data;
           _this5.textomensaje = "Se ha actualizado Exitosamente";
           _this5.mensaje = "mostrar";
-
-          _this5.limpiarFormulario(0);
         });
       }
+
+      this.limpiarFormulario(0);
     },
     eliminar: function eliminar(tarifario, index) {
       var _this6 = this;
@@ -5381,6 +5513,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
+  props: ['user'],
   data: function data() {
     return {
       TipoServicios: [],
@@ -5390,10 +5523,15 @@ __webpack_require__.r(__webpack_exports__);
       },
       editmodo: false,
       mensaje: "hidden",
-      textomensaje: ""
+      textomensaje: "",
+      emailuser: this.user.email,
+      permiso_crear: 0,
+      permiso_editar: 0,
+      permiso_eliminar: 0
     };
   },
   created: function created() {
+    this.cargarPermisosUser();
     this.getKeeps();
   },
   methods: {
@@ -5409,52 +5547,73 @@ __webpack_require__.r(__webpack_exports__);
         }
       });
     },
+    cargarPermisosUser: function cargarPermisosUser() {
+      var _this2 = this;
+
+      axios.get("api/cargarPermisosUser/tiposserv/".concat(this.emailuser)).then(function (res) {
+        if (res.data[0]) {
+          _this2.permiso_crear = res.data[0].crear;
+          _this2.permiso_editar = res.data[0].editar;
+          _this2.permiso_eliminar = res.data[0].eliminar;
+        } else {
+          console.log("No se encontro registros");
+        }
+      });
+    },
     editar: function editar(id) {
       this.editmodo = true;
       this.TipoServicio = this.TipoServicios[id];
     },
     guardar: function guardar(TipoServicio) {
-      var _this2 = this;
+      var _this3 = this;
 
       if (this.editmodo == false) {
-        axios.post("/api/tiposserv", this.TipoServicio).then(function (res) {
-          _this2.TipoServicios.push(TipoServicio);
+        if (this.permiso_crear == 0) {
+          this.textomensaje = "No cuenta con los privilegios para realizar esta accion, consulte al administrador";
+          this.mensaje = "mostrar";
+        } else {
+          axios.post("/api/tiposserv", this.TipoServicio).then(function (res) {
+            _this3.TipoServicios.push(TipoServicio);
 
-          _this2.textomensaje = "Se ha creado Exitosamente";
-          _this2.mensaje = "mostrar";
-        });
+            _this3.textomensaje = "Se ha creado Exitosamente";
+            _this3.mensaje = "mostrar";
+          });
+        }
       } else {
         axios.put("/api/tiposserv/".concat(this.TipoServicio.id), TipoServicio).then(function (res) {
-          var index = _this2.TipoServicios.findIndex(function (item) {
+          var index = _this3.TipoServicios.findIndex(function (item) {
             return item.id === TipoServicio.id;
           });
 
-          _this2.TipoServicio[index] = res.data;
-          _this2.editmodo = false;
-          _this2.textomensaje = "Se ha actualizado Exitosamente";
-          _this2.mensaje = "mostrar";
+          _this3.TipoServicio[index] = res.data;
+          _this3.editmodo = false;
+          _this3.textomensaje = "Se ha actualizado Exitosamente";
+          _this3.mensaje = "mostrar";
         });
       }
 
-      this.limpiarFormulario();
+      this.limpiarFormulario(0);
     },
     eliminar: function eliminar(TipoServicio, index) {
-      var _this3 = this;
+      var _this4 = this;
 
       var confirmacion = confirm("Eliminar el estado de pago: ".concat(TipoServicio.nombre));
 
       if (confirmacion) {
         axios["delete"]("/api/tiposserv/".concat(TipoServicio.id)).then(function () {
-          _this3.TipoServicios.splice(index, 1);
+          _this4.TipoServicios.splice(index, 1);
 
-          _this3.textomensaje = "Se ha eliminado Exitosamente";
-          _this3.mensaje = "mostrar";
+          _this4.textomensaje = "Se ha eliminado Exitosamente";
+          _this4.mensaje = "mostrar";
         });
       }
     },
-    limpiarFormulario: function limpiarFormulario() {
-      this.textomensaje = "";
-      this.mensaje = "hidden";
+    limpiarFormulario: function limpiarFormulario(org) {
+      if (org > 0) {
+        this.textomensaje = "";
+        this.mensaje = "hidden";
+      }
+
       this.editmodo = false;
       this.TipoServicio = {
         id: 0,
@@ -5672,7 +5831,6 @@ __webpack_require__.r(__webpack_exports__);
               _this4.textomensaje = "Se ha creado Exitosamente";
               _this4.mensaje = "mostrar";
             });
-            this.limpiarFormulario();
           }
         } else {
           axios.put("/api/usuarios/".concat(this.usuario.id), usuario).then(function (res) {
@@ -5684,8 +5842,9 @@ __webpack_require__.r(__webpack_exports__);
             _this4.textomensaje = "Se ha actualizado Exitosamente";
             _this4.mensaje = "mostrar";
           });
-          this.limpiarFormulario();
         }
+
+        this.limpiarFormulario(0);
       }
     },
     eliminar: function eliminar(usuario, index) {
@@ -5706,9 +5865,12 @@ __webpack_require__.r(__webpack_exports__);
       var url = "api/exportarlstuser";
       window.open(url);
     },
-    limpiarFormulario: function limpiarFormulario() {
-      this.textomensaje = "";
-      this.mensaje = "hidden";
+    limpiarFormulario: function limpiarFormulario(org) {
+      if (org > 0) {
+        this.textomensaje = "";
+        this.mensaje = "hidden";
+      }
+
       this.editmodo = false;
       this.usuario = {
         id: 0,
@@ -41837,33 +41999,37 @@ var render = function() {
                       _c("td", [_vm._v(_vm._s(item.ingenio))]),
                       _vm._v(" "),
                       _c("td", [
-                        _c(
-                          "button",
-                          {
-                            staticClass: "btn btn-warning",
-                            attrs: { type: "button", title: "Editar" },
-                            on: {
-                              click: function($event) {
-                                return _vm.editar(index)
-                              }
-                            }
-                          },
-                          [_c("i", { staticClass: "far fa-edit" })]
-                        ),
+                        _vm.permiso_editar == 1
+                          ? _c(
+                              "button",
+                              {
+                                staticClass: "btn btn-warning",
+                                attrs: { type: "button", title: "Editar" },
+                                on: {
+                                  click: function($event) {
+                                    return _vm.editar(index)
+                                  }
+                                }
+                              },
+                              [_c("i", { staticClass: "far fa-edit" })]
+                            )
+                          : _vm._e(),
                         _vm._v(" "),
-                        _c(
-                          "button",
-                          {
-                            staticClass: "btn btn-danger",
-                            attrs: { type: "button", title: "Eliminar" },
-                            on: {
-                              click: function($event) {
-                                return _vm.eliminar(item, index)
-                              }
-                            }
-                          },
-                          [_c("i", { staticClass: "far fa-trash-alt" })]
-                        )
+                        _vm.permiso_eliminar == 1
+                          ? _c(
+                              "button",
+                              {
+                                staticClass: "btn btn-danger",
+                                attrs: { type: "button", title: "Eliminar" },
+                                on: {
+                                  click: function($event) {
+                                    return _vm.eliminar(item, index)
+                                  }
+                                }
+                              },
+                              [_c("i", { staticClass: "far fa-trash-alt" })]
+                            )
+                          : _vm._e()
                       ])
                     ])
                   }),
@@ -42076,7 +42242,7 @@ var render = function() {
                 attrs: { type: "buttom" },
                 on: {
                   click: function($event) {
-                    return _vm.limpiarFormulario()
+                    return _vm.limpiarFormulario(1)
                   }
                 }
               },
@@ -44158,33 +44324,37 @@ var render = function() {
                       _c("td", [_vm._v(_vm._s(item.nombre))]),
                       _vm._v(" "),
                       _c("td", [
-                        _c(
-                          "button",
-                          {
-                            staticClass: "btn btn-warning",
-                            attrs: { type: "button", title: "Editar" },
-                            on: {
-                              click: function($event) {
-                                return _vm.editar(index)
-                              }
-                            }
-                          },
-                          [_c("i", { staticClass: "far fa-edit" })]
-                        ),
+                        _vm.permiso_editar == 1
+                          ? _c(
+                              "button",
+                              {
+                                staticClass: "btn btn-warning",
+                                attrs: { type: "button", title: "Editar" },
+                                on: {
+                                  click: function($event) {
+                                    return _vm.editar(index)
+                                  }
+                                }
+                              },
+                              [_c("i", { staticClass: "far fa-edit" })]
+                            )
+                          : _vm._e(),
                         _vm._v(" "),
-                        _c(
-                          "button",
-                          {
-                            staticClass: "btn btn-danger",
-                            attrs: { type: "button", title: "Eliminar" },
-                            on: {
-                              click: function($event) {
-                                return _vm.eliminar(item, index)
-                              }
-                            }
-                          },
-                          [_c("i", { staticClass: "far fa-trash-alt" })]
-                        )
+                        _vm.permiso_eliminar == 1
+                          ? _c(
+                              "button",
+                              {
+                                staticClass: "btn btn-danger",
+                                attrs: { type: "button", title: "Eliminar" },
+                                on: {
+                                  click: function($event) {
+                                    return _vm.eliminar(item, index)
+                                  }
+                                }
+                              },
+                              [_c("i", { staticClass: "far fa-trash-alt" })]
+                            )
+                          : _vm._e()
                       ])
                     ])
                   }),
@@ -44286,7 +44456,7 @@ var render = function() {
                 attrs: { type: "buttom" },
                 on: {
                   click: function($event) {
-                    return _vm.limpiarFormulario()
+                    return _vm.limpiarFormulario(1)
                   }
                 }
               },
@@ -44464,33 +44634,37 @@ var render = function() {
                       _c("td", [_vm._v(_vm._s(item.nombre))]),
                       _vm._v(" "),
                       _c("td", [
-                        _c(
-                          "button",
-                          {
-                            staticClass: "btn btn-warning",
-                            attrs: { type: "button", title: "Editar" },
-                            on: {
-                              click: function($event) {
-                                return _vm.editar(index)
-                              }
-                            }
-                          },
-                          [_c("i", { staticClass: "far fa-edit" })]
-                        ),
+                        _vm.permiso_editar == 1
+                          ? _c(
+                              "button",
+                              {
+                                staticClass: "btn btn-warning",
+                                attrs: { type: "button", title: "Editar" },
+                                on: {
+                                  click: function($event) {
+                                    return _vm.editar(index)
+                                  }
+                                }
+                              },
+                              [_c("i", { staticClass: "far fa-edit" })]
+                            )
+                          : _vm._e(),
                         _vm._v(" "),
-                        _c(
-                          "button",
-                          {
-                            staticClass: "btn btn-danger",
-                            attrs: { type: "button", title: "Eliminar" },
-                            on: {
-                              click: function($event) {
-                                return _vm.eliminar(item, index)
-                              }
-                            }
-                          },
-                          [_c("i", { staticClass: "far fa-trash-alt" })]
-                        )
+                        _vm.permiso_eliminar == 1
+                          ? _c(
+                              "button",
+                              {
+                                staticClass: "btn btn-danger",
+                                attrs: { type: "button", title: "Eliminar" },
+                                on: {
+                                  click: function($event) {
+                                    return _vm.eliminar(item, index)
+                                  }
+                                }
+                              },
+                              [_c("i", { staticClass: "far fa-trash-alt" })]
+                            )
+                          : _vm._e()
                       ])
                     ])
                   }),
@@ -44596,7 +44770,7 @@ var render = function() {
                 attrs: { type: "buttom" },
                 on: {
                   click: function($event) {
-                    return _vm.limpiarFormulario()
+                    return _vm.limpiarFormulario(1)
                   }
                 }
               },
@@ -44971,33 +45145,37 @@ var render = function() {
                       _c("td", [_vm._v(_vm._s(item.nombre))]),
                       _vm._v(" "),
                       _c("td", [
-                        _c(
-                          "button",
-                          {
-                            staticClass: "btn btn-warning",
-                            attrs: { type: "button", title: "Editar" },
-                            on: {
-                              click: function($event) {
-                                return _vm.editar(index)
-                              }
-                            }
-                          },
-                          [_c("i", { staticClass: "far fa-edit" })]
-                        ),
+                        _vm.permiso_editar == 1
+                          ? _c(
+                              "button",
+                              {
+                                staticClass: "btn btn-warning",
+                                attrs: { type: "button", title: "Editar" },
+                                on: {
+                                  click: function($event) {
+                                    return _vm.editar(index)
+                                  }
+                                }
+                              },
+                              [_c("i", { staticClass: "far fa-edit" })]
+                            )
+                          : _vm._e(),
                         _vm._v(" "),
-                        _c(
-                          "button",
-                          {
-                            staticClass: "btn btn-danger",
-                            attrs: { type: "button", title: "Eliminar" },
-                            on: {
-                              click: function($event) {
-                                return _vm.eliminar(item, index)
-                              }
-                            }
-                          },
-                          [_c("i", { staticClass: "far fa-trash-alt" })]
-                        )
+                        _vm.permiso_eliminar == 1
+                          ? _c(
+                              "button",
+                              {
+                                staticClass: "btn btn-danger",
+                                attrs: { type: "button", title: "Eliminar" },
+                                on: {
+                                  click: function($event) {
+                                    return _vm.eliminar(item, index)
+                                  }
+                                }
+                              },
+                              [_c("i", { staticClass: "far fa-trash-alt" })]
+                            )
+                          : _vm._e()
                       ])
                     ])
                   }),
@@ -45099,7 +45277,7 @@ var render = function() {
                 attrs: { type: "buttom" },
                 on: {
                   click: function($event) {
-                    return _vm.limpiarFormulario()
+                    return _vm.limpiarFormulario(1)
                   }
                 }
               },
@@ -46990,33 +47168,37 @@ var render = function() {
                       ]),
                       _vm._v(" "),
                       _c("td", [
-                        _c(
-                          "button",
-                          {
-                            staticClass: "btn btn-warning",
-                            attrs: { type: "button", title: "Editar" },
-                            on: {
-                              click: function($event) {
-                                return _vm.editar(index)
-                              }
-                            }
-                          },
-                          [_c("i", { staticClass: "far fa-edit" })]
-                        ),
+                        _vm.permiso_editar == 1
+                          ? _c(
+                              "button",
+                              {
+                                staticClass: "btn btn-warning",
+                                attrs: { type: "button", title: "Editar" },
+                                on: {
+                                  click: function($event) {
+                                    return _vm.editar(index)
+                                  }
+                                }
+                              },
+                              [_c("i", { staticClass: "far fa-edit" })]
+                            )
+                          : _vm._e(),
                         _vm._v(" "),
-                        _c(
-                          "button",
-                          {
-                            staticClass: "btn btn-danger",
-                            attrs: { type: "button", title: "Eliminar" },
-                            on: {
-                              click: function($event) {
-                                return _vm.eliminar(item, index)
-                              }
-                            }
-                          },
-                          [_c("i", { staticClass: "far fa-trash-alt" })]
-                        )
+                        _vm.permiso_eliminar == 1
+                          ? _c(
+                              "button",
+                              {
+                                staticClass: "btn btn-danger",
+                                attrs: { type: "button", title: "Eliminar" },
+                                on: {
+                                  click: function($event) {
+                                    return _vm.eliminar(item, index)
+                                  }
+                                }
+                              },
+                              [_c("i", { staticClass: "far fa-trash-alt" })]
+                            )
+                          : _vm._e()
                       ])
                     ])
                   }),
@@ -47308,7 +47490,7 @@ var render = function() {
                 attrs: { type: "buttom" },
                 on: {
                   click: function($event) {
-                    return _vm.limpiarFormulario()
+                    return _vm.limpiarFormulario(1)
                   }
                 }
               },
@@ -47850,33 +48032,37 @@ var render = function() {
                       _c("td", [_vm._v(_vm._s(item.nombre))]),
                       _vm._v(" "),
                       _c("td", [
-                        _c(
-                          "button",
-                          {
-                            staticClass: "btn btn-warning",
-                            attrs: { type: "button", title: "Editar" },
-                            on: {
-                              click: function($event) {
-                                return _vm.editar(index)
-                              }
-                            }
-                          },
-                          [_c("i", { staticClass: "far fa-edit" })]
-                        ),
+                        _vm.permiso_editar == 1
+                          ? _c(
+                              "button",
+                              {
+                                staticClass: "btn btn-warning",
+                                attrs: { type: "button", title: "Editar" },
+                                on: {
+                                  click: function($event) {
+                                    return _vm.editar(index)
+                                  }
+                                }
+                              },
+                              [_c("i", { staticClass: "far fa-edit" })]
+                            )
+                          : _vm._e(),
                         _vm._v(" "),
-                        _c(
-                          "button",
-                          {
-                            staticClass: "btn btn-danger",
-                            attrs: { type: "button", title: "Eliminar" },
-                            on: {
-                              click: function($event) {
-                                return _vm.eliminar(item, index)
-                              }
-                            }
-                          },
-                          [_c("i", { staticClass: "far fa-trash-alt" })]
-                        )
+                        _vm.permiso_eliminar == 1
+                          ? _c(
+                              "button",
+                              {
+                                staticClass: "btn btn-danger",
+                                attrs: { type: "button", title: "Eliminar" },
+                                on: {
+                                  click: function($event) {
+                                    return _vm.eliminar(item, index)
+                                  }
+                                }
+                              },
+                              [_c("i", { staticClass: "far fa-trash-alt" })]
+                            )
+                          : _vm._e()
                       ])
                     ])
                   }),
@@ -47982,7 +48168,7 @@ var render = function() {
                 attrs: { type: "buttom" },
                 on: {
                   click: function($event) {
-                    return _vm.limpiarFormulario()
+                    return _vm.limpiarFormulario(1)
                   }
                 }
               },
@@ -48439,7 +48625,7 @@ var render = function() {
                 attrs: { type: "buttom" },
                 on: {
                   click: function($event) {
-                    return _vm.limpiarFormulario()
+                    return _vm.limpiarFormulario(1)
                   }
                 }
               },

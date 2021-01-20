@@ -20,10 +20,10 @@
                                 <td>{{ index + 1 }}</td>
                                 <td>{{ item.nombre }}</td>
                                 <td>
-                                    <button type="button" class="btn btn-warning" title="Editar" @click="editar(index)">
+                                    <button type="button" class="btn btn-warning" title="Editar" @click="editar(index)" v-if="permiso_editar==1">
                                         <i class="far fa-edit"></i>
                                     </button>
-                                    <button type="button" class="btn btn-danger" title="Eliminar" @click="eliminar(item, index)">
+                                    <button type="button" class="btn btn-danger" title="Eliminar" @click="eliminar(item, index)" v-if="permiso_eliminar==1">
                                         <i class="far fa-trash-alt"></i>
                                     </button>
                                 </td>
@@ -67,7 +67,7 @@
                             </div>
                         </div>
                         <button type="submit" class="btn btn-primary">Guardar</button>
-                        <button type="buttom" class="btn btn-default" @click="limpiarFormulario()">Limpiar</button>
+                        <button type="buttom" class="btn btn-default" @click="limpiarFormulario(1)">Limpiar</button>
                     </form>
             </div>
         </div>
@@ -77,16 +77,22 @@
 
 <script>
 export default {
+    props : ['user'],
     data() {
         return {
             TipoServicios: [],
             TipoServicio: { id: 0, nombre: ""},
             editmodo:false,
             mensaje:"hidden",
-            textomensaje:""
+            textomensaje:"",
+            emailuser: this.user.email,
+            permiso_crear:0,
+            permiso_editar:0,
+            permiso_eliminar:0
         };
     },
     created: function () {
+        this.cargarPermisosUser();
         this.getKeeps();
     },
   methods: {
@@ -100,17 +106,33 @@ export default {
         }
       });
     },
+    cargarPermisosUser: function () {
+      axios.get(`api/cargarPermisosUser/tiposserv/${this.emailuser}`).then((res) => {
+        if (res.data[0]){
+          this.permiso_crear = res.data[0].crear;
+          this.permiso_editar = res.data[0].editar;
+          this.permiso_eliminar = res.data[0].eliminar;
+        }else{
+          console.log("No se encontro registros");
+        }
+      });
+    },
     editar:function(id){
         this.editmodo= true;
         this.TipoServicio= this.TipoServicios[id];
     },
     guardar: function(TipoServicio){
         if (this.editmodo==false){
-            axios.post(`/api/tiposserv`, this.TipoServicio).then((res) => {
-                this.TipoServicios.push(TipoServicio);
-                this.textomensaje= "Se ha creado Exitosamente";
+            if (this.permiso_crear==0){
+                this.textomensaje= "No cuenta con los privilegios para realizar esta accion, consulte al administrador";
                 this.mensaje="mostrar";
-            });
+            }else{
+                axios.post(`/api/tiposserv`, this.TipoServicio).then((res) => {
+                    this.TipoServicios.push(TipoServicio);
+                    this.textomensaje= "Se ha creado Exitosamente";
+                    this.mensaje="mostrar";
+                });
+            }
         }else{
             axios.put(`/api/tiposserv/${this.TipoServicio.id}`, TipoServicio)
                 .then(res=>{
@@ -121,7 +143,7 @@ export default {
                 this.mensaje="mostrar";
             });
         }
-        this.limpiarFormulario();
+        this.limpiarFormulario(0);
     },
     eliminar: function(TipoServicio, index){
         const confirmacion = confirm(`Eliminar el estado de pago: ${TipoServicio.nombre}`);
@@ -134,9 +156,11 @@ export default {
             });
         }
     },
-    limpiarFormulario: function(){
-        this.textomensaje= "";
-        this.mensaje="hidden";
+    limpiarFormulario: function(org){
+        if (org>0){
+            this.textomensaje= "";
+            this.mensaje="hidden";
+        }
         this.editmodo= false;
         this.TipoServicio= { id: 0, nombre: ""};
     }

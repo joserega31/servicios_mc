@@ -1,5 +1,5 @@
 @extends('layouts.dashboard')
 
 @section('content')
-<designaciones-component><designaciones-component>
+<designaciones-component :user="{{ Auth::user() }}"><designaciones-component>
 @endsection
