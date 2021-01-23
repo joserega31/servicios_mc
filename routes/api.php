@@ -35,6 +35,7 @@ Route::middleware('cors')->group(function(){
     Route::resource('menu', 'App\Http\Controllers\MenuController'::class);
     Route::resource('submenu', 'App\Http\Controllers\SubMenuController'::class);
     Route::resource('usuarios', 'App\Http\Controllers\UsuariosController'::class);
+    Route::resource('ordenes', 'App\Http\Controllers\OrdenesController'::class);
     Route::get('serviciopte', 'App\Http\Controllers\HomeController@serviciopte');
     Route::get('servicioptepago', 'App\Http\Controllers\HomeController@servicioptepago');
     Route::get('servicioptepagodet', 'App\Http\Controllers\HomeController@servicioptepagodet');
