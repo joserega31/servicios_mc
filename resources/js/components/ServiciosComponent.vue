@@ -94,7 +94,27 @@
                         </div>
                     </div>
                 </div>
-            
+                
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label for="ingenio_id">Ingenios</label>
+                        <select class="form-control" id="ingenio_id" required  v-model="orden.ingenio_id">
+                            <option v-for="(item, index) in Ingenios" :key="index" :value="item.id">{{ item.nombre}}</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="estados_pago_id">Estado de Pago</label>
+                        <select class="form-control" id="estados_pago_id" required  v-model="orden.estados_pago_id">
+                            <option v-for="(item, index) in EstadosPago" :key="index" :value="item.id">{{ item.nombre}}</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="modos_pagos_id">Modo de Pago</label>
+                        <select class="form-control" id="modos_pagos_id" required  v-model="orden.modos_pagos_id">
+                            <option v-for="(item, index) in ModosPago" :key="index" :value="item.id">{{ item.nombre}}</option>
+                        </select>
+                    </div>
+                </div>
                 <div class="form-row">
                     <div class="form-group col-md-10">
                         <h5 class="card-title">Servicios</h5>
@@ -107,7 +127,6 @@
                             <table class="table dataTable my-0" id="dataTable">
                                 <thead>
                                     <tr>
-                                        <th>Nro</th>
                                         <th class="text-left">Tipo Servicio</th>
                                         <th>Gu&iacute;a Transport&iacute;sta</th>
                                         <th>Conductor</th>
@@ -116,6 +135,20 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    <tr v-for="(item, index) in Servicios" :key="index">
+                                        <td>{{ item.tipo_servicio_id }}</td>
+                                        <td>{{ item.guia_transportista }}</td>
+                                        <td>{{ item.conductor }}</td>
+                                        <td>{{ item.almacen }}</td>
+                                        <td>
+                                            <button type="button" class="btn btn-warning" title="Editar" @click="editarServicio(index)">
+                                                <i class="far fa-edit"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-danger" title="Eliminar" @click="eliminarServicio(index)">
+                                                <i class="far fa-trash-alt"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
                                 </tbody>
                                 <tfoot>
                                     <tr></tr>
@@ -132,7 +165,7 @@
     </div>
     <br><br>
 
-    <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" :show="modal">
         <div class="modal-dialog modal-xl">
             <div class="modal-content" style="padding:15px">
                 <div class="modal-header">
@@ -140,6 +173,9 @@
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
                 <div class="modal-body">
+                    <div class="alert alert-success w-100" role="alert" :class="mensajemodal">
+                        {{textomensajemodal}}
+                    </div>
                     <form>
                         <div class="form-row">
                             <div class="form-group col-md-4">
@@ -175,35 +211,15 @@
                                 <input type="text" class="form-control" id="unidad" required v-model="Servicio.unidad">
                             </div>
                             <div class="form-group col-md-4">
-                                <label for="ingenio_id">Ingenios</label>
-                                <select class="form-control" id="ingenio_id" required  v-model="Servicio.ingenio_id">
-                                    <option v-for="(item, index) in Ingenios" :key="index" :value="item.id">{{ item.nombre}}</option>
-                                </select>
-                            </div>
-                            <div class="form-group col-md-4">
                                 <label for="lineas_productos_id">Linea de Producto</label>
                                 <select class="form-control" id="lineas_producto_id" required  v-model="Servicio.lineas_productos_id">
                                     <option v-for="(item, index) in LineasProductos" :key="index" :value="item.id">{{ item.nombre}}</option>
                                 </select>
                             </div>
-                        </div>
-                        <div class="form-row">
                             <div class="form-group col-md-4">
                                 <label for="tipo_servicio_id">Tipo de Servicio</label>
                                 <select class="form-control" id="tipo_servicio_id" required  v-model="Servicio.tipo_servicio_id">
                                     <option v-for="(item, index) in TiposServicios" :key="index" :value="item.id">{{ item.nombre}}</option>
-                                </select>
-                            </div>
-                            <div class="form-group col-md-4">
-                                <label for="estados_pago_id">Estado de Pago</label>
-                                <select class="form-control" id="estados_pago_id" required  v-model="Servicio.estados_pago_id">
-                                    <option v-for="(item, index) in EstadosPago" :key="index" :value="item.id">{{ item.nombre}}</option>
-                                </select>
-                            </div>
-                            <div class="form-group col-md-4">
-                                <label for="modos_pagos_id">Modo de Pago</label>
-                                <select class="form-control" id="modos_pagos_id" required  v-model="Servicio.modos_pagos_id">
-                                    <option v-for="(item, index) in ModosPago" :key="index" :value="item.id">{{ item.nombre}}</option>
                                 </select>
                             </div>
                         </div>
@@ -213,15 +229,19 @@
                                 <input type="number" class="form-control" id="costo_uni_est" step="0.1" min="1" value="0.00" required v-model="Servicio.costo_unitario_estiba">
                             </div>
                             <div class="form-group col-md-4">
+                                <label for="costo_flat_estiba">Costo Flat Estiba</label>
+                                <input type="number" class="form-control" id="costo_flat_estiba" step="0.1" min="1" value="0.00" required v-model="Servicio.costo_flat_estiba">
+                            </div>
+                            <div class="form-group col-md-4">
                                 <label for="costo_opeext_est">Costo Operativo Extra Estiba</label>
                                 <input type="number" class="form-control" id="costo_opeext_est" step="0.1" min="1" value="0.00" required v-model="Servicio.costo_operativo_extra_estiba">
                             </div>
+                        </div>
+                        <div class="form-row">
                             <div class="form-group col-md-4">
                                 <label for="costo_extr_est">Costo Extra Estiba</label>
                                 <input type="number" class="form-control" id="costo_extr_est" step="0.1" min="1" value="0.00" required v-model="Servicio.costo_extra_estiba">
                             </div>
-                        </div>
-                        <div class="form-row">
                             <div class="form-group col-md-4">
                                 <label for="precio_extr_est">Precio Extra Estiba</label>
                                 <input type="number" class="form-control" id="precio_extr_est" step="0.1" min="1" value="0.00" required v-model="Servicio.precio_extra_estiba">
@@ -230,12 +250,12 @@
                                 <label for="precio_servicio">Precio Servicio</label>
                                 <input type="number" class="form-control" id="precio_servicio" step="0.1" min="1" value="0.00" required v-model="Servicio.precio_servicio">
                             </div>
+                        </div>
+                        <div class="form-row">
                             <div class="form-group col-md-4">
                                 <label for="precio_tot_serv">Precio Total Servicio</label>
                                 <input type="number" class="form-control" id="precio_tot_serv" step="0.1" min="1" value="0.00" required v-model="Servicio.precio_total_servicio">
                             </div>
-                        </div>
-                        <div class="form-row">
                             <div class="form-group col-md-4">
                                 <label for="costo_tot_serv">Costo Total Servicio</label>
                                 <input type="number" class="form-control" id="costo_tot_serv" step="0.1" min="1" value="0.00" required v-model="Servicio.costo_total_servicio">
@@ -244,12 +264,14 @@
                                 <label for="utilidad">Utilidad</label>
                                 <input type="number" class="form-control" id="utilidad" step="0.1" min="1" value="0.00" required v-model="Servicio.utilidad">
                             </div>
+                        </div>  
+                        <div class="form-row">
                             <div class="form-group col-md-4">
                                 <label for="igv">IGV</label>
                                 <input type="number" class="form-control" id="igv" step="0.1" min="1" value="0.00" required v-model="Servicio.igv">
                             </div>
                         </div>
-                        <button type="button" class="btn btn-primary">Agregar</button>
+                        <button type="button" class="btn btn-primary" @click="cargarServicio(Servicio)">Agregar</button>
                         <button type="reset" class="btn btn-default">Limpiar</button>
                     </form>
                 </div>
@@ -262,12 +284,13 @@
 
 <script>
 export default {
+    props : ['user'],
     data() {
         return {
             Ordenes:[],
-            orden: {id:0, fecha:null, cliente_id:0, igv:0, estatus:0, cliente:""},
+            orden: {id:0, fecha:null, cliente_id:0, igv:0, estatus:0, cliente:"", ingenio_id:0, estados_pago_id:0, modos_pagos_id:0},
             Servicios: [],
-            Servicio: {id:0,ingenio_id:null,empresa_transporte:"",conductor:"",placa_unidad:"",placa_carretera:"",guia_transportista:"",almacen:"",cantidad:1,unidad:"",costo_unitario_estiba:0,costo_operativo_extra_estiba:0,costo_flat_estiba:0,costo_total_servicio:0,costo_extra_estiba:0,precio_extra_estiba:0,precio_servicio:0,precio_total_servicio:0,utilidad:0,igv:0,fecha_servicio:null,fecha_pago:null,fecha_liquidacion:null,facturado:0,num_factura:"",lineas_productos_id:null,estados_pago_id:null,cliente_id:null,tipo_servicio_id:null,modos_pagos_id:null, cliente:""},
+            Servicio: {id:0,empresa_transporte:"",conductor:"",placa_unidad:"",placa_carretera:"",guia_transportista:"",almacen:"",cantidad:1,unidad:"",costo_unitario_estiba:0,costo_operativo_extra_estiba:0,costo_flat_estiba:0,costo_total_servicio:0,costo_extra_estiba:0,precio_extra_estiba:0,precio_servicio:0,precio_total_servicio:0,utilidad:0,igv:0,fecha_servicio:null,fecha_pago:null,fecha_liquidacion:null,facturado:0,num_factura:"",lineas_productos_id:null,cliente_id:null,tipo_servicio_id:null, ordenes_servicios_id:0},
             LineasProductos: [],
             TiposServicios:[],
             EstadosPago:[],
@@ -278,6 +301,8 @@ export default {
             ocultar:"hidden",
             textomensaje: "",
             mensaje: "hidden",
+            textomensajemodal: "",
+            mensajemodal: "hidden",
             editmodo:false
         };
     },
@@ -364,7 +389,7 @@ export default {
       });
     },
     cargarClientes: function () {
-      axios.get(`api/clientes/${this.Servicio.cliente}`, '0').then((res) => {
+      axios.get(`api/clientes/${this.orden.cliente}`, '0').then((res) => {
         if (res.data[0].id){
           this.Clientes = res.data;
           this.ocultar= "mostrar";
@@ -378,6 +403,14 @@ export default {
         this.orden.cliente= cliente;
         this.ocultar= "hidden";
     },
+    cargarServicio: function(Servicio){
+        if (Servicio.conductor=="" || Servicio.placa_unidad=="" || Servicio.placa_carretera=="" || Servicio.guia_transportista=="" || Servicio.almacen=="" || Servicio.unidad=="" || Servicio.lineas_productos_id=="" || Servicio.tipo_servicio_id==""){
+            this.textomensajemodal= "Por favor, Complete todos los campos";
+            this.mensajemodal="mostrar";
+        }else{
+            this.Servicios.push(Servicio);
+        }
+    },
     limpiarBusqueda: function () {
         this.ocultar= "hidden";
     },
@@ -385,11 +418,28 @@ export default {
         this.editmodo= true;
         this.orden= this.Ordenes[id];
     },
+    editarServicio:function(id){
+        this.Servicio= this.Ordenes[id];
+    },
+    eliminarServicio: function(index){
+        const confirmacion = confirm(`Eliminar el servicio numero:  ${index +1}`);
+        if(confirmacion){
+            this.Servicios.splice(index, 1);
+        }
+    },
     guardar: function(orden){
         if (this.editmodo==false){
             console.log(orden);
             axios.post(`/api/ordenes`, this.orden).then((res) => {
                 this.Ordenes.push(orden);
+                this.Servicios.ordenes_servicios_id= res.data.ordenes_servicios_id;
+
+                //GUARDAR LOS SERVICIOS
+                for(i in this.Servicios){
+                    axios.post(`/api/servicios`, this.Servicios[i]).then((res) => {
+
+                    });
+                }
                 this.textomensaje= "Se ha creado Exitosamente";
                 this.mensaje="mostrar";
                 this.getKeeps();
@@ -410,27 +460,29 @@ export default {
                 this.getKeeps();
             });*/
         }
-        this.limpiarFormulario();
+        this.limpiarFormulario(0);
     },
     eliminar: function(orden, index){
         const confirmacion = confirm(`Eliminar la orden numero:  ${orden.id}`);
         if(confirmacion){
-            axios.delete(`/api/servicios/${Servicio.id}`)
+            axios.delete(`/api/ordenes/${orden.id}`)
             .then(()=>{
-                this.Servicios.splice(index, 1);
+                this.Ordenes.splice(index, 1);
                 this.textomensaje= "Se ha eliminado Exitosamente";
                 this.mensaje="mostrar";
             });
         }
     },
-    limpiarFormulario: function(){
-        this.editmodo= false;
-        this.buscliente="";
+    limpiarFormulario: function(org){
+        if (org>0){
+            this.textomensaje= "";
+            this.mensaje="hidden";
+        }
         this.ocultar="hidden";
         this.textomensaje= "";
         this.mensaje="hidden";
-        this.orden= {id:0, fecha:null, cliente_id:0, igv:0, estatus:0, cliente:""};
-        this.Servicio= {id:0,ingenio_id:null,empresa_transporte:"",conductor:"",placa_unidad:"",placa_carretera:"",guia_transportista:"",almacen:"",cantidad:1,unidad:"",costo_unitario_estiba:0,costo_operativo_extra_estiba:0,costo_flat_estiba:0,costo_total_servicio:0,costo_extra_estiba:0,precio_extra_estiba:0,precio_servicio:0,precio_total_servicio:0,utilidad:0,igv:0,fecha_servicio:null,fecha_pago:null,fecha_liquidacion:null,facturado:0,num_factura:"",lineas_productos_id:null,estados_pago_id:null,cliente_id:null,tipo_servicio_id:null,modos_pagos_id:null, cliente:""};
+        this.orden= {id:0, fecha:null, cliente_id:0, igv:0, estatus:0, cliente:"", ingenio_id:0, estados_pago_id:0, modos_pagos_id:0};
+        this.Servicio= {id:0,empresa_transporte:"",conductor:"",placa_unidad:"",placa_carretera:"",guia_transportista:"",almacen:"",cantidad:1,unidad:"",costo_unitario_estiba:0,costo_operativo_extra_estiba:0,costo_flat_estiba:0,costo_total_servicio:0,costo_extra_estiba:0,precio_extra_estiba:0,precio_servicio:0,precio_total_servicio:0,utilidad:0,igv:0,fecha_servicio:null,fecha_pago:null,fecha_liquidacion:null,facturado:0,num_factura:"",lineas_productos_id:null,cliente_id:null,tipo_servicio_id:null};
     }
   },
   mounted() {

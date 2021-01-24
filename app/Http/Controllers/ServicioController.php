@@ -43,8 +43,7 @@ class ServicioController extends Controller
     {
         try{
             $servicio = new Servicio();
-            $servicio->ingenio_id = $request->ingenio_id;
-            $servicio->empresa_transporte = $request->empresa_transporte;
+            $servicio->ordenes_servicios_id = $request->ordenes_servicios_id;
             $servicio->conductor = $request->conductor;
             $servicio->placa_unidad = $request->placa_unidad;
             $servicio->placa_carretera = $request->placa_carretera;
@@ -62,16 +61,8 @@ class ServicioController extends Controller
             $servicio->precio_total_servicio = $request->precio_total_servicio;
             $servicio->utilidad = $request->utilidad;
             $servicio->igv = $request->igv;
-            $servicio->fecha_servicio = $request->fecha_servicio;
-            $servicio->fecha_pago = $request->fecha_pago;
-            $servicio->fecha_liquidacion = $request->fecha_liquidacion;
-            $servicio->facturado = $request->facturado;
-            $servicio->num_factura = $request->num_factura;
             $servicio->lineas_productos_id = $request->lineas_productos_id;
-            $servicio->estados_pago_id = $request->estados_pago_id;
-            $servicio->cliente_id = $request->cliente_id;
             $servicio->tipo_servicio_id = $request->tipo_servicio_id;
-            $servicio->modos_pagos_id = $request->modos_pagos_id;
             $servicio->save();
             return $servicio;
         } catch (Exception $ex) {
@@ -113,8 +104,6 @@ class ServicioController extends Controller
     {
         try{
             $servicio = Servicio::findOrFail($id);
-            $servicio->ingenio_id = $request->ingenio_id;
-            $servicio->empresa_transporte = $request->empresa_transporte;
             $servicio->conductor = $request->conductor;
             $servicio->placa_unidad = $request->placa_unidad;
             $servicio->placa_carretera = $request->placa_carretera;
@@ -132,16 +121,8 @@ class ServicioController extends Controller
             $servicio->precio_total_servicio = $request->precio_total_servicio;
             $servicio->utilidad = $request->utilidad;
             $servicio->igv = $request->igv;
-            $servicio->fecha_servicio = $request->fecha_servicio;
-            $servicio->fecha_pago = $request->fecha_pago;
-            $servicio->fecha_liquidacion = $request->fecha_liquidacion;
-            $servicio->facturado = $request->facturado;
-            $servicio->num_factura = $request->num_factura;
             $servicio->lineas_productos_id = $request->lineas_productos_id;
-            $servicio->estados_pago_id = $request->estados_pago_id;
-            $servicio->cliente_id = $request->cliente_id;
             $servicio->tipo_servicio_id = $request->tipo_servicio_id;
-            $servicio->modos_pagos_id = $request->modos_pagos_id;
             $servicio->update();
             return $servicio;
         } catch (Exception $ex) {

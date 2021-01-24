@@ -29,6 +29,8 @@ class CreateOrdenesServiciosTable extends Migration
             $table->foreign('estados_pago_id')->references('id')->on('estados_pagos');
             $table->integer('modos_pagos_id')->unsigned(); 
             $table->foreign('modos_pagos_id')->references('id')->on('modo_pagos');
+            $table->integer('ingenio_id')->unsigned();
+            $table->foreign('ingenio_id')->references('id')->on('ingenios');
             $table->timestamps();
         });
     }

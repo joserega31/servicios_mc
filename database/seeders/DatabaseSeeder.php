@@ -19,7 +19,7 @@ class DatabaseSeeder extends Seeder
         
         //Menus
         DB::table('menus')->insert([
-            'nombre' => 'Servicio',
+            'nombre' => 'Orden de Servicio',
             'icono' => 'fas fa-hand-holding',
             'url' => 'servicio',
             'orden' => 1,
@@ -45,7 +45,7 @@ class DatabaseSeeder extends Seeder
 
         DB::table('sub_menus')->insert([
             'menu_id' => 1,
-            'nombre' => 'Servicio',
+            'nombre' => 'Orden de Servicio',
             'icono' => 'fas fa-hand-holding',
             'url' => 'servicio',
             'orden' => 1,
@@ -163,5 +163,102 @@ class DatabaseSeeder extends Seeder
             'nombre' => 'Pagado',
         ]);
 
+        //ACCESOS PERFIL ADMINISTRADOR
+        DB::table('funcion_roles')->insert([
+            'rol_id' => '1',
+            'menu_id' => '2',
+            'sub_menu_id' => '2',
+            'crear' => '1',
+            'editar' => '1',
+            'eliminar' => '1'
+        ]);
+        DB::table('funcion_roles')->insert([
+            'rol_id' => '1',
+            'menu_id' => '2',
+            'sub_menu_id' => '3',
+            'crear' => '1',
+            'editar' => '1',
+            'eliminar' => '1'
+        ]);
+        DB::table('funcion_roles')->insert([
+            'rol_id' => '1',
+            'menu_id' => '2',
+            'sub_menu_id' => '4',
+            'crear' => '1',
+            'editar' => '1',
+            'eliminar' => '1'
+        ]);
+        DB::table('funcion_roles')->insert([
+            'rol_id' => '1',
+            'menu_id' => '2',
+            'sub_menu_id' => '5',
+            'crear' => '1',
+            'editar' => '1',
+            'eliminar' => '1'
+        ]);
+        DB::table('funcion_roles')->insert([
+            'rol_id' => '1',
+            'menu_id' => '2',
+            'sub_menu_id' => '6',
+            'crear' => '1',
+            'editar' => '1',
+            'eliminar' => '1'
+        ]);
+        DB::table('funcion_roles')->insert([
+            'rol_id' => '1',
+            'menu_id' => '2',
+            'sub_menu_id' => '7',
+            'crear' => '1',
+            'editar' => '1',
+            'eliminar' => '1'
+        ]);
+        DB::table('funcion_roles')->insert([
+            'rol_id' => '1',
+            'menu_id' => '2',
+            'sub_menu_id' => '8',
+            'crear' => '1',
+            'editar' => '1',
+            'eliminar' => '1'
+        ]);
+        DB::table('funcion_roles')->insert([
+            'rol_id' => '1',
+            'menu_id' => '2',
+            'sub_menu_id' => '9',
+            'crear' => '1',
+            'editar' => '1',
+            'eliminar' => '1'
+        ]);
+        DB::table('funcion_roles')->insert([
+            'rol_id' => '1',
+            'menu_id' => '2',
+            'sub_menu_id' => '10',
+            'crear' => '1',
+            'editar' => '1',
+            'eliminar' => '1'
+        ]);
+        DB::table('funcion_roles')->insert([
+            'rol_id' => '1',
+            'menu_id' => '4',
+            'sub_menu_id' => '11',
+            'crear' => '1',
+            'editar' => '1',
+            'eliminar' => '1'
+        ]);
+        DB::table('funcion_roles')->insert([
+            'rol_id' => '1',
+            'menu_id' => '4',
+            'sub_menu_id' => '12',
+            'crear' => '1',
+            'editar' => '1',
+            'eliminar' => '1'
+        ]);
+        DB::table('funcion_roles')->insert([
+            'rol_id' => '1',
+            'menu_id' => '4',
+            'sub_menu_id' => '13',
+            'crear' => '1',
+            'editar' => '1',
+            'eliminar' => '1'
+        ]);
     }
 }

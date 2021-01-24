@@ -44,6 +44,9 @@ class OrdenesController extends Controller
             $OrdenesServicio->cliente_id = $request->cliente_id;
             $OrdenesServicio->igv = 1;
             $OrdenesServicio->estatus = 0;
+            $OrdenesServicio->estados_pago_id = $request->estados_pago_id;
+            $OrdenesServicio->ingenio_id = $request->ingenio_id;
+            $OrdenesServicio->modos_pagos_id = $request->modos_pagos_id;
             $OrdenesServicio->save();
             return $OrdenesServicio;
         } catch (Exception $ex) {

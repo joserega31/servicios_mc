@@ -4713,7 +4713,30 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
+  props: ['user'],
   data: function data() {
     return {
       Ordenes: [],
@@ -4723,12 +4746,14 @@ __webpack_require__.r(__webpack_exports__);
         cliente_id: 0,
         igv: 0,
         estatus: 0,
-        cliente: ""
+        cliente: "",
+        ingenio_id: 0,
+        estados_pago_id: 0,
+        modos_pagos_id: 0
       },
       Servicios: [],
       Servicio: {
         id: 0,
-        ingenio_id: null,
         empresa_transporte: "",
         conductor: "",
         placa_unidad: "",
@@ -4753,11 +4778,9 @@ __webpack_require__.r(__webpack_exports__);
         facturado: 0,
         num_factura: "",
         lineas_productos_id: null,
-        estados_pago_id: null,
         cliente_id: null,
         tipo_servicio_id: null,
-        modos_pagos_id: null,
-        cliente: ""
+        ordenes_servicios_id: 0
       },
       LineasProductos: [],
       TiposServicios: [],
@@ -4769,6 +4792,8 @@ __webpack_require__.r(__webpack_exports__);
       ocultar: "hidden",
       textomensaje: "",
       mensaje: "hidden",
+      textomensajemodal: "",
+      mensajemodal: "hidden",
       editmodo: false
     };
   },
@@ -4871,7 +4896,7 @@ __webpack_require__.r(__webpack_exports__);
     cargarClientes: function cargarClientes() {
       var _this7 = this;
 
-      axios.get("api/clientes/".concat(this.Servicio.cliente), '0').then(function (res) {
+      axios.get("api/clientes/".concat(this.orden.cliente), '0').then(function (res) {
         if (res.data[0].id) {
           _this7.Clientes = res.data;
           _this7.ocultar = "mostrar";
@@ -4885,12 +4910,30 @@ __webpack_require__.r(__webpack_exports__);
       this.orden.cliente = cliente;
       this.ocultar = "hidden";
     },
+    cargarServicio: function cargarServicio(Servicio) {
+      if (Servicio.conductor == "" || Servicio.placa_unidad == "" || Servicio.placa_carretera == "" || Servicio.guia_transportista == "" || Servicio.almacen == "" || Servicio.unidad == "" || Servicio.lineas_productos_id == "" || Servicio.tipo_servicio_id == "") {
+        this.textomensajemodal = "Por favor, Complete todos los campos";
+        this.mensajemodal = "mostrar";
+      } else {
+        this.Servicios.push(Servicio);
+      }
+    },
     limpiarBusqueda: function limpiarBusqueda() {
       this.ocultar = "hidden";
     },
     editar: function editar(id) {
       this.editmodo = true;
       this.orden = this.Ordenes[id];
+    },
+    editarServicio: function editarServicio(id) {
+      this.Servicio = this.Ordenes[id];
+    },
+    eliminarServicio: function eliminarServicio(index) {
+      var confirmacion = confirm("Eliminar el servicio numero:  ".concat(index + 1));
+
+      if (confirmacion) {
+        this.Servicios.splice(index, 1);
+      }
     },
     guardar: function guardar(orden) {
       var _this8 = this;
@@ -4899,6 +4942,12 @@ __webpack_require__.r(__webpack_exports__);
         console.log(orden);
         axios.post("/api/ordenes", this.orden).then(function (res) {
           _this8.Ordenes.push(orden);
+
+          _this8.Servicios.ordenes_servicios_id = res.data.ordenes_servicios_id; //GUARDAR LOS SERVICIOS
+
+          for (i in _this8.Servicios) {
+            axios.post("/api/servicios", _this8.Servicios[i]).then(function (res) {});
+          }
 
           _this8.textomensaje = "Se ha creado Exitosamente";
           _this8.mensaje = "mostrar";
@@ -4922,7 +4971,7 @@ __webpack_require__.r(__webpack_exports__);
           });*/
         }
 
-      this.limpiarFormulario();
+      this.limpiarFormulario(0);
     },
     eliminar: function eliminar(orden, index) {
       var _this9 = this;
@@ -4930,17 +4979,20 @@ __webpack_require__.r(__webpack_exports__);
       var confirmacion = confirm("Eliminar la orden numero:  ".concat(orden.id));
 
       if (confirmacion) {
-        axios["delete"]("/api/servicios/".concat(Servicio.id)).then(function () {
-          _this9.Servicios.splice(index, 1);
+        axios["delete"]("/api/ordenes/".concat(orden.id)).then(function () {
+          _this9.Ordenes.splice(index, 1);
 
           _this9.textomensaje = "Se ha eliminado Exitosamente";
           _this9.mensaje = "mostrar";
         });
       }
     },
-    limpiarFormulario: function limpiarFormulario() {
-      this.editmodo = false;
-      this.buscliente = "";
+    limpiarFormulario: function limpiarFormulario(org) {
+      if (org > 0) {
+        this.textomensaje = "";
+        this.mensaje = "hidden";
+      }
+
       this.ocultar = "hidden";
       this.textomensaje = "";
       this.mensaje = "hidden";
@@ -4950,11 +5002,13 @@ __webpack_require__.r(__webpack_exports__);
         cliente_id: 0,
         igv: 0,
         estatus: 0,
-        cliente: ""
+        cliente: "",
+        ingenio_id: 0,
+        estados_pago_id: 0,
+        modos_pagos_id: 0
       };
       this.Servicio = {
         id: 0,
-        ingenio_id: null,
         empresa_transporte: "",
         conductor: "",
         placa_unidad: "",
@@ -4979,11 +5033,8 @@ __webpack_require__.r(__webpack_exports__);
         facturado: 0,
         num_factura: "",
         lineas_productos_id: null,
-        estados_pago_id: null,
         cliente_id: null,
-        tipo_servicio_id: null,
-        modos_pagos_id: null,
-        cliente: ""
+        tipo_servicio_id: null
       };
     }
   },
@@ -46261,7 +46312,239 @@ var render = function() {
               ])
             ]),
             _vm._v(" "),
-            _vm._m(3),
+            _c("div", { staticClass: "form-row" }, [
+              _c("div", { staticClass: "form-group col-md-4" }, [
+                _c("label", { attrs: { for: "ingenio_id" } }, [
+                  _vm._v("Ingenios")
+                ]),
+                _vm._v(" "),
+                _c(
+                  "select",
+                  {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.orden.ingenio_id,
+                        expression: "orden.ingenio_id"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    attrs: { id: "ingenio_id", required: "" },
+                    on: {
+                      change: function($event) {
+                        var $$selectedVal = Array.prototype.filter
+                          .call($event.target.options, function(o) {
+                            return o.selected
+                          })
+                          .map(function(o) {
+                            var val = "_value" in o ? o._value : o.value
+                            return val
+                          })
+                        _vm.$set(
+                          _vm.orden,
+                          "ingenio_id",
+                          $event.target.multiple
+                            ? $$selectedVal
+                            : $$selectedVal[0]
+                        )
+                      }
+                    }
+                  },
+                  _vm._l(_vm.Ingenios, function(item, index) {
+                    return _c(
+                      "option",
+                      { key: index, domProps: { value: item.id } },
+                      [_vm._v(_vm._s(item.nombre))]
+                    )
+                  }),
+                  0
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "form-group col-md-4" }, [
+                _c("label", { attrs: { for: "estados_pago_id" } }, [
+                  _vm._v("Estado de Pago")
+                ]),
+                _vm._v(" "),
+                _c(
+                  "select",
+                  {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.orden.estados_pago_id,
+                        expression: "orden.estados_pago_id"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    attrs: { id: "estados_pago_id", required: "" },
+                    on: {
+                      change: function($event) {
+                        var $$selectedVal = Array.prototype.filter
+                          .call($event.target.options, function(o) {
+                            return o.selected
+                          })
+                          .map(function(o) {
+                            var val = "_value" in o ? o._value : o.value
+                            return val
+                          })
+                        _vm.$set(
+                          _vm.orden,
+                          "estados_pago_id",
+                          $event.target.multiple
+                            ? $$selectedVal
+                            : $$selectedVal[0]
+                        )
+                      }
+                    }
+                  },
+                  _vm._l(_vm.EstadosPago, function(item, index) {
+                    return _c(
+                      "option",
+                      { key: index, domProps: { value: item.id } },
+                      [_vm._v(_vm._s(item.nombre))]
+                    )
+                  }),
+                  0
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "form-group col-md-4" }, [
+                _c("label", { attrs: { for: "modos_pagos_id" } }, [
+                  _vm._v("Modo de Pago")
+                ]),
+                _vm._v(" "),
+                _c(
+                  "select",
+                  {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.orden.modos_pagos_id,
+                        expression: "orden.modos_pagos_id"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    attrs: { id: "modos_pagos_id", required: "" },
+                    on: {
+                      change: function($event) {
+                        var $$selectedVal = Array.prototype.filter
+                          .call($event.target.options, function(o) {
+                            return o.selected
+                          })
+                          .map(function(o) {
+                            var val = "_value" in o ? o._value : o.value
+                            return val
+                          })
+                        _vm.$set(
+                          _vm.orden,
+                          "modos_pagos_id",
+                          $event.target.multiple
+                            ? $$selectedVal
+                            : $$selectedVal[0]
+                        )
+                      }
+                    }
+                  },
+                  _vm._l(_vm.ModosPago, function(item, index) {
+                    return _c(
+                      "option",
+                      { key: index, domProps: { value: item.id } },
+                      [_vm._v(_vm._s(item.nombre))]
+                    )
+                  }),
+                  0
+                )
+              ])
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "form-row" }, [
+              _vm._m(3),
+              _vm._v(" "),
+              _vm._m(4),
+              _vm._v(" "),
+              _c("div", { staticClass: "form-group col-md-12" }, [
+                _c(
+                  "div",
+                  {
+                    staticClass: "table-responsive table mt-2",
+                    attrs: {
+                      id: "dataTable",
+                      role: "grid",
+                      "aria-describedby": "dataTable_info"
+                    }
+                  },
+                  [
+                    _c(
+                      "table",
+                      {
+                        staticClass: "table dataTable my-0",
+                        attrs: { id: "dataTable" }
+                      },
+                      [
+                        _vm._m(5),
+                        _vm._v(" "),
+                        _c(
+                          "tbody",
+                          _vm._l(_vm.Servicios, function(item, index) {
+                            return _c("tr", { key: index }, [
+                              _c("td", [_vm._v(_vm._s(item.tipo_servicio_id))]),
+                              _vm._v(" "),
+                              _c("td", [
+                                _vm._v(_vm._s(item.guia_transportista))
+                              ]),
+                              _vm._v(" "),
+                              _c("td", [_vm._v(_vm._s(item.conductor))]),
+                              _vm._v(" "),
+                              _c("td", [_vm._v(_vm._s(item.almacen))]),
+                              _vm._v(" "),
+                              _c("td", [
+                                _c(
+                                  "button",
+                                  {
+                                    staticClass: "btn btn-warning",
+                                    attrs: { type: "button", title: "Editar" },
+                                    on: {
+                                      click: function($event) {
+                                        return _vm.editarServicio(index)
+                                      }
+                                    }
+                                  },
+                                  [_c("i", { staticClass: "far fa-edit" })]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "button",
+                                  {
+                                    staticClass: "btn btn-danger",
+                                    attrs: {
+                                      type: "button",
+                                      title: "Eliminar"
+                                    },
+                                    on: {
+                                      click: function($event) {
+                                        return _vm.eliminarServicio(index)
+                                      }
+                                    }
+                                  },
+                                  [_c("i", { staticClass: "far fa-trash-alt" })]
+                                )
+                              ])
+                            ])
+                          }),
+                          0
+                        ),
+                        _vm._v(" "),
+                        _vm._m(6)
+                      ]
+                    )
+                  ]
+                )
+              ])
+            ]),
             _vm._v(" "),
             _c("br"),
             _c("br"),
@@ -46293,7 +46576,8 @@ var render = function() {
           tabindex: "-1",
           role: "dialog",
           "aria-labelledby": "myLargeModalLabel",
-          "aria-hidden": "true"
+          "aria-hidden": "true",
+          show: _vm.modal
         }
       },
       [
@@ -46302,9 +46586,25 @@ var render = function() {
             "div",
             { staticClass: "modal-content", staticStyle: { padding: "15px" } },
             [
-              _vm._m(4),
+              _vm._m(7),
               _vm._v(" "),
               _c("div", { staticClass: "modal-body" }, [
+                _c(
+                  "div",
+                  {
+                    staticClass: "alert alert-success w-100",
+                    class: _vm.mensajemodal,
+                    attrs: { role: "alert" }
+                  },
+                  [
+                    _vm._v(
+                      "\r\n                        " +
+                        _vm._s(_vm.textomensajemodal) +
+                        "\r\n                    "
+                    )
+                  ]
+                ),
+                _vm._v(" "),
                 _c("form", [
                   _c("div", { staticClass: "form-row" }, [
                     _c("div", { staticClass: "form-group col-md-4" }, [
@@ -46551,55 +46851,6 @@ var render = function() {
                     ]),
                     _vm._v(" "),
                     _c("div", { staticClass: "form-group col-md-4" }, [
-                      _c("label", { attrs: { for: "ingenio_id" } }, [
-                        _vm._v("Ingenios")
-                      ]),
-                      _vm._v(" "),
-                      _c(
-                        "select",
-                        {
-                          directives: [
-                            {
-                              name: "model",
-                              rawName: "v-model",
-                              value: _vm.Servicio.ingenio_id,
-                              expression: "Servicio.ingenio_id"
-                            }
-                          ],
-                          staticClass: "form-control",
-                          attrs: { id: "ingenio_id", required: "" },
-                          on: {
-                            change: function($event) {
-                              var $$selectedVal = Array.prototype.filter
-                                .call($event.target.options, function(o) {
-                                  return o.selected
-                                })
-                                .map(function(o) {
-                                  var val = "_value" in o ? o._value : o.value
-                                  return val
-                                })
-                              _vm.$set(
-                                _vm.Servicio,
-                                "ingenio_id",
-                                $event.target.multiple
-                                  ? $$selectedVal
-                                  : $$selectedVal[0]
-                              )
-                            }
-                          }
-                        },
-                        _vm._l(_vm.Ingenios, function(item, index) {
-                          return _c(
-                            "option",
-                            { key: index, domProps: { value: item.id } },
-                            [_vm._v(_vm._s(item.nombre))]
-                          )
-                        }),
-                        0
-                      )
-                    ]),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "form-group col-md-4" }, [
                       _c("label", { attrs: { for: "lineas_productos_id" } }, [
                         _vm._v("Linea de Producto")
                       ]),
@@ -46646,10 +46897,8 @@ var render = function() {
                         }),
                         0
                       )
-                    ])
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "form-row" }, [
+                    ]),
+                    _vm._v(" "),
                     _c("div", { staticClass: "form-group col-md-4" }, [
                       _c("label", { attrs: { for: "tipo_servicio_id" } }, [
                         _vm._v("Tipo de Servicio")
@@ -46689,104 +46938,6 @@ var render = function() {
                           }
                         },
                         _vm._l(_vm.TiposServicios, function(item, index) {
-                          return _c(
-                            "option",
-                            { key: index, domProps: { value: item.id } },
-                            [_vm._v(_vm._s(item.nombre))]
-                          )
-                        }),
-                        0
-                      )
-                    ]),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "form-group col-md-4" }, [
-                      _c("label", { attrs: { for: "estados_pago_id" } }, [
-                        _vm._v("Estado de Pago")
-                      ]),
-                      _vm._v(" "),
-                      _c(
-                        "select",
-                        {
-                          directives: [
-                            {
-                              name: "model",
-                              rawName: "v-model",
-                              value: _vm.Servicio.estados_pago_id,
-                              expression: "Servicio.estados_pago_id"
-                            }
-                          ],
-                          staticClass: "form-control",
-                          attrs: { id: "estados_pago_id", required: "" },
-                          on: {
-                            change: function($event) {
-                              var $$selectedVal = Array.prototype.filter
-                                .call($event.target.options, function(o) {
-                                  return o.selected
-                                })
-                                .map(function(o) {
-                                  var val = "_value" in o ? o._value : o.value
-                                  return val
-                                })
-                              _vm.$set(
-                                _vm.Servicio,
-                                "estados_pago_id",
-                                $event.target.multiple
-                                  ? $$selectedVal
-                                  : $$selectedVal[0]
-                              )
-                            }
-                          }
-                        },
-                        _vm._l(_vm.EstadosPago, function(item, index) {
-                          return _c(
-                            "option",
-                            { key: index, domProps: { value: item.id } },
-                            [_vm._v(_vm._s(item.nombre))]
-                          )
-                        }),
-                        0
-                      )
-                    ]),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "form-group col-md-4" }, [
-                      _c("label", { attrs: { for: "modos_pagos_id" } }, [
-                        _vm._v("Modo de Pago")
-                      ]),
-                      _vm._v(" "),
-                      _c(
-                        "select",
-                        {
-                          directives: [
-                            {
-                              name: "model",
-                              rawName: "v-model",
-                              value: _vm.Servicio.modos_pagos_id,
-                              expression: "Servicio.modos_pagos_id"
-                            }
-                          ],
-                          staticClass: "form-control",
-                          attrs: { id: "modos_pagos_id", required: "" },
-                          on: {
-                            change: function($event) {
-                              var $$selectedVal = Array.prototype.filter
-                                .call($event.target.options, function(o) {
-                                  return o.selected
-                                })
-                                .map(function(o) {
-                                  var val = "_value" in o ? o._value : o.value
-                                  return val
-                                })
-                              _vm.$set(
-                                _vm.Servicio,
-                                "modos_pagos_id",
-                                $event.target.multiple
-                                  ? $$selectedVal
-                                  : $$selectedVal[0]
-                              )
-                            }
-                          }
-                        },
-                        _vm._l(_vm.ModosPago, function(item, index) {
                           return _c(
                             "option",
                             { key: index, domProps: { value: item.id } },
@@ -46839,6 +46990,45 @@ var render = function() {
                     ]),
                     _vm._v(" "),
                     _c("div", { staticClass: "form-group col-md-4" }, [
+                      _c("label", { attrs: { for: "costo_flat_estiba" } }, [
+                        _vm._v("Costo Flat Estiba")
+                      ]),
+                      _vm._v(" "),
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.Servicio.costo_flat_estiba,
+                            expression: "Servicio.costo_flat_estiba"
+                          }
+                        ],
+                        staticClass: "form-control",
+                        attrs: {
+                          type: "number",
+                          id: "costo_flat_estiba",
+                          step: "0.1",
+                          min: "1",
+                          value: "0.00",
+                          required: ""
+                        },
+                        domProps: { value: _vm.Servicio.costo_flat_estiba },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.$set(
+                              _vm.Servicio,
+                              "costo_flat_estiba",
+                              $event.target.value
+                            )
+                          }
+                        }
+                      })
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "form-group col-md-4" }, [
                       _c("label", { attrs: { for: "costo_opeext_est" } }, [
                         _vm._v("Costo Operativo Extra Estiba")
                       ]),
@@ -46877,8 +47067,10 @@ var render = function() {
                           }
                         }
                       })
-                    ]),
-                    _vm._v(" "),
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "form-row" }, [
                     _c("div", { staticClass: "form-group col-md-4" }, [
                       _c("label", { attrs: { for: "costo_extr_est" } }, [
                         _vm._v("Costo Extra Estiba")
@@ -46916,10 +47108,8 @@ var render = function() {
                           }
                         }
                       })
-                    ])
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "form-row" }, [
+                    ]),
+                    _vm._v(" "),
                     _c("div", { staticClass: "form-group col-md-4" }, [
                       _c("label", { attrs: { for: "precio_extr_est" } }, [
                         _vm._v("Precio Extra Estiba")
@@ -46996,8 +47186,10 @@ var render = function() {
                           }
                         }
                       })
-                    ]),
-                    _vm._v(" "),
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "form-row" }, [
                     _c("div", { staticClass: "form-group col-md-4" }, [
                       _c("label", { attrs: { for: "precio_tot_serv" } }, [
                         _vm._v("Precio Total Servicio")
@@ -47035,10 +47227,8 @@ var render = function() {
                           }
                         }
                       })
-                    ])
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "form-row" }, [
+                    ]),
+                    _vm._v(" "),
                     _c("div", { staticClass: "form-group col-md-4" }, [
                       _c("label", { attrs: { for: "costo_tot_serv" } }, [
                         _vm._v("Costo Total Servicio")
@@ -47115,8 +47305,10 @@ var render = function() {
                           }
                         }
                       })
-                    ]),
-                    _vm._v(" "),
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "form-row" }, [
                     _c("div", { staticClass: "form-group col-md-4" }, [
                       _c("label", { attrs: { for: "igv" } }, [_vm._v("IGV")]),
                       _vm._v(" "),
@@ -47155,7 +47347,12 @@ var render = function() {
                     "button",
                     {
                       staticClass: "btn btn-primary",
-                      attrs: { type: "button" }
+                      attrs: { type: "button" },
+                      on: {
+                        click: function($event) {
+                          return _vm.cargarServicio(_vm.Servicio)
+                        }
+                      }
                     },
                     [_vm._v("Agregar")]
                   ),
@@ -47278,72 +47475,52 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "form-row" }, [
-      _c("div", { staticClass: "form-group col-md-10" }, [
-        _c("h5", { staticClass: "card-title" }, [_vm._v("Servicios")])
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "form-group col-md-2 text-right" }, [
-        _c(
-          "button",
-          {
-            staticClass: "btn btn-info",
-            attrs: {
-              type: "button",
-              "data-toggle": "modal",
-              "data-target": ".bd-example-modal-lg"
-            }
-          },
-          [_vm._v("Agregar Servicio")]
-        )
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "form-group col-md-12" }, [
-        _c(
-          "div",
-          {
-            staticClass: "table-responsive table mt-2",
-            attrs: {
-              id: "dataTable",
-              role: "grid",
-              "aria-describedby": "dataTable_info"
-            }
-          },
-          [
-            _c(
-              "table",
-              {
-                staticClass: "table dataTable my-0",
-                attrs: { id: "dataTable" }
-              },
-              [
-                _c("thead", [
-                  _c("tr", [
-                    _c("th", [_vm._v("Nro")]),
-                    _vm._v(" "),
-                    _c("th", { staticClass: "text-left" }, [
-                      _vm._v("Tipo Servicio")
-                    ]),
-                    _vm._v(" "),
-                    _c("th", [_vm._v("Guía Transportísta")]),
-                    _vm._v(" "),
-                    _c("th", [_vm._v("Conductor")]),
-                    _vm._v(" "),
-                    _c("th", [_vm._v("Almacen")]),
-                    _vm._v(" "),
-                    _c("th", [_vm._v("Acciones")])
-                  ])
-                ]),
-                _vm._v(" "),
-                _c("tbody"),
-                _vm._v(" "),
-                _c("tfoot", [_c("tr")])
-              ]
-            )
-          ]
-        )
+    return _c("div", { staticClass: "form-group col-md-10" }, [
+      _c("h5", { staticClass: "card-title" }, [_vm._v("Servicios")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "form-group col-md-2 text-right" }, [
+      _c(
+        "button",
+        {
+          staticClass: "btn btn-info",
+          attrs: {
+            type: "button",
+            "data-toggle": "modal",
+            "data-target": ".bd-example-modal-lg"
+          }
+        },
+        [_vm._v("Agregar Servicio")]
+      )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("thead", [
+      _c("tr", [
+        _c("th", { staticClass: "text-left" }, [_vm._v("Tipo Servicio")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Guía Transportísta")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Conductor")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Almacen")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Acciones")])
       ])
     ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("tfoot", [_c("tr")])
   },
   function() {
     var _vm = this
