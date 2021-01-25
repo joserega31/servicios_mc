@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\OrdenesServicio;
+use App\Models\Servicio;
 use Illuminate\Http\Request;
 use Exception;
 use Illuminate\Support\Facades\DB;
@@ -16,10 +17,13 @@ class OrdenesController extends Controller
      */
     public function index()
     {
-        $OrdenesServicio= DB::select('SELECT o.*, c.razon_social as cliente FROM ordenes_servicios AS o INNER JOIN clientes as c ON o.cliente_id= c.id');
+        $OrdenesServicio= DB::select('SELECT o.*, c.razon_social as cliente FROM ordenes_servicios AS o INNER JOIN clientes as c ON o.cliente_id= c.id');       
         return $OrdenesServicio;
     }
-
+    public function cargarServiciosOrden($id){
+        $servicios= DB::select('SELECT * FROM servicios WHERE ordenes_servicios_id="'.$id.'"');
+        return $servicios;
+    }
     /**
      * Show the form for creating a new resource.
      *

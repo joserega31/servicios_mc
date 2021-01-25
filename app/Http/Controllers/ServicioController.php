@@ -66,7 +66,7 @@ class ServicioController extends Controller
             $servicio->save();
             return $servicio;
         } catch (Exception $ex) {
-            return $this->JsonResponseError($ex, 'exception');
+            return $ex;
         }
     }
 
@@ -141,4 +141,6 @@ class ServicioController extends Controller
         $Servicio = Servicio::find($id);
         $Servicio->delete();
     }
+
+    
 }

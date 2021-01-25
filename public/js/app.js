@@ -4735,6 +4735,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['user'],
   data: function data() {
@@ -4780,7 +4784,8 @@ __webpack_require__.r(__webpack_exports__);
         lineas_productos_id: null,
         cliente_id: null,
         tipo_servicio_id: null,
-        ordenes_servicios_id: 0
+        ordenes_servicios_id: 0,
+        observaciones: ""
       },
       LineasProductos: [],
       TiposServicios: [],
@@ -4794,6 +4799,7 @@ __webpack_require__.r(__webpack_exports__);
       mensaje: "hidden",
       textomensajemodal: "",
       mensajemodal: "hidden",
+      ocultarModal: "hidden",
       editmodo: false
     };
   },
@@ -4827,79 +4833,90 @@ __webpack_require__.r(__webpack_exports__);
       axios.get(url).then(function (res) {
         if (res.data[0].id) {
           _this.Ordenes = res.data;
-          _this.buscliente = res.data.razon_social;
+          _this;
+        } else {
+          console.log("No se encontro registros");
+        }
+      });
+    },
+    cargarServiciosOrden: function cargarServiciosOrden(id) {
+      var _this2 = this;
+
+      axios.get("api/cargarServiciosOrden/".concat(id)).then(function (res) {
+        if (res.data) {
+          _this2.Servicios = res.data;
         } else {
           console.log("No se encontro registros");
         }
       });
     },
     cargarLineasProd: function cargarLineasProd() {
-      var _this2 = this;
+      var _this3 = this;
 
       var url = "api/LineasProd";
       axios.get(url).then(function (res) {
         if (res.data[0].id) {
-          _this2.LineasProductos = res.data;
+          _this3.LineasProductos = res.data;
         } else {
           console.log("No se encontro registros");
         }
       });
     },
     cargarTiposServicios: function cargarTiposServicios() {
-      var _this3 = this;
+      var _this4 = this;
 
       var url = "api/tiposserv";
       axios.get(url).then(function (res) {
         if (res.data[0].id) {
-          _this3.TiposServicios = res.data;
+          _this4.TiposServicios = res.data;
         } else {
           console.log("No se encontro registros");
         }
       });
     },
     cargarEstadosPago: function cargarEstadosPago() {
-      var _this4 = this;
+      var _this5 = this;
 
       var url = "api/estpagos";
       axios.get(url).then(function (res) {
         if (res.data[0].id) {
-          _this4.EstadosPago = res.data;
+          _this5.EstadosPago = res.data;
         } else {
           console.log("No se encontro registros");
         }
       });
     },
     cargarModosPago: function cargarModosPago() {
-      var _this5 = this;
+      var _this6 = this;
 
       var url = "api/metpagos";
       axios.get(url).then(function (res) {
         if (res.data[0].id) {
-          _this5.ModosPago = res.data;
+          _this6.ModosPago = res.data;
         } else {
           console.log("No se encontro registros");
         }
       });
     },
     cargaringenios: function cargaringenios() {
-      var _this6 = this;
+      var _this7 = this;
 
       var url = "api/ingenios";
       axios.get(url).then(function (res) {
         if (res.data[0].id) {
-          _this6.Ingenios = res.data;
+          _this7.Ingenios = res.data;
         } else {
           console.log("No se encontro registros");
         }
       });
     },
     cargarClientes: function cargarClientes() {
-      var _this7 = this;
+      var _this8 = this;
 
       axios.get("api/clientes/".concat(this.orden.cliente), '0').then(function (res) {
         if (res.data[0].id) {
-          _this7.Clientes = res.data;
-          _this7.ocultar = "mostrar";
+          _this8.Clientes = res.data;
+          _this8.ocultar = "mostrar";
         } else {
           console.log("No se encontro registros");
         }
@@ -4924,6 +4941,7 @@ __webpack_require__.r(__webpack_exports__);
     editar: function editar(id) {
       this.editmodo = true;
       this.orden = this.Ordenes[id];
+      this.cargarServiciosOrden(this.orden.id);
     },
     editarServicio: function editarServicio(id) {
       this.Servicio = this.Ordenes[id];
@@ -4936,54 +4954,47 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     guardar: function guardar(orden) {
-      var _this8 = this;
+      var _this9 = this;
 
       if (this.editmodo == false) {
-        console.log(orden);
         axios.post("/api/ordenes", this.orden).then(function (res) {
-          _this8.Ordenes.push(orden);
+          _this9.Ordenes.push(orden); //GUARDAR LOS SERVICIOS
 
-          _this8.Servicios.ordenes_servicios_id = res.data.ordenes_servicios_id; //GUARDAR LOS SERVICIOS
 
-          for (i in _this8.Servicios) {
-            axios.post("/api/servicios", _this8.Servicios[i]).then(function (res) {});
+          for (var i in _this9.Servicios) {
+            _this9.Servicios[i].ordenes_servicios_id = res.data.id;
+            axios.post("/api/servicios", _this9.Servicios[i]).then(function (res) {});
           }
 
-          _this8.textomensaje = "Se ha creado Exitosamente";
-          _this8.mensaje = "mostrar";
+          _this9.textomensaje = "Se ha creado Exitosamente";
+          _this9.mensaje = "mostrar";
 
-          _this8.getKeeps();
+          _this9.getKeeps();
         });
-        /*axios.post(`/api/servicios`, this.Servicio).then((res) => {
-            this.Servicios.push(Servicio);
-            this.textomensaje= "Se ha creado Exitosamente";
+      } else {
+        /*axios.put(`/api/servicios/${this.Servicio.id}`, Servicio)
+            .then(res=>{
+            const index = this.Servicios.findIndex(item => item.id === Servicio.id);
+            this.Servicio[index] = res.data;
+            this.textomensaje= "Se ha actualizado Exitosamente";
             this.mensaje="mostrar";
             this.getKeeps();
         });*/
-      } else {
-          /*axios.put(`/api/servicios/${this.Servicio.id}`, Servicio)
-              .then(res=>{
-              const index = this.Servicios.findIndex(item => item.id === Servicio.id);
-              this.Servicio[index] = res.data;
-              this.textomensaje= "Se ha actualizado Exitosamente";
-              this.mensaje="mostrar";
-              this.getKeeps();
-          });*/
-        }
+      }
 
       this.limpiarFormulario(0);
     },
     eliminar: function eliminar(orden, index) {
-      var _this9 = this;
+      var _this10 = this;
 
       var confirmacion = confirm("Eliminar la orden numero:  ".concat(orden.id));
 
       if (confirmacion) {
         axios["delete"]("/api/ordenes/".concat(orden.id)).then(function () {
-          _this9.Ordenes.splice(index, 1);
+          _this10.Ordenes.splice(index, 1);
 
-          _this9.textomensaje = "Se ha eliminado Exitosamente";
-          _this9.mensaje = "mostrar";
+          _this10.textomensaje = "Se ha eliminado Exitosamente";
+          _this10.mensaje = "mostrar";
         });
       }
     },
@@ -4993,6 +5004,7 @@ __webpack_require__.r(__webpack_exports__);
         this.mensaje = "hidden";
       }
 
+      this.Servicios = [];
       this.ocultar = "hidden";
       this.textomensaje = "";
       this.mensaje = "hidden";
@@ -46576,8 +46588,7 @@ var render = function() {
           tabindex: "-1",
           role: "dialog",
           "aria-labelledby": "myLargeModalLabel",
-          "aria-hidden": "true",
-          show: _vm.modal
+          "aria-hidden": "true"
         }
       },
       [
@@ -47337,6 +47348,37 @@ var render = function() {
                               return
                             }
                             _vm.$set(_vm.Servicio, "igv", $event.target.value)
+                          }
+                        }
+                      })
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "form-group col-md-8" }, [
+                      _c("label", { attrs: { for: "observaciones" } }, [
+                        _vm._v("Observaciones")
+                      ]),
+                      _vm._v(" "),
+                      _c("textarea", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.Servicio.observaciones,
+                            expression: "Servicio.observaciones"
+                          }
+                        ],
+                        staticClass: "form-control",
+                        domProps: { value: _vm.Servicio.observaciones },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.$set(
+                              _vm.Servicio,
+                              "observaciones",
+                              $event.target.value
+                            )
                           }
                         }
                       })

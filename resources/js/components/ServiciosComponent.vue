@@ -165,7 +165,7 @@
     </div>
     <br><br>
 
-    <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" :show="modal">
+    <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-xl">
             <div class="modal-content" style="padding:15px">
                 <div class="modal-header">
@@ -270,6 +270,10 @@
                                 <label for="igv">IGV</label>
                                 <input type="number" class="form-control" id="igv" step="0.1" min="1" value="0.00" required v-model="Servicio.igv">
                             </div>
+                            <div class="form-group col-md-8">
+                                <label for="observaciones">Observaciones</label>
+                                <textarea class="form-control" v-model="Servicio.observaciones"></textarea>
+                            </div>
                         </div>
                         <button type="button" class="btn btn-primary" @click="cargarServicio(Servicio)">Agregar</button>
                         <button type="reset" class="btn btn-default">Limpiar</button>
@@ -290,7 +294,7 @@ export default {
             Ordenes:[],
             orden: {id:0, fecha:null, cliente_id:0, igv:0, estatus:0, cliente:"", ingenio_id:0, estados_pago_id:0, modos_pagos_id:0},
             Servicios: [],
-            Servicio: {id:0,empresa_transporte:"",conductor:"",placa_unidad:"",placa_carretera:"",guia_transportista:"",almacen:"",cantidad:1,unidad:"",costo_unitario_estiba:0,costo_operativo_extra_estiba:0,costo_flat_estiba:0,costo_total_servicio:0,costo_extra_estiba:0,precio_extra_estiba:0,precio_servicio:0,precio_total_servicio:0,utilidad:0,igv:0,fecha_servicio:null,fecha_pago:null,fecha_liquidacion:null,facturado:0,num_factura:"",lineas_productos_id:null,cliente_id:null,tipo_servicio_id:null, ordenes_servicios_id:0},
+            Servicio: {id:0,empresa_transporte:"",conductor:"",placa_unidad:"",placa_carretera:"",guia_transportista:"",almacen:"",cantidad:1,unidad:"",costo_unitario_estiba:0,costo_operativo_extra_estiba:0,costo_flat_estiba:0,costo_total_servicio:0,costo_extra_estiba:0,precio_extra_estiba:0,precio_servicio:0,precio_total_servicio:0,utilidad:0,igv:0,fecha_servicio:null,fecha_pago:null,fecha_liquidacion:null,facturado:0,num_factura:"",lineas_productos_id:null,cliente_id:null,tipo_servicio_id:null, ordenes_servicios_id:0, observaciones:""},
             LineasProductos: [],
             TiposServicios:[],
             EstadosPago:[],
@@ -303,6 +307,7 @@ export default {
             mensaje: "hidden",
             textomensajemodal: "",
             mensajemodal: "hidden",
+            ocultarModal: "hidden",
             editmodo:false
         };
     },
@@ -332,7 +337,16 @@ export default {
       axios.get(url).then((res) => {
         if (res.data[0].id){
           this.Ordenes = res.data;
-          this.buscliente= res.data.razon_social;
+          this
+        }else{
+          console.log("No se encontro registros");
+        }
+      });
+    },
+    cargarServiciosOrden:function(id){
+      axios.get(`api/cargarServiciosOrden/${id}`).then((res) => {
+        if (res.data){
+          this.Servicios = res.data;
         }else{
           console.log("No se encontro registros");
         }
@@ -417,6 +431,7 @@ export default {
     editar:function(id){
         this.editmodo= true;
         this.orden= this.Ordenes[id];
+        this.cargarServiciosOrden(this.orden.id);
     },
     editarServicio:function(id){
         this.Servicio= this.Ordenes[id];
@@ -429,27 +444,19 @@ export default {
     },
     guardar: function(orden){
         if (this.editmodo==false){
-            console.log(orden);
             axios.post(`/api/ordenes`, this.orden).then((res) => {
                 this.Ordenes.push(orden);
-                this.Servicios.ordenes_servicios_id= res.data.ordenes_servicios_id;
-
                 //GUARDAR LOS SERVICIOS
-                for(i in this.Servicios){
+                for(let i in this.Servicios){
+                    this.Servicios[i].ordenes_servicios_id= res.data.id;
                     axios.post(`/api/servicios`, this.Servicios[i]).then((res) => {
-
+                        
                     });
                 }
                 this.textomensaje= "Se ha creado Exitosamente";
                 this.mensaje="mostrar";
                 this.getKeeps();
             });
-            /*axios.post(`/api/servicios`, this.Servicio).then((res) => {
-                this.Servicios.push(Servicio);
-                this.textomensaje= "Se ha creado Exitosamente";
-                this.mensaje="mostrar";
-                this.getKeeps();
-            });*/
         }else{
             /*axios.put(`/api/servicios/${this.Servicio.id}`, Servicio)
                 .then(res=>{
@@ -478,6 +485,7 @@ export default {
             this.textomensaje= "";
             this.mensaje="hidden";
         }
+        this.Servicios= [];
         this.ocultar="hidden";
         this.textomensaje= "";
         this.mensaje="hidden";

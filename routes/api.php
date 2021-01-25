@@ -43,7 +43,7 @@ Route::middleware('cors')->group(function(){
     Route::get('totalservicios', 'App\Http\Controllers\HomeController@totalservicios');
     Route::get('cargarPermisosUser/{url}/{email}', 'App\Http\Controllers\HomeController@cargarPermisosUser');
     Route::get('submenuxusuario/{id}/{email}', 'App\Http\Controllers\HomeController@cargarSubmenuUsuario');
-    
+    Route::get('cargarServiciosOrden/{id}', 'App\Http\Controllers\OrdenesController@cargarServiciosOrden');
     //REPORTES
     Route::get('exportarservicio', 'App\Http\Controllers\ReportesController@exportarServicio');
     Route::get('exportarlstcli', 'App\Http\Controllers\ReportesController@exportarlstcli');
