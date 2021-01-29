@@ -20,14 +20,11 @@ class CreateServiciosTable extends Migration
             $table->string('placa_unidad', 45);
             $table->string('placa_carretera', 45);
             $table->string('guia_transportista', 45);
-            $table->string('almacen', 100);
+            $table->integer('almacen_id')->unsigned();   
+            $table->foreign('almacen_id')->references('id')->on('almacenes');
             $table->double('cantidad');
-            $table->string('unidad', 5);
-            $table->double('costo_unitario_estiba');
-            $table->double('costo_operativo_extra_estiba');
-            $table->double('costo_flat_estiba');
-            $table->double('costo_total_servicio');
-            $table->double('costo_extra_estiba');
+            $table->integer('unidad_id')->unsigned();   
+            $table->foreign('unidad_id')->references('id')->on('unidades');
             $table->double('precio_extra_estiba');
             $table->double('precio_servicio');
             $table->double('precio_total_servicio');

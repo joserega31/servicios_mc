@@ -38,7 +38,8 @@ Vue.component('usuarios-component', require('./components/UsuariosComponent.vue'
 Vue.component('maestros-component', require('./components/MaestrosComponent.vue').default);
 Vue.component('menu-component', require('./components/MenuComponent.vue').default);
 Vue.component('reportes-component', require('./components/ReportesComponent.vue').default);
-
+Vue.component('almacenes-component', require('./components/AlmacenesComponent.vue').default);
+Vue.component('unidades-component', require('./components/UnidadesComponent.vue').default);
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application

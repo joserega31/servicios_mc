@@ -116,6 +116,22 @@ class DatabaseSeeder extends Seeder
             'orden' => 9,
         ]);
 
+        DB::table('sub_menus')->insert([
+            'menu_id' => 2,
+            'nombre' => 'Almacenes',
+            'icono' => 'fas fa-warehouse',
+            'url' => 'almacenes',
+            'orden' => 10,
+        ]);
+
+        DB::table('sub_menus')->insert([
+            'menu_id' => 2,
+            'nombre' => 'Unidades',
+            'icono' => 'fas fa-box-open',
+            'url' => 'unidades',
+            'orden' => 11,
+        ]);
+
         //Configuracion
         DB::table('sub_menus')->insert([
             'menu_id' => 4,
@@ -232,6 +248,22 @@ class DatabaseSeeder extends Seeder
             'rol_id' => '1',
             'menu_id' => '2',
             'sub_menu_id' => '10',
+            'crear' => '1',
+            'editar' => '1',
+            'eliminar' => '1'
+        ]);
+        DB::table('funcion_roles')->insert([
+            'rol_id' => '1',
+            'menu_id' => '2',
+            'sub_menu_id' => '11',
+            'crear' => '1',
+            'editar' => '1',
+            'eliminar' => '1'
+        ]);
+        DB::table('funcion_roles')->insert([
+            'rol_id' => '1',
+            'menu_id' => '2',
+            'sub_menu_id' => '12',
             'crear' => '1',
             'editar' => '1',
             'eliminar' => '1'

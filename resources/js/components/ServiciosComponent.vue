@@ -103,6 +103,12 @@
                         </select>
                     </div>
                     <div class="form-group col-md-4">
+                        <label for="almacen">Almacen</label>
+                        <select class="form-control" id="almacen" required  v-model="orden.almacen_id">
+                            <option v-for="(item, index) in Almacenes" :key="index" :value="item.id">{{ item.nombre}}</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-4">
                         <label for="estados_pago_id">Estado de Pago</label>
                         <select class="form-control" id="estados_pago_id" required  v-model="orden.estados_pago_id">
                             <option v-for="(item, index) in EstadosPago" :key="index" :value="item.id">{{ item.nombre}}</option>
@@ -141,8 +147,8 @@
                                         <td>{{ item.conductor }}</td>
                                         <td>{{ item.almacen }}</td>
                                         <td>
-                                            <button type="button" class="btn btn-warning" title="Editar" @click="editarServicio(index)">
-                                                <i class="far fa-edit"></i>
+                                            <button type="button" class="btn btn-info" title="Ver" @click="editarServicio(index)">
+                                                <i class="far fa-eye"></i>
                                             </button>
                                             <button type="button" class="btn btn-danger" title="Eliminar" @click="eliminarServicio(index)">
                                                 <i class="far fa-trash-alt"></i>
@@ -159,7 +165,7 @@
                 </div>
                 <br><br>
                 <button type="submit" class="btn btn-primary">Guardar</button>
-                <button type="reset" class="btn btn-default">Limpiar</button>
+                <button type="buttom" class="btn btn-default" >Limpiar</button>
             </form>
         </div>
     </div>
@@ -197,19 +203,17 @@
                                 <input type="text" class="form-control" id="guia" required  v-model="Servicio.guia_transportista">
                             </div>
                             <div class="form-group col-md-4">
-                                <label for="almacen">Almacen</label>
-                                <input type="text" class="form-control" id="almacen" required v-model="Servicio.almacen">
-                            </div>
-                            <div class="form-group col-md-4">
                                 <label for="cantidad">Cantidad</label>
                                 <input type="number" class="form-control" id="cantidad" step="1" min="1" value="1" required v-model="Servicio.cantidad">
                             </div>
-                        </div>
-                        <div class="form-row">
                             <div class="form-group col-md-4">
                                 <label for="unidad">Unidad</label>
-                                <input type="text" class="form-control" id="unidad" required v-model="Servicio.unidad">
+                                <select class="form-control" id="unidad_id" required  v-model="Servicio.unidad_id">
+                                    <option v-for="(item, index) in Unidades" :key="index" :value="item.id">{{ item.descripcion_larga}}</option>
+                                </select>
                             </div>
+                        </div>
+                        <div class="form-row">
                             <div class="form-group col-md-4">
                                 <label for="lineas_productos_id">Linea de Producto</label>
                                 <select class="form-control" id="lineas_producto_id" required  v-model="Servicio.lineas_productos_id">
@@ -222,43 +226,19 @@
                                     <option v-for="(item, index) in TiposServicios" :key="index" :value="item.id">{{ item.nombre}}</option>
                                 </select>
                             </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group col-md-4">
-                                <label for="costo_uni_est">Costo Unitario Estiba</label>
-                                <input type="number" class="form-control" id="costo_uni_est" step="0.1" min="1" value="0.00" required v-model="Servicio.costo_unitario_estiba">
-                            </div>
-                            <div class="form-group col-md-4">
-                                <label for="costo_flat_estiba">Costo Flat Estiba</label>
-                                <input type="number" class="form-control" id="costo_flat_estiba" step="0.1" min="1" value="0.00" required v-model="Servicio.costo_flat_estiba">
-                            </div>
-                            <div class="form-group col-md-4">
-                                <label for="costo_opeext_est">Costo Operativo Extra Estiba</label>
-                                <input type="number" class="form-control" id="costo_opeext_est" step="0.1" min="1" value="0.00" required v-model="Servicio.costo_operativo_extra_estiba">
-                            </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group col-md-4">
-                                <label for="costo_extr_est">Costo Extra Estiba</label>
-                                <input type="number" class="form-control" id="costo_extr_est" step="0.1" min="1" value="0.00" required v-model="Servicio.costo_extra_estiba">
-                            </div>
                             <div class="form-group col-md-4">
                                 <label for="precio_extr_est">Precio Extra Estiba</label>
                                 <input type="number" class="form-control" id="precio_extr_est" step="0.1" min="1" value="0.00" required v-model="Servicio.precio_extra_estiba">
                             </div>
+                        </div>
+                        <div class="form-row">
                             <div class="form-group col-md-4">
                                 <label for="precio_servicio">Precio Servicio</label>
                                 <input type="number" class="form-control" id="precio_servicio" step="0.1" min="1" value="0.00" required v-model="Servicio.precio_servicio">
                             </div>
-                        </div>
-                        <div class="form-row">
                             <div class="form-group col-md-4">
                                 <label for="precio_tot_serv">Precio Total Servicio</label>
                                 <input type="number" class="form-control" id="precio_tot_serv" step="0.1" min="1" value="0.00" required v-model="Servicio.precio_total_servicio">
-                            </div>
-                            <div class="form-group col-md-4">
-                                <label for="costo_tot_serv">Costo Total Servicio</label>
-                                <input type="number" class="form-control" id="costo_tot_serv" step="0.1" min="1" value="0.00" required v-model="Servicio.costo_total_servicio">
                             </div>
                             <div class="form-group col-md-4">
                                 <label for="utilidad">Utilidad</label>
@@ -276,7 +256,7 @@
                             </div>
                         </div>
                         <button type="button" class="btn btn-primary" @click="cargarServicio(Servicio)">Agregar</button>
-                        <button type="reset" class="btn btn-default">Limpiar</button>
+                        <button type="reset" class="btn btn-default"  @click="limpiarFormulario(1)" >Limpiar</button>
                     </form>
                 </div>
             </div>
@@ -292,22 +272,22 @@ export default {
     data() {
         return {
             Ordenes:[],
-            orden: {id:0, fecha:null, cliente_id:0, igv:0, estatus:0, cliente:"", ingenio_id:0, estados_pago_id:0, modos_pagos_id:0},
+            orden: {id:0, fecha:null, cliente_id:0, igv:0, estatus:0, cliente:"", ingenio_id:0, estados_pago_id:0, modos_pagos_id:0, almacen_id:null},
             Servicios: [],
-            Servicio: {id:0,empresa_transporte:"",conductor:"",placa_unidad:"",placa_carretera:"",guia_transportista:"",almacen:"",cantidad:1,unidad:"",costo_unitario_estiba:0,costo_operativo_extra_estiba:0,costo_flat_estiba:0,costo_total_servicio:0,costo_extra_estiba:0,precio_extra_estiba:0,precio_servicio:0,precio_total_servicio:0,utilidad:0,igv:0,fecha_servicio:null,fecha_pago:null,fecha_liquidacion:null,facturado:0,num_factura:"",lineas_productos_id:null,cliente_id:null,tipo_servicio_id:null, ordenes_servicios_id:0, observaciones:""},
+            Servicio: {id:0,conductor:"",placa_unidad:"",placa_carretera:"",guia_transportista:"", cantidad:1,precio_extra_estiba:0,precio_servicio:0,precio_total_servicio:0,utilidad:0,igv:0,lineas_productos_id:null,tipo_servicio_id:null, ordenes_servicios_id:0, unidad_id:null, observaciones:""},
             LineasProductos: [],
             TiposServicios:[],
             EstadosPago:[],
             ModosPago:[],
             Clientes:[],
             Ingenios:[],
+            Unidades:[],
             buscliente:"",
             ocultar:"hidden",
             textomensaje: "",
             mensaje: "hidden",
             textomensajemodal: "",
             mensajemodal: "hidden",
-            ocultarModal: "hidden",
             editmodo:false
         };
     },
@@ -316,9 +296,10 @@ export default {
         this.cargarLineasProd();
         this.cargarTiposServicios();
         this.cargarEstadosPago();
-        this.cargarModosPago();
         this.cargaringenios();
-        
+        this.cargaUnidades();
+        this.cargarModosPago();
+
         var fecha = new Date(); 
         var mes = fecha.getMonth()+1; 
         var dia = fecha.getDate(); 
@@ -335,7 +316,7 @@ export default {
     getKeeps: function () {
       var url = "api/ordenes";
       axios.get(url).then((res) => {
-        if (res.data[0].id){
+        if (res.data[0]){
           this.Ordenes = res.data;
           this
         }else{
@@ -355,7 +336,7 @@ export default {
     cargarLineasProd: function () {
       var url = "api/LineasProd";
       axios.get(url).then((res) => {
-        if (res.data[0].id){
+        if (res.data[0]){
           this.LineasProductos = res.data;
         }else{
           console.log("No se encontro registros");
@@ -365,7 +346,7 @@ export default {
     cargarTiposServicios: function () {
       var url = "api/tiposserv";
       axios.get(url).then((res) => {
-        if (res.data[0].id){
+        if (res.data[0]){
           this.TiposServicios = res.data;
         }else{
           console.log("No se encontro registros");
@@ -375,7 +356,7 @@ export default {
     cargarEstadosPago: function () {
       var url = "api/estpagos";
       axios.get(url).then((res) => {
-        if (res.data[0].id){
+        if (res.data[0]){
           this.EstadosPago = res.data;
         }else{
           console.log("No se encontro registros");
@@ -385,7 +366,7 @@ export default {
     cargarModosPago: function () {
       var url = "api/metpagos";
       axios.get(url).then((res) => {
-        if (res.data[0].id){
+        if (res.data[0]){
           this.ModosPago = res.data;
         }else{
           console.log("No se encontro registros");
@@ -395,16 +376,26 @@ export default {
     cargaringenios: function () {
       var url = "api/ingenios";
       axios.get(url).then((res) => {
-        if (res.data[0].id){
+        if (res.data[0]){
           this.Ingenios = res.data;
         }else{
-          console.log("No se encontro registros");
+          console.log("No se encontro registros de Ingenios");
+        }
+      });
+    },
+    cargaUnidades: function () {
+      var url = "api/unidades";
+      axios.get(url).then((res) => {
+        if (res.data[0]){
+          this.Unidades = res.data;
+        }else{
+          console.log("No se encontro registros de Unidades");
         }
       });
     },
     cargarClientes: function () {
       axios.get(`api/clientes/${this.orden.cliente}`, '0').then((res) => {
-        if (res.data[0].id){
+        if (res.data[0]){
           this.Clientes = res.data;
           this.ocultar= "mostrar";
         }else{
@@ -423,6 +414,7 @@ export default {
             this.mensajemodal="mostrar";
         }else{
             this.Servicios.push(Servicio);
+            this.Servicio= {id:0,empresa_transporte:"",conductor:"",placa_unidad:"",placa_carretera:"",guia_transportista:"",almacen:"",cantidad:1,unidad:"",costo_unitario_estiba:0,costo_operativo_extra_estiba:0,costo_flat_estiba:0,costo_total_servicio:0,costo_extra_estiba:0,precio_extra_estiba:0,precio_servicio:0,precio_total_servicio:0,utilidad:0,igv:0,fecha_servicio:null,fecha_pago:null,fecha_liquidacion:null,facturado:0,num_factura:"",lineas_productos_id:null,cliente_id:null,tipo_servicio_id:null, ordenes_servicios_id:0, observaciones:""};
         }
     },
     limpiarBusqueda: function () {
@@ -447,15 +439,17 @@ export default {
             axios.post(`/api/ordenes`, this.orden).then((res) => {
                 this.Ordenes.push(orden);
                 //GUARDAR LOS SERVICIOS
+                console.log(this.Servicios);
                 for(let i in this.Servicios){
                     this.Servicios[i].ordenes_servicios_id= res.data.id;
+                    console.log(this.Servicios[i]);
                     axios.post(`/api/servicios`, this.Servicios[i]).then((res) => {
                         
                     });
                 }
                 this.textomensaje= "Se ha creado Exitosamente";
                 this.mensaje="mostrar";
-                this.getKeeps();
+                this.limpiarFormulario(0);
             });
         }else{
             /*axios.put(`/api/servicios/${this.Servicio.id}`, Servicio)
@@ -467,7 +461,7 @@ export default {
                 this.getKeeps();
             });*/
         }
-        this.limpiarFormulario(0);
+        
     },
     eliminar: function(orden, index){
         const confirmacion = confirm(`Eliminar la orden numero:  ${orden.id}`);
@@ -485,12 +479,14 @@ export default {
             this.textomensaje= "";
             this.mensaje="hidden";
         }
+        this.getKeeps();
         this.Servicios= [];
         this.ocultar="hidden";
         this.textomensaje= "";
         this.mensaje="hidden";
+        this.Servicios= null;
         this.orden= {id:0, fecha:null, cliente_id:0, igv:0, estatus:0, cliente:"", ingenio_id:0, estados_pago_id:0, modos_pagos_id:0};
-        this.Servicio= {id:0,empresa_transporte:"",conductor:"",placa_unidad:"",placa_carretera:"",guia_transportista:"",almacen:"",cantidad:1,unidad:"",costo_unitario_estiba:0,costo_operativo_extra_estiba:0,costo_flat_estiba:0,costo_total_servicio:0,costo_extra_estiba:0,precio_extra_estiba:0,precio_servicio:0,precio_total_servicio:0,utilidad:0,igv:0,fecha_servicio:null,fecha_pago:null,fecha_liquidacion:null,facturado:0,num_factura:"",lineas_productos_id:null,cliente_id:null,tipo_servicio_id:null};
+        this.Servicio= {id:0,empresa_transporte:"",conductor:"",placa_unidad:"",placa_carretera:"",guia_transportista:"",almacen:"",cantidad:1,unidad:"",costo_unitario_estiba:0,costo_operativo_extra_estiba:0,costo_flat_estiba:0,costo_total_servicio:0,costo_extra_estiba:0,precio_extra_estiba:0,precio_servicio:0,precio_total_servicio:0,utilidad:0,igv:0,fecha_servicio:null,fecha_pago:null,fecha_liquidacion:null,facturado:0,num_factura:"",lineas_productos_id:null,cliente_id:null,tipo_servicio_id:null, ordenes_servicios_id:0, observaciones:""};
     }
   },
   mounted() {

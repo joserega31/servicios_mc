@@ -37,3 +37,5 @@ Route::get('/configuracion', [App\Http\Controllers\ConfiguracionController::clas
 Route::get('/usuarios', [App\Http\Controllers\UsuariosController::class, 'vistauser'])->name('usuarios');
 Route::get('/roles', [App\Http\Controllers\RolesController::class, 'vistaroles'])->name('roles');
 Route::get('/funcionrol', [App\Http\Controllers\FuncionRolesController::class, 'vistafuncionrol'])->name('funcionrol');
+Route::get('/unidades', [App\Http\Controllers\UnidadesController::class, 'vistaUnidades'])->name('funcionrol');
+Route::get('/almacenes', [App\Http\Controllers\AlmacenesController::class, 'vistaAlmacenes'])->name('funcionrol');
