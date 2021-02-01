@@ -48,14 +48,8 @@ class ServicioController extends Controller
             $servicio->placa_unidad = $request->placa_unidad;
             $servicio->placa_carretera = $request->placa_carretera;
             $servicio->guia_transportista = $request->guia_transportista;
-            $servicio->almacen = $request->almacen;
             $servicio->cantidad = $request->cantidad;
-            $servicio->unidad = $request->unidad;
-            $servicio->costo_unitario_estiba = $request->costo_unitario_estiba;
-            $servicio->costo_operativo_extra_estiba = $request->costo_operativo_extra_estiba;
-            $servicio->costo_flat_estiba = $request->costo_flat_estiba;
-            $servicio->costo_total_servicio = $request->costo_total_servicio;
-            $servicio->costo_extra_estiba = $request->costo_extra_estiba;
+            $servicio->unidad_id = $request->unidad_id;
             $servicio->precio_extra_estiba = $request->precio_extra_estiba;
             $servicio->precio_servicio = $request->precio_servicio;
             $servicio->precio_total_servicio = $request->precio_total_servicio;
@@ -63,6 +57,7 @@ class ServicioController extends Controller
             $servicio->igv = $request->igv;
             $servicio->lineas_productos_id = $request->lineas_productos_id;
             $servicio->tipo_servicio_id = $request->tipo_servicio_id;
+            $servicio->observaciones = $request->observaciones;
             $servicio->save();
             return $servicio;
         } catch (Exception $ex) {
@@ -108,14 +103,8 @@ class ServicioController extends Controller
             $servicio->placa_unidad = $request->placa_unidad;
             $servicio->placa_carretera = $request->placa_carretera;
             $servicio->guia_transportista = $request->guia_transportista;
-            $servicio->almacen = $request->almacen;
             $servicio->cantidad = $request->cantidad;
-            $servicio->unidad = $request->unidad;
-            $servicio->costo_unitario_estiba = $request->costo_unitario_estiba;
-            $servicio->costo_operativo_extra_estiba = $request->costo_operativo_extra_estiba;
-            $servicio->costo_flat_estiba = $request->costo_flat_estiba;
-            $servicio->costo_total_servicio = $request->costo_total_servicio;
-            $servicio->costo_extra_estiba = $request->costo_extra_estiba;
+            $servicio->unidad_id = $request->unidad_id;
             $servicio->precio_extra_estiba = $request->precio_extra_estiba;
             $servicio->precio_servicio = $request->precio_servicio;
             $servicio->precio_total_servicio = $request->precio_total_servicio;
@@ -123,6 +112,7 @@ class ServicioController extends Controller
             $servicio->igv = $request->igv;
             $servicio->lineas_productos_id = $request->lineas_productos_id;
             $servicio->tipo_servicio_id = $request->tipo_servicio_id;
+            $servicio->observaciones = $request->observaciones;
             $servicio->update();
             return $servicio;
         } catch (Exception $ex) {

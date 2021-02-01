@@ -25,6 +25,8 @@ class CreateOrdenesServiciosTable extends Migration
             $table->date('fecha_factura')->nullable();
             $table->string('num_factura', 10)->nullable();
             $table->double('monto_factura')->nullable();
+            $table->integer('almacen_id')->unsigned();
+            $table->foreign('almacen_id')->references('id')->on('almacenes');
             $table->integer('estados_pago_id')->unsigned();   
             $table->foreign('estados_pago_id')->references('id')->on('estados_pagos');
             $table->integer('modos_pagos_id')->unsigned(); 

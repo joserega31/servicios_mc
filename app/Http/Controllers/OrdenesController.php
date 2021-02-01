@@ -17,7 +17,7 @@ class OrdenesController extends Controller
      */
     public function index()
     {
-        $OrdenesServicio= DB::select('SELECT o.*, c.razon_social as cliente FROM ordenes_servicios AS o INNER JOIN clientes as c ON o.cliente_id= c.id');       
+        $OrdenesServicio= DB::select('SELECT o.*, c.razon_social as cliente FROM ordenes_servicios AS o INNER JOIN clientes as c ON o.cliente_id= c.id WHERE o.estatus="0"');       
         return $OrdenesServicio;
     }
     public function cargarServiciosOrden($id){
@@ -46,8 +46,10 @@ class OrdenesController extends Controller
             $OrdenesServicio = new OrdenesServicio();
             $OrdenesServicio->fecha = $request->fecha;
             $OrdenesServicio->cliente_id = $request->cliente_id;
-            $OrdenesServicio->igv = 1;
+            $OrdenesServicio->igv = $request->igv;
             $OrdenesServicio->estatus = 0;
+            $OrdenesServicio->almacen_id = $request->almacen_id;
+            $OrdenesServicio->estados_pago_id = $request->estados_pago_id;
             $OrdenesServicio->estados_pago_id = $request->estados_pago_id;
             $OrdenesServicio->ingenio_id = $request->ingenio_id;
             $OrdenesServicio->modos_pagos_id = $request->modos_pagos_id;
@@ -110,7 +112,7 @@ class OrdenesController extends Controller
      */
     public function destroy($id)
     {
-        $OrdenesServicio = OrdenesServicio::find($id);
-        $OrdenesServicio->delete();
+        $OrdenesServicio= DB::select('UPDATE ordenes_servicios SET estatus="1" WHERE id="'.$id. '"');       
+        return $OrdenesServicio;
     }
 }

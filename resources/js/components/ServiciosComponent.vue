@@ -98,14 +98,14 @@
                 <div class="form-row">
                     <div class="form-group col-md-4">
                         <label for="ingenio_id">Ingenios</label>
-                        <select class="form-control" id="ingenio_id" required  v-model="orden.ingenio_id">
+                        <select class="form-control" id="ingenio_id" required  v-model="orden.ingenio_id" @change="cargarAlmacenes(orden.ingenio_id)">
                             <option v-for="(item, index) in Ingenios" :key="index" :value="item.id">{{ item.nombre}}</option>
                         </select>
                     </div>
                     <div class="form-group col-md-4">
                         <label for="almacen">Almacen</label>
                         <select class="form-control" id="almacen" required  v-model="orden.almacen_id">
-                            <option v-for="(item, index) in Almacenes" :key="index" :value="item.id">{{ item.nombre}}</option>
+                            <option v-for="(item, index) in Almacenes" :key="index" :value="item.id">{{ item.nombre_almacen}}</option>
                         </select>
                     </div>
                     <div class="form-group col-md-4">
@@ -126,7 +126,7 @@
                         <h5 class="card-title">Servicios</h5>
                     </div>  
                     <div class="form-group col-md-2 text-right">
-                        <button type="button" class="btn btn-info" data-toggle="modal" data-target=".bd-example-modal-lg">Agregar Servicio</button>
+                        <button type="button" class="btn btn-info" data-toggle="modal" data-target=".bd-example-modal-lg" @click="agregarNuevoServicio()">Agregar Servicio</button>
                     </div>
                     <div class="form-group col-md-12">
                         <div class="table-responsive table mt-2" id="dataTable" role="grid" aria-describedby="dataTable_info">
@@ -147,7 +147,7 @@
                                         <td>{{ item.conductor }}</td>
                                         <td>{{ item.almacen }}</td>
                                         <td>
-                                            <button type="button" class="btn btn-info" title="Ver" @click="editarServicio(index)">
+                                            <button type="button" class="btn btn-info" title="Ver" @click="verServicio(index)" data-toggle="modal" data-target=".bd-example-modal-lg">
                                                 <i class="far fa-eye"></i>
                                             </button>
                                             <button type="button" class="btn btn-danger" title="Eliminar" @click="eliminarServicio(index)">
@@ -165,7 +165,7 @@
                 </div>
                 <br><br>
                 <button type="submit" class="btn btn-primary">Guardar</button>
-                <button type="buttom" class="btn btn-default" >Limpiar</button>
+                <button type="buttom" class="btn btn-default" @click="limpiarFormulario(1)">Limpiar</button>
             </form>
         </div>
     </div>
@@ -250,13 +250,23 @@
                                 <label for="igv">IGV</label>
                                 <input type="number" class="form-control" id="igv" step="0.1" min="1" value="0.00" required v-model="Servicio.igv">
                             </div>
+                            <div class="form-group col-md-4">
+                                <label for="subtotal">Subtotal</label>
+                                <input type="number" class="form-control" id="subtotal" step="0.1" min="1" value="0.00" required v-model="Servicio.Subtotal" readonly>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label for="total">Total</label>
+                                <input type="number" class="form-control" id="total" step="0.1" min="1" value="0.00" required v-model="Servicio.total" readonly>
+                            </div>
+                        </div>
+                        <div class="form-row">
                             <div class="form-group col-md-8">
                                 <label for="observaciones">Observaciones</label>
                                 <textarea class="form-control" v-model="Servicio.observaciones"></textarea>
                             </div>
                         </div>
-                        <button type="button" class="btn btn-primary" @click="cargarServicio(Servicio)">Agregar</button>
-                        <button type="reset" class="btn btn-default"  @click="limpiarFormulario(1)" >Limpiar</button>
+                        <button type="button" class="btn btn-primary" @click="cargarServicio(Servicio)" :disabled="botonmodal">Agregar</button>
+                        <button type="reset" class="btn btn-default"  @click="limpiarFormulario(1)" :disabled="botonmodal">Limpiar</button>
                     </form>
                 </div>
             </div>
@@ -274,13 +284,14 @@ export default {
             Ordenes:[],
             orden: {id:0, fecha:null, cliente_id:0, igv:0, estatus:0, cliente:"", ingenio_id:0, estados_pago_id:0, modos_pagos_id:0, almacen_id:null},
             Servicios: [],
-            Servicio: {id:0,conductor:"",placa_unidad:"",placa_carretera:"",guia_transportista:"", cantidad:1,precio_extra_estiba:0,precio_servicio:0,precio_total_servicio:0,utilidad:0,igv:0,lineas_productos_id:null,tipo_servicio_id:null, ordenes_servicios_id:0, unidad_id:null, observaciones:""},
+            Servicio: {id:0,conductor:"",placa_unidad:"",placa_carretera:"",guia_transportista:"", cantidad:1,precio_extra_estiba:0,precio_servicio:0,precio_total_servicio:0,utilidad:0,igv:0,lineas_productos_id:null,tipo_servicio_id:null, ordenes_servicios_id:0, unidad_id:null, observaciones:"", Subtotal:0, total:0},
             LineasProductos: [],
             TiposServicios:[],
             EstadosPago:[],
             ModosPago:[],
             Clientes:[],
             Ingenios:[],
+            Almacenes:[],
             Unidades:[],
             buscliente:"",
             ocultar:"hidden",
@@ -288,6 +299,7 @@ export default {
             mensaje: "hidden",
             textomensajemodal: "",
             mensajemodal: "hidden",
+            botonmodal:false,
             editmodo:false
         };
     },
@@ -299,6 +311,7 @@ export default {
         this.cargaringenios();
         this.cargaUnidades();
         this.cargarModosPago();
+
 
         var fecha = new Date(); 
         var mes = fecha.getMonth()+1; 
@@ -319,6 +332,15 @@ export default {
         if (res.data[0]){
           this.Ordenes = res.data;
           this
+        }else{
+          console.log("No se encontro registros");
+        }
+      });
+    },
+    cargarAlmacenes: function (id) {
+      axios.get(`api/almacenesxingenio/${id}`).then((res) => {
+        if (res.data){
+          this.Almacenes = res.data;
         }else{
           console.log("No se encontro registros");
         }
@@ -409,9 +431,10 @@ export default {
         this.ocultar= "hidden";
     },
     cargarServicio: function(Servicio){
-        if (Servicio.conductor=="" || Servicio.placa_unidad=="" || Servicio.placa_carretera=="" || Servicio.guia_transportista=="" || Servicio.almacen=="" || Servicio.unidad=="" || Servicio.lineas_productos_id=="" || Servicio.tipo_servicio_id==""){
+        if (Servicio.conductor=="" || Servicio.placa_unidad=="" || Servicio.placa_carretera=="" || Servicio.guia_transportista=="" || Servicio.unidad==0 || Servicio.lineas_productos_id==0){
             this.textomensajemodal= "Por favor, Complete todos los campos";
             this.mensajemodal="mostrar";
+            console.log(Servicio.conductor + " " + Servicio.placa_unidad + " " + Servicio.placa_carretera + " " + Servicio.guia_transportista + " " + Servicio.unidad + " " + Servicio.lineas_productos_id);
         }else{
             this.Servicios.push(Servicio);
             this.Servicio= {id:0,empresa_transporte:"",conductor:"",placa_unidad:"",placa_carretera:"",guia_transportista:"",almacen:"",cantidad:1,unidad:"",costo_unitario_estiba:0,costo_operativo_extra_estiba:0,costo_flat_estiba:0,costo_total_servicio:0,costo_extra_estiba:0,precio_extra_estiba:0,precio_servicio:0,precio_total_servicio:0,utilidad:0,igv:0,fecha_servicio:null,fecha_pago:null,fecha_liquidacion:null,facturado:0,num_factura:"",lineas_productos_id:null,cliente_id:null,tipo_servicio_id:null, ordenes_servicios_id:0, observaciones:""};
@@ -424,9 +447,15 @@ export default {
         this.editmodo= true;
         this.orden= this.Ordenes[id];
         this.cargarServiciosOrden(this.orden.id);
+        this.cargarAlmacenes(this.orden.ingenio_id);
     },
-    editarServicio:function(id){
-        this.Servicio= this.Ordenes[id];
+    agregarNuevoServicio: function(){
+        this.botonmodal= false;
+        //this.Servicio= {id:0,empresa_transporte:"",conductor:"",placa_unidad:"",placa_carretera:"",guia_transportista:"",almacen:"",cantidad:1,unidad:"",costo_unitario_estiba:0,costo_operativo_extra_estiba:0,costo_flat_estiba:0,costo_total_servicio:0,costo_extra_estiba:0,precio_extra_estiba:0,precio_servicio:0,precio_total_servicio:0,utilidad:0,igv:0,fecha_servicio:null,fecha_pago:null,fecha_liquidacion:null,facturado:0,num_factura:"",lineas_productos_id:null,cliente_id:null,tipo_servicio_id:null, ordenes_servicios_id:0, observaciones:""};
+    },
+    verServicio:function(id){
+        this.Servicio= this.Servicios[id];
+        this.botonmodal= true;
     },
     eliminarServicio: function(index){
         const confirmacion = confirm(`Eliminar el servicio numero:  ${index +1}`);

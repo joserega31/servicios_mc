@@ -4948,6 +4948,16 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['user'],
   data: function data() {
@@ -4982,7 +4992,9 @@ __webpack_require__.r(__webpack_exports__);
         tipo_servicio_id: null,
         ordenes_servicios_id: 0,
         unidad_id: null,
-        observaciones: ""
+        observaciones: "",
+        Subtotal: 0,
+        total: 0
       },
       LineasProductos: [],
       TiposServicios: [],
@@ -4990,6 +5002,7 @@ __webpack_require__.r(__webpack_exports__);
       ModosPago: [],
       Clientes: [],
       Ingenios: [],
+      Almacenes: [],
       Unidades: [],
       buscliente: "",
       ocultar: "hidden",
@@ -4997,6 +5010,7 @@ __webpack_require__.r(__webpack_exports__);
       mensaje: "hidden",
       textomensajemodal: "",
       mensajemodal: "hidden",
+      botonmodal: false,
       editmodo: false
     };
   },
@@ -5037,96 +5051,107 @@ __webpack_require__.r(__webpack_exports__);
         }
       });
     },
-    cargarServiciosOrden: function cargarServiciosOrden(id) {
+    cargarAlmacenes: function cargarAlmacenes(id) {
       var _this2 = this;
+
+      axios.get("api/almacenesxingenio/".concat(id)).then(function (res) {
+        if (res.data) {
+          _this2.Almacenes = res.data;
+        } else {
+          console.log("No se encontro registros");
+        }
+      });
+    },
+    cargarServiciosOrden: function cargarServiciosOrden(id) {
+      var _this3 = this;
 
       axios.get("api/cargarServiciosOrden/".concat(id)).then(function (res) {
         if (res.data) {
-          _this2.Servicios = res.data;
+          _this3.Servicios = res.data;
         } else {
           console.log("No se encontro registros");
         }
       });
     },
     cargarLineasProd: function cargarLineasProd() {
-      var _this3 = this;
+      var _this4 = this;
 
       var url = "api/LineasProd";
       axios.get(url).then(function (res) {
         if (res.data[0]) {
-          _this3.LineasProductos = res.data;
+          _this4.LineasProductos = res.data;
         } else {
           console.log("No se encontro registros");
         }
       });
     },
     cargarTiposServicios: function cargarTiposServicios() {
-      var _this4 = this;
+      var _this5 = this;
 
       var url = "api/tiposserv";
       axios.get(url).then(function (res) {
         if (res.data[0]) {
-          _this4.TiposServicios = res.data;
+          _this5.TiposServicios = res.data;
         } else {
           console.log("No se encontro registros");
         }
       });
     },
     cargarEstadosPago: function cargarEstadosPago() {
-      var _this5 = this;
+      var _this6 = this;
 
       var url = "api/estpagos";
       axios.get(url).then(function (res) {
         if (res.data[0]) {
-          _this5.EstadosPago = res.data;
+          _this6.EstadosPago = res.data;
         } else {
           console.log("No se encontro registros");
         }
       });
     },
     cargarModosPago: function cargarModosPago() {
-      var _this6 = this;
+      var _this7 = this;
 
       var url = "api/metpagos";
       axios.get(url).then(function (res) {
         if (res.data[0]) {
-          _this6.ModosPago = res.data;
+          _this7.ModosPago = res.data;
         } else {
           console.log("No se encontro registros");
         }
       });
     },
     cargaringenios: function cargaringenios() {
-      var _this7 = this;
+      var _this8 = this;
 
       var url = "api/ingenios";
       axios.get(url).then(function (res) {
         if (res.data[0]) {
-          _this7.Ingenios = res.data;
+          _this8.Ingenios = res.data;
         } else {
           console.log("No se encontro registros de Ingenios");
         }
       });
     },
     cargaUnidades: function cargaUnidades() {
-      var _this8 = this;
+      var _this9 = this;
 
       var url = "api/unidades";
       axios.get(url).then(function (res) {
         if (res.data[0]) {
-          _this8.Unidades = res.data;
+          _this9.Unidades = res.data;
         } else {
           console.log("No se encontro registros de Unidades");
         }
       });
     },
     cargarClientes: function cargarClientes() {
-      var _this9 = this;
+      var _this10 = this;
 
       axios.get("api/clientes/".concat(this.orden.cliente), '0').then(function (res) {
         if (res.data[0]) {
-          _this9.Clientes = res.data;
-          _this9.ocultar = "mostrar";
+          _this10.Clientes = res.data;
+          _this10.ocultar = "mostrar";
         } else {
           console.log("No se encontro registros");
         }
@@ -5138,9 +5163,10 @@ __webpack_require__.r(__webpack_exports__);
       this.ocultar = "hidden";
     },
     cargarServicio: function cargarServicio(Servicio) {
-      if (Servicio.conductor == "" || Servicio.placa_unidad == "" || Servicio.placa_carretera == "" || Servicio.guia_transportista == "" || Servicio.almacen == "" || Servicio.unidad == "" || Servicio.lineas_productos_id == "" || Servicio.tipo_servicio_id == "") {
+      if (Servicio.conductor == "" || Servicio.placa_unidad == "" || Servicio.placa_carretera == "" || Servicio.guia_transportista == "" || Servicio.unidad == 0 || Servicio.lineas_productos_id == 0) {
         this.textomensajemodal = "Por favor, Complete todos los campos";
         this.mensajemodal = "mostrar";
+        console.log(Servicio.conductor + " " + Servicio.placa_unidad + " " + Servicio.placa_carretera + " " + Servicio.guia_transportista + " " + Servicio.unidad + " " + Servicio.lineas_productos_id);
       } else {
         this.Servicios.push(Servicio);
         this.Servicio = {
@@ -5183,9 +5209,14 @@ __webpack_require__.r(__webpack_exports__);
       this.editmodo = true;
       this.orden = this.Ordenes[id];
       this.cargarServiciosOrden(this.orden.id);
+      this.cargarAlmacenes(this.orden.ingenio_id);
     },
-    editarServicio: function editarServicio(id) {
-      this.Servicio = this.Ordenes[id];
+    agregarNuevoServicio: function agregarNuevoServicio() {
+      this.botonmodal = false; //this.Servicio= {id:0,empresa_transporte:"",conductor:"",placa_unidad:"",placa_carretera:"",guia_transportista:"",almacen:"",cantidad:1,unidad:"",costo_unitario_estiba:0,costo_operativo_extra_estiba:0,costo_flat_estiba:0,costo_total_servicio:0,costo_extra_estiba:0,precio_extra_estiba:0,precio_servicio:0,precio_total_servicio:0,utilidad:0,igv:0,fecha_servicio:null,fecha_pago:null,fecha_liquidacion:null,facturado:0,num_factura:"",lineas_productos_id:null,cliente_id:null,tipo_servicio_id:null, ordenes_servicios_id:0, observaciones:""};
+    },
+    verServicio: function verServicio(id) {
+      this.Servicio = this.Servicios[id];
+      this.botonmodal = true;
     },
     eliminarServicio: function eliminarServicio(index) {
       var confirmacion = confirm("Eliminar el servicio numero:  ".concat(index + 1));
@@ -5195,25 +5226,25 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     guardar: function guardar(orden) {
-      var _this10 = this;
+      var _this11 = this;
 
       if (this.editmodo == false) {
         axios.post("/api/ordenes", this.orden).then(function (res) {
-          _this10.Ordenes.push(orden); //GUARDAR LOS SERVICIOS
+          _this11.Ordenes.push(orden); //GUARDAR LOS SERVICIOS
 
 
-          console.log(_this10.Servicios);
+          console.log(_this11.Servicios);
 
-          for (var i in _this10.Servicios) {
-            _this10.Servicios[i].ordenes_servicios_id = res.data.id;
-            console.log(_this10.Servicios[i]);
-            axios.post("/api/servicios", _this10.Servicios[i]).then(function (res) {});
+          for (var i in _this11.Servicios) {
+            _this11.Servicios[i].ordenes_servicios_id = res.data.id;
+            console.log(_this11.Servicios[i]);
+            axios.post("/api/servicios", _this11.Servicios[i]).then(function (res) {});
           }
 
-          _this10.textomensaje = "Se ha creado Exitosamente";
-          _this10.mensaje = "mostrar";
+          _this11.textomensaje = "Se ha creado Exitosamente";
+          _this11.mensaje = "mostrar";
 
-          _this10.limpiarFormulario(0);
+          _this11.limpiarFormulario(0);
         });
       } else {
         /*axios.put(`/api/servicios/${this.Servicio.id}`, Servicio)
@@ -5227,16 +5258,16 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     eliminar: function eliminar(orden, index) {
-      var _this11 = this;
+      var _this12 = this;
 
       var confirmacion = confirm("Eliminar la orden numero:  ".concat(orden.id));
 
       if (confirmacion) {
         axios["delete"]("/api/ordenes/".concat(orden.id)).then(function () {
-          _this11.Ordenes.splice(index, 1);
+          _this12.Ordenes.splice(index, 1);
 
-          _this11.textomensaje = "Se ha eliminado Exitosamente";
-          _this11.mensaje = "mostrar";
+          _this12.textomensaje = "Se ha eliminado Exitosamente";
+          _this12.mensaje = "mostrar";
         });
       }
     },
@@ -47151,23 +47182,28 @@ var render = function() {
                     staticClass: "form-control",
                     attrs: { id: "ingenio_id", required: "" },
                     on: {
-                      change: function($event) {
-                        var $$selectedVal = Array.prototype.filter
-                          .call($event.target.options, function(o) {
-                            return o.selected
-                          })
-                          .map(function(o) {
-                            var val = "_value" in o ? o._value : o.value
-                            return val
-                          })
-                        _vm.$set(
-                          _vm.orden,
-                          "ingenio_id",
-                          $event.target.multiple
-                            ? $$selectedVal
-                            : $$selectedVal[0]
-                        )
-                      }
+                      change: [
+                        function($event) {
+                          var $$selectedVal = Array.prototype.filter
+                            .call($event.target.options, function(o) {
+                              return o.selected
+                            })
+                            .map(function(o) {
+                              var val = "_value" in o ? o._value : o.value
+                              return val
+                            })
+                          _vm.$set(
+                            _vm.orden,
+                            "ingenio_id",
+                            $event.target.multiple
+                              ? $$selectedVal
+                              : $$selectedVal[0]
+                          )
+                        },
+                        function($event) {
+                          return _vm.cargarAlmacenes(_vm.orden.ingenio_id)
+                        }
+                      ]
                     }
                   },
                   _vm._l(_vm.Ingenios, function(item, index) {
@@ -47221,7 +47257,7 @@ var render = function() {
                     return _c(
                       "option",
                       { key: index, domProps: { value: item.id } },
-                      [_vm._v(_vm._s(item.nombre))]
+                      [_vm._v(_vm._s(item.nombre_almacen))]
                     )
                   }),
                   0
@@ -47330,7 +47366,25 @@ var render = function() {
             _c("div", { staticClass: "form-row" }, [
               _vm._m(3),
               _vm._v(" "),
-              _vm._m(4),
+              _c("div", { staticClass: "form-group col-md-2 text-right" }, [
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-info",
+                    attrs: {
+                      type: "button",
+                      "data-toggle": "modal",
+                      "data-target": ".bd-example-modal-lg"
+                    },
+                    on: {
+                      click: function($event) {
+                        return _vm.agregarNuevoServicio()
+                      }
+                    }
+                  },
+                  [_vm._v("Agregar Servicio")]
+                )
+              ]),
               _vm._v(" "),
               _c("div", { staticClass: "form-group col-md-12" }, [
                 _c(
@@ -47351,7 +47405,7 @@ var render = function() {
                         attrs: { id: "dataTable" }
                       },
                       [
-                        _vm._m(5),
+                        _vm._m(4),
                         _vm._v(" "),
                         _c(
                           "tbody",
@@ -47372,10 +47426,15 @@ var render = function() {
                                   "button",
                                   {
                                     staticClass: "btn btn-info",
-                                    attrs: { type: "button", title: "Ver" },
+                                    attrs: {
+                                      type: "button",
+                                      title: "Ver",
+                                      "data-toggle": "modal",
+                                      "data-target": ".bd-example-modal-lg"
+                                    },
                                     on: {
                                       click: function($event) {
-                                        return _vm.editarServicio(index)
+                                        return _vm.verServicio(index)
                                       }
                                     }
                                   },
@@ -47404,7 +47463,7 @@ var render = function() {
                           0
                         ),
                         _vm._v(" "),
-                        _vm._m(6)
+                        _vm._m(5)
                       ]
                     )
                   ]
@@ -47423,7 +47482,15 @@ var render = function() {
             _vm._v(" "),
             _c(
               "button",
-              { staticClass: "btn btn-default", attrs: { type: "buttom" } },
+              {
+                staticClass: "btn btn-default",
+                attrs: { type: "buttom" },
+                on: {
+                  click: function($event) {
+                    return _vm.limpiarFormulario(1)
+                  }
+                }
+              },
               [_vm._v("Limpiar")]
             )
           ]
@@ -47451,7 +47518,7 @@ var render = function() {
             "div",
             { staticClass: "modal-content", staticStyle: { padding: "15px" } },
             [
-              _vm._m(7),
+              _vm._m(6),
               _vm._v(" "),
               _c("div", { staticClass: "modal-body" }, [
                 _c(
@@ -47991,6 +48058,84 @@ var render = function() {
                       })
                     ]),
                     _vm._v(" "),
+                    _c("div", { staticClass: "form-group col-md-4" }, [
+                      _c("label", { attrs: { for: "subtotal" } }, [
+                        _vm._v("Subtotal")
+                      ]),
+                      _vm._v(" "),
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.Servicio.Subtotal,
+                            expression: "Servicio.Subtotal"
+                          }
+                        ],
+                        staticClass: "form-control",
+                        attrs: {
+                          type: "number",
+                          id: "subtotal",
+                          step: "0.1",
+                          min: "1",
+                          value: "0.00",
+                          required: "",
+                          readonly: ""
+                        },
+                        domProps: { value: _vm.Servicio.Subtotal },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.$set(
+                              _vm.Servicio,
+                              "Subtotal",
+                              $event.target.value
+                            )
+                          }
+                        }
+                      })
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "form-group col-md-4" }, [
+                      _c("label", { attrs: { for: "total" } }, [
+                        _vm._v("Total")
+                      ]),
+                      _vm._v(" "),
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.Servicio.total,
+                            expression: "Servicio.total"
+                          }
+                        ],
+                        staticClass: "form-control",
+                        attrs: {
+                          type: "number",
+                          id: "total",
+                          step: "0.1",
+                          min: "1",
+                          value: "0.00",
+                          required: "",
+                          readonly: ""
+                        },
+                        domProps: { value: _vm.Servicio.total },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.$set(_vm.Servicio, "total", $event.target.value)
+                          }
+                        }
+                      })
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "form-row" }, [
                     _c("div", { staticClass: "form-group col-md-8" }, [
                       _c("label", { attrs: { for: "observaciones" } }, [
                         _vm._v("Observaciones")
@@ -48027,7 +48172,7 @@ var render = function() {
                     "button",
                     {
                       staticClass: "btn btn-primary",
-                      attrs: { type: "button" },
+                      attrs: { type: "button", disabled: _vm.botonmodal },
                       on: {
                         click: function($event) {
                           return _vm.cargarServicio(_vm.Servicio)
@@ -48041,7 +48186,7 @@ var render = function() {
                     "button",
                     {
                       staticClass: "btn btn-default",
-                      attrs: { type: "reset" },
+                      attrs: { type: "reset", disabled: _vm.botonmodal },
                       on: {
                         click: function($event) {
                           return _vm.limpiarFormulario(1)
@@ -48162,25 +48307,6 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "form-group col-md-10" }, [
       _c("h5", { staticClass: "card-title" }, [_vm._v("Servicios")])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "form-group col-md-2 text-right" }, [
-      _c(
-        "button",
-        {
-          staticClass: "btn btn-info",
-          attrs: {
-            type: "button",
-            "data-toggle": "modal",
-            "data-target": ".bd-example-modal-lg"
-          }
-        },
-        [_vm._v("Agregar Servicio")]
-      )
     ])
   },
   function() {

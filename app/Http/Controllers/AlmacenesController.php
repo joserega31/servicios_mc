@@ -20,10 +20,15 @@ class AlmacenesController extends Controller
      */
     public function index()
     {
-        $almacenes= DB::select('select a.*, i.nombre as ingenio FROM almacenes as a INNER JOIN ingenios as i ON a.ingenios_id= i.id');
+        $almacenes= DB::select('SELECT a.*, i.nombre as ingenio FROM almacenes as a INNER JOIN ingenios as i ON a.ingenios_id= i.id');
         return $almacenes;
     }
-
+    
+    public function almacenesxingenio($ingenio_id)
+    {
+        $almacenes= DB::select('SELECT id, nombre_almacen FROM almacenes WHERE ingenios_id="'.$ingenio_id. '"');
+        return $almacenes;
+    }
     /**
      * Show the form for creating a new resource.
      *
