@@ -292,5 +292,17 @@ class DatabaseSeeder extends Seeder
             'editar' => '1',
             'eliminar' => '1'
         ]);
+        
+        //TIPOS DE TRANSPORTE
+        DB::table('tipo_servicios')->insert([
+            'nombre' => 'CARGA'
+        ]);
+        DB::table('tipo_servicios')->insert([
+            'nombre' => 'DESCARGA'
+        ]);
+        DB::table('tipo_servicios')->insert([
+            'nombre' => 'ENCARPADO'
+        ]);
+        
     }
 }

@@ -5157,6 +5157,11 @@ __webpack_require__.r(__webpack_exports__);
         }
       });
     },
+    calcularsubtotal: function calcularsubtotal() {
+      this.Servicio.Subtotal = Number(this.Servicio.precio_servicio * this.Servicio.cantidad).toFixed(2);
+      this.Servicio.igv = Number(this.Servicio.Subtotal * 18 / 100).toFixed(2);
+      this.Servicio.total = Number(parseFloat(this.Servicio.Subtotal) + parseFloat(this.Servicio.igv)).toFixed(2);
+    },
     cargarIdClientes: function cargarIdClientes(id, cliente) {
       this.orden.cliente_id = id;
       this.orden.cliente = cliente;
@@ -47702,6 +47707,9 @@ var render = function() {
                         },
                         domProps: { value: _vm.Servicio.cantidad },
                         on: {
+                          change: function($event) {
+                            return _vm.calcularsubtotal()
+                          },
                           input: function($event) {
                             if ($event.target.composing) {
                               return
@@ -47931,6 +47939,9 @@ var render = function() {
                         },
                         domProps: { value: _vm.Servicio.precio_servicio },
                         on: {
+                          change: function($event) {
+                            return _vm.calcularsubtotal()
+                          },
                           input: function($event) {
                             if ($event.target.composing) {
                               return
@@ -48044,7 +48055,8 @@ var render = function() {
                           step: "0.1",
                           min: "1",
                           value: "0.00",
-                          required: ""
+                          required: "",
+                          readonly: ""
                         },
                         domProps: { value: _vm.Servicio.igv },
                         on: {
@@ -48059,7 +48071,7 @@ var render = function() {
                     ]),
                     _vm._v(" "),
                     _c("div", { staticClass: "form-group col-md-4" }, [
-                      _c("label", { attrs: { for: "subtotal" } }, [
+                      _c("label", { attrs: { for: "Subtotal" } }, [
                         _vm._v("Subtotal")
                       ]),
                       _vm._v(" "),
@@ -48075,11 +48087,8 @@ var render = function() {
                         staticClass: "form-control",
                         attrs: {
                           type: "number",
-                          id: "subtotal",
-                          step: "0.1",
-                          min: "1",
+                          id: "Subtotal",
                           value: "0.00",
-                          required: "",
                           readonly: ""
                         },
                         domProps: { value: _vm.Servicio.Subtotal },
@@ -48116,10 +48125,7 @@ var render = function() {
                         attrs: {
                           type: "number",
                           id: "total",
-                          step: "0.1",
-                          min: "1",
                           value: "0.00",
-                          required: "",
                           readonly: ""
                         },
                         domProps: { value: _vm.Servicio.total },

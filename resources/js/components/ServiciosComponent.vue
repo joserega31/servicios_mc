@@ -204,7 +204,7 @@
                             </div>
                             <div class="form-group col-md-4">
                                 <label for="cantidad">Cantidad</label>
-                                <input type="number" class="form-control" id="cantidad" step="1" min="1" value="1" required v-model="Servicio.cantidad">
+                                <input type="number" class="form-control" id="cantidad" step="1" min="1" value="1" required v-model="Servicio.cantidad" @change="calcularsubtotal()">
                             </div>
                             <div class="form-group col-md-4">
                                 <label for="unidad">Unidad</label>
@@ -234,7 +234,7 @@
                         <div class="form-row">
                             <div class="form-group col-md-4">
                                 <label for="precio_servicio">Precio Servicio</label>
-                                <input type="number" class="form-control" id="precio_servicio" step="0.1" min="1" value="0.00" required v-model="Servicio.precio_servicio">
+                                <input type="number" class="form-control" id="precio_servicio" step="0.1" min="1" value="0.00" required v-model="Servicio.precio_servicio" @change="calcularsubtotal()">
                             </div>
                             <div class="form-group col-md-4">
                                 <label for="precio_tot_serv">Precio Total Servicio</label>
@@ -248,15 +248,15 @@
                         <div class="form-row">
                             <div class="form-group col-md-4">
                                 <label for="igv">IGV</label>
-                                <input type="number" class="form-control" id="igv" step="0.1" min="1" value="0.00" required v-model="Servicio.igv">
+                                <input type="number" class="form-control" id="igv" step="0.1" min="1" value="0.00" required v-model="Servicio.igv" readonly>
                             </div>
                             <div class="form-group col-md-4">
-                                <label for="subtotal">Subtotal</label>
-                                <input type="number" class="form-control" id="subtotal" step="0.1" min="1" value="0.00" required v-model="Servicio.Subtotal" readonly>
+                                <label for="Subtotal">Subtotal</label>
+                                <input type="number" class="form-control" id="Subtotal" value="0.00" v-model="Servicio.Subtotal" readonly>
                             </div>
                             <div class="form-group col-md-4">
                                 <label for="total">Total</label>
-                                <input type="number" class="form-control" id="total" step="0.1" min="1" value="0.00" required v-model="Servicio.total" readonly>
+                                <input type="number" class="form-control" id="total" value="0.00" v-model="Servicio.total" readonly>
                             </div>
                         </div>
                         <div class="form-row">
@@ -424,6 +424,11 @@ export default {
           console.log("No se encontro registros");
         }
       });
+    },
+    calcularsubtotal: function (){
+        this.Servicio.Subtotal= Number(this.Servicio.precio_servicio * this.Servicio.cantidad).toFixed(2); 
+        this.Servicio.igv= Number((this.Servicio.Subtotal * 18)/100).toFixed(2);
+        this.Servicio.total= Number(parseFloat(this.Servicio.Subtotal) + parseFloat(this.Servicio.igv)).toFixed(2);
     },
     cargarIdClientes: function (id, cliente) {
         this.orden.cliente_id= id;
