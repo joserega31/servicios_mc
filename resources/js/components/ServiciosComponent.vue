@@ -75,7 +75,7 @@
                         <div class="input-group">
                             <input class="bg-light form-control small"  id="cliente" v-model="orden.cliente" type="text"  @change="limpiarBusqueda()" autocomplete="off">
                             <ul id="lstbuscarcliente" class="autocomplete" :class="ocultar">
-                                <li v-for="(item, index) in Clientes" :key="index" :value="item.id" @click="cargarIdClientes(item.id, item.razon_social)">{{ item.razon_social }}</li>
+                                <li v-for="(item, index) in Clientesb" :key="index" :value="item.id" @click="cargarIdClientes(item.id, item.razon_social)">{{ item.razon_social }}</li>
                             </ul>
                             <div class="input-group-append">
                                 <button class="btn btn-primary py-0" type="button" @click="cargarClientes()">
@@ -85,8 +85,13 @@
                         </div>
                         <input type="hidden" class="form-control" id="clientes_id" required  v-model="orden.cliente_id">
                     </div>
-                    
-                    <div class="form-group col-md-4">
+                    <div class="form-group col-md-1">
+                        <label for="agrcliente">&nbsp;&nbsp;</label><br>
+                        <button class="btn btn-info form-control" type="button" title="Agregar Cliente Nuevo" style="width: 50px;"  data-toggle="modal" data-target=".modal-cliente">
+                            <i class="fas fa-plus" ></i>
+                        </button>
+                    </div>
+                    <div class="form-group col-md-2">
                         <label for="nombre">&nbsp;&nbsp;</label>
                         <div class="form-check">
                             <input type="checkbox" class="checkbox" id="vigente" v-model="orden.igv">
@@ -126,7 +131,7 @@
                         <h5 class="card-title">Servicios</h5>
                     </div>  
                     <div class="form-group col-md-2 text-right">
-                        <button type="button" class="btn btn-info" data-toggle="modal" data-target=".bd-example-modal-lg" @click="agregarNuevoServicio()">Agregar Servicio</button>
+                        <button type="button" class="btn btn-info" data-toggle="modal" data-target=".modal-servicio" @click="agregarNuevoServicio()">Agregar Servicio</button>
                     </div>
                     <div class="form-group col-md-12">
                         <div class="table-responsive table mt-2" id="dataTable" role="grid" aria-describedby="dataTable_info">
@@ -136,16 +141,16 @@
                                         <th class="text-left">Tipo Servicio</th>
                                         <th>Gu&iacute;a Transport&iacute;sta</th>
                                         <th>Conductor</th>
-                                        <th>Almacen</th>
+                                        <th>Placa Unidad</th>
                                         <th>Acciones</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr v-for="(item, index) in Servicios" :key="index">
-                                        <td>{{ item.tipo_servicio_id }}</td>
+                                        <td>{{ item.tipo_servicio }}</td>
                                         <td>{{ item.guia_transportista }}</td>
                                         <td>{{ item.conductor }}</td>
-                                        <td>{{ item.almacen }}</td>
+                                        <td>{{ item.placa_unidad }}</td>
                                         <td>
                                             <button type="button" class="btn btn-info" title="Ver" @click="verServicio(index)" data-toggle="modal" data-target=".bd-example-modal-lg">
                                                 <i class="far fa-eye"></i>
@@ -171,7 +176,7 @@
     </div>
     <br><br>
 
-    <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal fade bd-example-modal-lg modal-servicio" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-xl">
             <div class="modal-content" style="padding:15px">
                 <div class="modal-header">
@@ -222,30 +227,20 @@
                             </div>
                             <div class="form-group col-md-4">
                                 <label for="tipo_servicio_id">Tipo de Servicio</label>
-                                <select class="form-control" id="tipo_servicio_id" required  v-model="Servicio.tipo_servicio_id">
+                                <select class="form-control" id="tipo_servicio_id" required  v-model="Servicio.tipo_servicio_id" @change="cargarTextTipoServicio($event)">
                                     <option v-for="(item, index) in TiposServicios" :key="index" :value="item.id">{{ item.nombre}}</option>
                                 </select>
                             </div>
                             <div class="form-group col-md-4">
-                                <label for="precio_extr_est">Precio Extra Estiba</label>
-                                <input type="number" class="form-control" id="precio_extr_est" step="0.1" min="1" value="0.00" required v-model="Servicio.precio_extra_estiba">
+                                <label for="precio_servicio">Precio Servicio</label>
+                                <input type="number" class="form-control" id="precio_servicio" step="0.1" min="1" value="0.00" required v-model="Servicio.precio_servicio" @change="calcularsubtotal()">
                             </div>
                         </div>
                         <div class="form-row">
                             <div class="form-group col-md-4">
-                                <label for="precio_servicio">Precio Servicio</label>
-                                <input type="number" class="form-control" id="precio_servicio" step="0.1" min="1" value="0.00" required v-model="Servicio.precio_servicio" @change="calcularsubtotal()">
-                            </div>
-                            <div class="form-group col-md-4">
-                                <label for="precio_tot_serv">Precio Total Servicio</label>
-                                <input type="number" class="form-control" id="precio_tot_serv" step="0.1" min="1" value="0.00" required v-model="Servicio.precio_total_servicio">
-                            </div>
-                            <div class="form-group col-md-4">
                                 <label for="utilidad">Utilidad</label>
                                 <input type="number" class="form-control" id="utilidad" step="0.1" min="1" value="0.00" required v-model="Servicio.utilidad">
                             </div>
-                        </div>  
-                        <div class="form-row">
                             <div class="form-group col-md-4">
                                 <label for="igv">IGV</label>
                                 <input type="number" class="form-control" id="igv" step="0.1" min="1" value="0.00" required v-model="Servicio.igv" readonly>
@@ -254,12 +249,12 @@
                                 <label for="Subtotal">Subtotal</label>
                                 <input type="number" class="form-control" id="Subtotal" value="0.00" v-model="Servicio.Subtotal" readonly>
                             </div>
-                            <div class="form-group col-md-4">
-                                <label for="total">Total</label>
-                                <input type="number" class="form-control" id="total" value="0.00" v-model="Servicio.total" readonly>
-                            </div>
-                        </div>
+                        </div>  
                         <div class="form-row">
+                            <div class="form-group col-md-4">
+                                <label for="precio_total_servicio">Precio Total Servicio</label>
+                                <input type="number" class="form-control" id="precio_total_servicio" value="0.00" v-model="Servicio.precio_total_servicio" readonly>
+                            </div>
                             <div class="form-group col-md-8">
                                 <label for="observaciones">Observaciones</label>
                                 <textarea class="form-control" v-model="Servicio.observaciones"></textarea>
@@ -273,6 +268,47 @@
         </div>
     </div>
 
+    <div class="modal fade bd-example-modal-lg modal-cliente" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content" style="padding:15px">
+                <div class="modal-header">
+                    <h4 class="modal-title">Agregar Nuevo Cliente</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-success w-100" role="alert" :class="mensajecli">
+                        {{textomensajecli}}
+                    </div>
+                    <form @submit.prevent="guardarCliente(cliente)">
+                        <div class="form-row">
+                            <div class="form-group col-md-2">
+                                <input type="hidden" class="form-control" id="id" required  v-model="cliente.id">
+                                <label for="ruc">Ruc</label>
+                                <input type="text" class="form-control" id="ruc" required  v-model="cliente.ruc"  @input="cliente.ruc = $event.target.value.toUpperCase()">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="razon_social">Raz&oacute;n Social</label>
+                                <input type="text" class="form-control" id="razon_social" required  v-model="cliente.razon_social" @input="cliente.razon_social = $event.target.value.toUpperCase()">
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label for="tarifario_id">Tarifario</label>
+                                <select class="form-control" id="tarifario_id" required  v-model="cliente.tarifario_id">
+                                    <option v-for="(item, index) in Tarifarios" :key="index" :value="item.id">{{ item.nombre}}</option>
+                                </select>
+                            </div>
+
+                        </div>
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                        <button type="buttom" class="btn btn-default" @click="limpiarFrmCliente()">Limpiar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
 </div>   
 </template>
 
@@ -284,7 +320,9 @@ export default {
             Ordenes:[],
             orden: {id:0, fecha:null, cliente_id:0, igv:0, estatus:0, cliente:"", ingenio_id:0, estados_pago_id:0, modos_pagos_id:0, almacen_id:null},
             Servicios: [],
-            Servicio: {id:0,conductor:"",placa_unidad:"",placa_carretera:"",guia_transportista:"", cantidad:1,precio_extra_estiba:0,precio_servicio:0,precio_total_servicio:0,utilidad:0,igv:0,lineas_productos_id:null,tipo_servicio_id:null, ordenes_servicios_id:0, unidad_id:null, observaciones:"", Subtotal:0, total:0},
+            Servicio: {id:0,conductor:"",placa_unidad:"",placa_carretera:"",guia_transportista:"", cantidad:1,precio_servicio:0,precio_total_servicio:0,utilidad:0,igv:0,lineas_productos_id:null,tipo_servicio_id:null, ordenes_servicios_id:0, unidad_id:null, observaciones:"", Subtotal:0, tipo_servicio:""},
+            cliente: { id: 0, ruc: "", razon_social: "" },
+            Clientesb: { id: 0, ruc: "", razon_social: "" },
             LineasProductos: [],
             TiposServicios:[],
             EstadosPago:[],
@@ -293,6 +331,7 @@ export default {
             Ingenios:[],
             Almacenes:[],
             Unidades:[],
+            Tarifarios: [],
             buscliente:"",
             ocultar:"hidden",
             textomensaje: "",
@@ -300,7 +339,9 @@ export default {
             textomensajemodal: "",
             mensajemodal: "hidden",
             botonmodal:false,
-            editmodo:false
+            editmodo:false,
+            textomensajecli:"",
+            mensajecli: "hidden",
         };
     },
     created: function () {
@@ -311,7 +352,7 @@ export default {
         this.cargaringenios();
         this.cargaUnidades();
         this.cargarModosPago();
-
+        this.cargaTarifarios();
 
         var fecha = new Date(); 
         var mes = fecha.getMonth()+1; 
@@ -415,20 +456,39 @@ export default {
         }
       });
     },
+    cargarTextTipoServicio: function(event){
+        this.Servicio.tipo_servicio = event.target.options[event.target.options.selectedIndex].text;
+    },
     cargarClientes: function () {
       axios.get(`api/clientes/${this.orden.cliente}`, '0').then((res) => {
         if (res.data[0]){
-          this.Clientes = res.data;
+          this.Clientesb = res.data;
           this.ocultar= "mostrar";
         }else{
           console.log("No se encontro registros");
         }
       });
     },
+    cargaTarifarios: function () {
+      var url = "api/tarifarios";
+      axios.get(url).then((res) => {
+        if (res.data[0].id){
+          this.Tarifarios = res.data;
+        }else{
+          console.log("No se encontro registros");
+        }
+      });
+    },
     calcularsubtotal: function (){
-        this.Servicio.Subtotal= Number(this.Servicio.precio_servicio * this.Servicio.cantidad).toFixed(2); 
-        this.Servicio.igv= Number((this.Servicio.Subtotal * 18)/100).toFixed(2);
-        this.Servicio.total= Number(parseFloat(this.Servicio.Subtotal) + parseFloat(this.Servicio.igv)).toFixed(2);
+        if (this.orden.igv==1){
+            this.Servicio.Subtotal= Number(this.Servicio.precio_servicio * this.Servicio.cantidad).toFixed(2); 
+            this.Servicio.igv= Number((this.Servicio.Subtotal * 18)/100).toFixed(2);
+            this.Servicio.precio_total_servicio= Number(parseFloat(this.Servicio.Subtotal) + parseFloat(this.Servicio.igv)).toFixed(2);
+        }else{
+            this.Servicio.Subtotal= Number(this.Servicio.precio_servicio * this.Servicio.cantidad).toFixed(2); 
+            this.Servicio.igv= Number(0).toFixed(2);
+            this.Servicio.precio_total_servicio= Number(parseFloat(this.Servicio.Subtotal) + parseFloat(this.Servicio.igv)).toFixed(2);
+        }
     },
     cargarIdClientes: function (id, cliente) {
         this.orden.cliente_id= id;
@@ -442,7 +502,7 @@ export default {
             console.log(Servicio.conductor + " " + Servicio.placa_unidad + " " + Servicio.placa_carretera + " " + Servicio.guia_transportista + " " + Servicio.unidad + " " + Servicio.lineas_productos_id);
         }else{
             this.Servicios.push(Servicio);
-            this.Servicio= {id:0,empresa_transporte:"",conductor:"",placa_unidad:"",placa_carretera:"",guia_transportista:"",almacen:"",cantidad:1,unidad:"",costo_unitario_estiba:0,costo_operativo_extra_estiba:0,costo_flat_estiba:0,costo_total_servicio:0,costo_extra_estiba:0,precio_extra_estiba:0,precio_servicio:0,precio_total_servicio:0,utilidad:0,igv:0,fecha_servicio:null,fecha_pago:null,fecha_liquidacion:null,facturado:0,num_factura:"",lineas_productos_id:null,cliente_id:null,tipo_servicio_id:null, ordenes_servicios_id:0, observaciones:""};
+            this.Servicio= {id:0,empresa_transporte:"",conductor:"",placa_unidad:"",placa_carretera:"",guia_transportista:"",almacen:"",cantidad:1,unidad:"",costo_unitario_estiba:0,costo_operativo_extra_estiba:0,costo_flat_estiba:0,costo_total_servicio:0,costo_extra_estiba:0,precio_servicio:0,precio_total_servicio:0,utilidad:0,igv:0,fecha_servicio:null,fecha_pago:null,fecha_liquidacion:null,facturado:0,num_factura:"",lineas_productos_id:null,cliente_id:null,tipo_servicio_id:null, ordenes_servicios_id:0, observaciones:""};
         }
     },
     limpiarBusqueda: function () {
@@ -461,6 +521,7 @@ export default {
     verServicio:function(id){
         this.Servicio= this.Servicios[id];
         this.botonmodal= true;
+        this.calcularsubtotal();
     },
     eliminarServicio: function(index){
         const confirmacion = confirm(`Eliminar el servicio numero:  ${index +1}`);
@@ -508,6 +569,14 @@ export default {
             });
         }
     },
+    guardarCliente: function(cliente){
+        axios.post(`/api/clientes`, this.cliente).then((res) => {
+            this.Clientesb.push(cliente);
+            this.textomensajecli= "Se ha creado Exitosamente";
+            this.mensajecli="mostrar";
+            this.limpiarFrmCliente(1);
+        });
+    },
     limpiarFormulario: function(org){
         if (org>0){
             this.textomensaje= "";
@@ -520,7 +589,14 @@ export default {
         this.mensaje="hidden";
         this.Servicios= null;
         this.orden= {id:0, fecha:null, cliente_id:0, igv:0, estatus:0, cliente:"", ingenio_id:0, estados_pago_id:0, modos_pagos_id:0};
-        this.Servicio= {id:0,empresa_transporte:"",conductor:"",placa_unidad:"",placa_carretera:"",guia_transportista:"",almacen:"",cantidad:1,unidad:"",costo_unitario_estiba:0,costo_operativo_extra_estiba:0,costo_flat_estiba:0,costo_total_servicio:0,costo_extra_estiba:0,precio_extra_estiba:0,precio_servicio:0,precio_total_servicio:0,utilidad:0,igv:0,fecha_servicio:null,fecha_pago:null,fecha_liquidacion:null,facturado:0,num_factura:"",lineas_productos_id:null,cliente_id:null,tipo_servicio_id:null, ordenes_servicios_id:0, observaciones:""};
+        this.Servicio= {id:0,empresa_transporte:"",conductor:"",placa_unidad:"",placa_carretera:"",guia_transportista:"",almacen:"",cantidad:1,unidad:"",costo_unitario_estiba:0,costo_operativo_extra_estiba:0,costo_flat_estiba:0,costo_total_servicio:0,costo_extra_estiba:0,precio_servicio:0,precio_total_servicio:0,utilidad:0,igv:0,fecha_servicio:null,fecha_pago:null,fecha_liquidacion:null,facturado:0,num_factura:"",lineas_productos_id:null,cliente_id:null,tipo_servicio_id:null, ordenes_servicios_id:0, observaciones:""};
+    },
+    limpiarFrmCliente:function(org){
+        this.cliente= { id: 0, ruc: "", razon_social: "" };
+        if (org>0){
+            this.textomensajecli= "";
+            this.mensajecli="hidden";
+        }
     }
   },
   mounted() {

@@ -50,7 +50,6 @@ class ServicioController extends Controller
             $servicio->guia_transportista = $request->guia_transportista;
             $servicio->cantidad = $request->cantidad;
             $servicio->unidad_id = $request->unidad_id;
-            $servicio->precio_extra_estiba = $request->precio_extra_estiba;
             $servicio->precio_servicio = $request->precio_servicio;
             $servicio->precio_total_servicio = $request->precio_total_servicio;
             $servicio->utilidad = $request->utilidad;
@@ -105,7 +104,6 @@ class ServicioController extends Controller
             $servicio->guia_transportista = $request->guia_transportista;
             $servicio->cantidad = $request->cantidad;
             $servicio->unidad_id = $request->unidad_id;
-            $servicio->precio_extra_estiba = $request->precio_extra_estiba;
             $servicio->precio_servicio = $request->precio_servicio;
             $servicio->precio_total_servicio = $request->precio_total_servicio;
             $servicio->utilidad = $request->utilidad;

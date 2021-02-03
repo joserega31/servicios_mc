@@ -22,7 +22,6 @@ class CreateServiciosTable extends Migration
             $table->double('cantidad');
             $table->integer('unidad_id')->unsigned();   
             $table->foreign('unidad_id')->references('id')->on('unidades');
-            $table->double('precio_extra_estiba');
             $table->double('precio_servicio');
             $table->double('precio_total_servicio');
             $table->double('utilidad');

@@ -16,7 +16,7 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         // \App\Models\User::factory(10)->create();
-        
+
         //Menus
         DB::table('menus')->insert([
             'nombre' => 'Orden de Servicio',
@@ -292,7 +292,7 @@ class DatabaseSeeder extends Seeder
             'editar' => '1',
             'eliminar' => '1'
         ]);
-        
+
         //TIPOS DE TRANSPORTE
         DB::table('tipo_servicios')->insert([
             'nombre' => 'CARGA'
@@ -303,6 +303,71 @@ class DatabaseSeeder extends Seeder
         DB::table('tipo_servicios')->insert([
             'nombre' => 'ENCARPADO'
         ]);
-        
+
+        //UNIDADES
+        DB::table('unidades')->insert([
+            'descripcion_corta' => 'TN',
+            'descripcion_larga' => 'TONELADAS'
+        ]);
+        DB::table('unidades')->insert([
+            'descripcion_corta' => 'CJ',
+            'descripcion_larga' => 'CAJA'
+        ]);
+        DB::table('unidades')->insert([
+            'descripcion_corta' => 'CR',
+            'descripcion_larga' => 'CARRO'
+        ]);
+
+        //INGENIOS
+        DB::table('ingenios')->insert([
+            'nombre' => 'CAÑA BRAVA'
+        ]);
+        DB::table('ingenios')->insert([
+            'nombre' => 'COSTEÑO'
+        ]);
+        DB::table('ingenios')->insert([
+            'nombre' => 'PUNTO BLANCO'
+        ]);
+        DB::table('ingenios')->insert([
+            'nombre' => 'ÁLVARES BOHL'
+        ]);
+
+        //ALMACENES
+        DB::table('almacenes')->insert([
+            'nombre_almacen' => 'PUNTO BLANCO PIURA',
+            'ingenios_id' => '3',
+        ]);
+        DB::table('almacenes')->insert([
+            'nombre_almacen' => 'PUNTO BLANCO PIURA',
+            'ingenios_id' => '3',
+        ]);
+
+        //MODOS DE PAGO
+        DB::table('modo_pagos')->insert([
+            'nombre' => 'EFECTIVO'
+        ]);
+        DB::table('modo_pagos')->insert([
+            'nombre' => 'DEPOSITO'
+        ]);
+        DB::table('modo_pagos')->insert([
+            'nombre' => 'CREDITO A 7 DIAS'
+        ]);
+
+        //LINEAS DE PRODUCTO
+        DB::table('lineas_productos')->insert([
+            'nombre' => 'ARROZ'
+        ]);
+        DB::table('lineas_productos')->insert([
+            'nombre' => 'AZUCAR'
+        ]);
+        DB::table('lineas_productos')->insert([
+            'nombre' => 'ABARROTES'
+        ]);
+
+        //TARIFARIOS
+        DB::table('tarifarios')->insert([
+            'nombre' => 'GENERICO',
+            'vigente' => '1',
+        ]);
     }
 }
