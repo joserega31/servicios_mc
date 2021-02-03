@@ -1,7 +1,7 @@
 <template>
     <div class="container-fluid">
         <div class="row">
-            <h3 class="text-dark">Servicios</h3>
+            <h3 class="text-dark">Ordenes de Servicios</h3>
             <div class="tile_count">
                     <div class="col-md-2  tile_stats_count">
                         <span class="count_top"><i class="fa fa-file-invoice"></i> Pendientes por Facturar</span>
@@ -13,8 +13,8 @@
                         <div class="count">{{totpago}}</div>
                         <!--span class="count_bottom"><i class="green"><i class="fas fa-sort-up"></i>3% </i> Esta semana</span-->
                     </div>
-                    <div class="col-md-2  tile_stats_count">
-                        <span class="count_top"><i class="fa fa-dollar-sign"></i> Total Costo Servicios</span>
+                    <div class="col-md-3  tile_stats_count">
+                        <span class="count_top"><i class="fa fa-dollar-sign"></i> Total Costo Ordenes Servicios</span>
                         <div class="count">{{totalservicio}}</div>
                         <!--span class="count_bottom"><i class="red"><i class="fas fa-sort-down"></i>12% </i> Esta semana</span-->
                     </div>
@@ -32,7 +32,7 @@
                     <div class="form-row">
                         <div class="form-group col-md-3">
                             <select class="btn btn-primary form-control" @change="cargarServicios()" v-model="opcionFiltro">
-                                <option selected value="0">Servicios pendiente de facturación</option>
+                                <option selected value="0">Pendiente de facturación</option>
                                 <option value="1">Pendiente de pago </option>
                                 <option value="2">Pendiente por Liquidar </option>
                             </select>
@@ -49,27 +49,27 @@
                     <table class="table dataTable my-0" id="dataTable">
                         <thead>
                             <tr>
-                                <th>Servicio</th>
+                                <th>Orden de Servicio</th>
                                 <th class="text-left">Ruc</th>
                                 <th class="text-left">Raz&oacute;n Social</th>
-                                <th class="text-left">Fecha Servicio</th>
+                                <th class="text-left">Fecha Orden Servicio</th>
                                 <th>Acci&oacute;n</th> 
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="(item, index) in servicios" :key="index">
+                            <tr v-for="(item, index) in OrdenesServicios" :key="index">
                                 <td>{{ item.id }}</td>
                                 <td>{{ item.ruc }}</td>
                                 <td>{{ item.razon_social }}</td>
-                                <td>{{ item.fecha_servicio }}</td>
+                                <td>{{ item.fecha }}</td>
                                 <td>
-                                    <button type="button" class="btn btn-primary" title="Emitir Factura" data-toggle="modal" data-target="#emitirfactura" v-on:click.prevent="enviarid(index)" v-if="item.facturado==0">
+                                    <button type="button" class="btn btn-primary" title="Emitir Factura" data-toggle="modal" data-target="#emitirfactura" v-on:click.prevent="enviarid(index)" v-if="item.fecha_factura==null">
                                         <i class="fas fa-file-invoice"></i>
                                     </button>
-                                    <button type="button" class="btn btn-success" title="Emitir Pago" data-toggle="modal" data-target="#emitirPago" v-on:click.prevent="enviarid(index)" v-if="item.facturado==1 && item.fecha_pago==null">
+                                    <button type="button" class="btn btn-success" title="Emitir Pago" data-toggle="modal" data-target="#emitirPago" v-on:click.prevent="enviarid(index)" v-if="item.fecha_factura!==null && item.fecha_pago==null">
                                         <i class="fas fa-dollar-sign"></i>
                                     </button>
-                                    <button type="button" class="btn btn-warning" title="Liquidar Servicio" data-toggle="modal" data-target="#liquidarservicio" v-on:click.prevent="enviarid(index)" v-if="item.facturado==1 && item.fecha_pago!=null">
+                                    <button type="button" class="btn btn-warning" title="Liquidar OrdenServicio" data-toggle="modal" data-target="#liquidarservicio" v-on:click.prevent="enviarid(index)" v-if="item.fecha_factura!==null && item.fecha_pago!=null">
                                         <i class="far fa-calendar-check"></i>
                                     </button>
                                 </td>
@@ -115,20 +115,20 @@
                         <div class="alert alert-success w-100" role="alert" :class="mensaje">
                             {{textomensaje}}
                         </div>
-                        <form @submit.prevent="emitirFactura(servicio)">
+                        <form @submit.prevent="emitirFactura(OrdenServicio)">
                             <div class="form-row">
                                 <div class="form-group col-md-6">
-                                    <input type="hidden" class="form-control" id="id" required v-model="servicio.id">
+                                    <input type="hidden" class="form-control" id="id" required v-model="OrdenServicio.id">
                                     <label for="nombre">Fecha</label>
-                                    <input type="date" class="form-control" id="fecha_factura" v-model="servicio.fecha_factura" required>
+                                    <input type="date" class="form-control" id="fecha_factura" v-model="OrdenServicio.fecha_factura" required>
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label for="nombre">Numero</label>
-                                    <input type="text" class="form-control" id="num_factura" v-model="servicio.num_factura" required>
+                                    <input type="text" class="form-control" id="num_factura" v-model="OrdenServicio.num_factura" required>
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label for="nombre">Monto</label>
-                                    <input type="number" class="form-control" id="monto_factura" v-model="servicio.monto_factura" min="0.00" required>
+                                    <input type="number" class="form-control" id="monto_factura" v-model="OrdenServicio.monto_factura" min="0.00" step="0.01" required>
                                 </div>
                             </div>
                             <div class="modal-footer">
@@ -153,15 +153,15 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <div class="alert alert-success w-100" role="alert" :class="mensaje">
-                            {{textomensaje}}
+                        <div class="alert alert-success w-100" role="alert" :class="mensajef">
+                            {{textomensajef}}
                         </div>
-                        <form @submit.prevent="emitirPago(servicio)">
+                        <form @submit.prevent="emitirPago(OrdenServicio)">
                             <div class="form-row">
                                 <div class="form-group col-md-6">
-                                    <input type="hidden" class="form-control" id="id" required v-model="servicio.id">
+                                    <input type="hidden" class="form-control" id="id" required v-model="OrdenServicio.id">
                                     <label for="nombre">Fecha</label>
-                                    <input type="date" class="form-control" id="fecha_pago" v-model="servicio.fecha_pago" required>
+                                    <input type="date" class="form-control" id="fecha_pago" v-model="OrdenServicio.fecha_pago" required>
                                 </div>
                             </div>
                             <div class="modal-footer">
@@ -180,7 +180,7 @@
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="liquidarservicioLabel">Liquidar Servicio</h5>
+                        <h5 class="modal-title" id="liquidarservicioLabel">Liquidar OrdenServicio</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                         </button>
@@ -189,12 +189,12 @@
                         <div class="alert alert-success w-100" role="alert" :class="mensaje">
                             {{textomensaje}}
                         </div>
-                        <form @submit.prevent="liquidarservicio(servicio)">
+                        <form @submit.prevent="liquidarservicio(OrdenServicio)">
                             <div class="form-row">
                                 <div class="form-group col-md-6">
-                                    <input type="hidden" class="form-control" id="id" required v-model="servicio.id">
+                                    <input type="hidden" class="form-control" id="id" required v-model="OrdenServicio.id">
                                     <label for="nombre">Fecha</label>
-                                    <input type="date" class="form-control" id="fecha_pago" v-model="servicio.fecha_pago" required>
+                                    <input type="date" class="form-control" id="fecha_pago" v-model="OrdenServicio.fecha_pago" required>
                                 </div>
                             </div>
                             <div class="modal-footer">
@@ -216,8 +216,8 @@
 export default {
     data() {
         return {
-            servicios: [],
-            servicio:{id:0, fecha_servicio: null,ruc: "", razon_social: "", fecha_factura:null, num_factura:"", monto_factura:0, fecha_pago:null, facturado:0, fecha_factura1:null, fecha_pago1:null},
+            OrdenesServicios: [],
+            OrdenServicio:{id:0, fecha: null,ruc: "", razon_social: "", fecha_factura:null, num_factura:"", monto_factura:0, fecha_pago:null, facturado:0, fecha_factura1:null, fecha_pago1:null},
             totptefacturar:0, 
             totpago: 0,
             totpagodet: 0, 
@@ -225,7 +225,9 @@ export default {
             totalfacturado: 0,
             opcionFiltro:0,
             mensaje:"hidden",
-            textomensaje:""
+            textomensaje:"",
+            mensajef:"hidden",
+            textomensajef:""
         };
     },
     created: function () {
@@ -234,10 +236,10 @@ export default {
     },  
     methods: {
         cargarTodosServicios: function () {
-            var url = "api/servicios";
+            var url = "api/OrdenesServicios";
             axios.get(url).then((res) => {
                 if (res.data[0].id){
-                    this.Servicios = res.data;
+                    this.OrdenesServicios = res.data;
                     this.buscliente= res.data.razon_social;
                 }else{
                     console.log("No se encontro registros");
@@ -255,7 +257,7 @@ export default {
             }
             axios.get(url).then((res) => {
                 if (res.data[0].id){
-                    this.servicios= res.data;
+                    this.OrdenesServicios= res.data;
                 }else{
                     console.log("No se encontro registros");
                 }
@@ -281,35 +283,35 @@ export default {
                 }
             });
         },
-        emitirFactura: function (servicio) {
-            servicio.facturado=1;
-            axios.put(`/api/home/${servicio.id}`, servicio)
+        emitirFactura: function (OrdenServicio) {
+            OrdenServicio.facturado=1;
+            axios.put(`/api/home/${OrdenServicio.id}`, OrdenServicio)
                 .then(res=>{
-                const index = this.servicios.findIndex(item => item.id === servicio.id);
-                this.servicios[index] = res.data;
-                this.textomensaje= "Se ha actualizado Exitosamente";
-                this.mensaje="mostrar";
+                const index = this.OrdenesServicios.findIndex(item => item.id === OrdenServicio.id);
+                this.OrdenesServicios[index] = res.data;
+                this.textomensajef= "Se ha actualizado Exitosamente";
+                this.mensajef="mostrar";
                 this.cargartotalservicio();
                 this.cargarServicios(0);
             });
         },
-        emitirPago: function (servicio) {
-            servicio.facturado=0;
-            axios.put(`/api/home/${servicio.id}`, servicio)
+        emitirPago: function (OrdenServicio) {
+            OrdenServicio.facturado=0;
+            axios.put(`/api/home/${OrdenServicio.id}`, OrdenServicio)
                 .then(res=>{
-                const index = this.servicios.findIndex(item => item.id === servicio.id);
-                this.servicios[index] = res.data;
+                const index = this.OrdenesServicios.findIndex(item => item.id === OrdenServicio.id);
+                this.OrdenesServicios[index] = res.data;
                 this.textomensaje= "Se ha actualizado Exitosamente";
                 this.mensaje="mostrar";
                 this.cargarServicios(1); 
             });
         },
-        liquidarservicio: function (servicio) {
-            servicio.facturado=2;
-            axios.put(`/api/home/${servicio.id}`, servicio)
+        liquidarservicio: function (OrdenServicio) {
+            OrdenServicio.facturado=2;
+            axios.put(`/api/home/${OrdenServicio.id}`, OrdenServicio)
                 .then(res=>{
-                const index = this.servicios.findIndex(item => item.id === servicio.id);
-                this.servicios[index] = res.data;
+                const index = this.OrdenesServicios.findIndex(item => item.id === OrdenServicio.id);
+                this.OrdenesServicios[index] = res.data;
                 this.textomensaje= "Se ha actualizado Exitosamente";
                 this.mensaje="mostrar";
                 this.cargarServicios(2);
@@ -320,7 +322,7 @@ export default {
             window.open(url);
         },
         enviarid: function (id) {
-            this.servicio= this.servicios[id];
+            this.OrdenServicio= this.OrdenesServicios[id];
 
             var fecha = new Date(); 
             var mes = fecha.getMonth()+1; 
@@ -332,8 +334,8 @@ export default {
             if(mes<10){
                 mes='0'+mes;
             }
-            this.servicio.fecha_factura1= ano+"-"+mes+"-"+dia;
-            this.servicio.fecha_pago1= ano+"-"+mes+"-"+dia;
+            this.OrdenServicio.fecha_factura1= ano+"-"+mes+"-"+dia;
+            this.OrdenServicio.fecha_pago1= ano+"-"+mes+"-"+dia;
             
             this.textomensaje= "";
             this.mensaje="hidden";
@@ -341,8 +343,10 @@ export default {
         limpiarFormulario: function(){
             this.textomensaje= "";
             this.mensaje="hidden";
-            this.servicios= [],
-            this.servicio={id:0, fecha_servicio: null,ruc: "", razon_social: "", fecha_factura:null, num_factura:"", monto_factura:0, fecha_pago:null, facturado:0, fecha_factura1:null, fecha_pago1:null}
+            this.textomensajef= "";
+            this.mensajef="hidden";
+            this.OrdenesServicios= [],
+            this.OrdenServicio={id:0, fecha_servicio: null,ruc: "", razon_social: "", fecha_factura:null, num_factura:"", monto_factura:0, fecha_pago:null, facturado:0, fecha_factura1:null, fecha_pago1:null}
         }
     }
 };

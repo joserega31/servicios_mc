@@ -3462,10 +3462,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      servicios: [],
-      servicio: {
+      OrdenesServicios: [],
+      OrdenServicio: {
         id: 0,
-        fecha_servicio: null,
+        fecha: null,
         ruc: "",
         razon_social: "",
         fecha_factura: null,
@@ -3483,7 +3483,9 @@ __webpack_require__.r(__webpack_exports__);
       totalfacturado: 0,
       opcionFiltro: 0,
       mensaje: "hidden",
-      textomensaje: ""
+      textomensaje: "",
+      mensajef: "hidden",
+      textomensajef: ""
     };
   },
   created: function created() {
@@ -3494,10 +3496,10 @@ __webpack_require__.r(__webpack_exports__);
     cargarTodosServicios: function cargarTodosServicios() {
       var _this = this;
 
-      var url = "api/servicios";
+      var url = "api/OrdenesServicios";
       axios.get(url).then(function (res) {
         if (res.data[0].id) {
-          _this.Servicios = res.data;
+          _this.OrdenesServicios = res.data;
           _this.buscliente = res.data.razon_social;
         } else {
           console.log("No se encontro registros");
@@ -3519,7 +3521,7 @@ __webpack_require__.r(__webpack_exports__);
 
       axios.get(url).then(function (res) {
         if (res.data[0].id) {
-          _this2.servicios = res.data;
+          _this2.OrdenesServicios = res.data;
         } else {
           console.log("No se encontro registros");
         }
@@ -3549,50 +3551,50 @@ __webpack_require__.r(__webpack_exports__);
         }
       });
     },
-    emitirFactura: function emitirFactura(servicio) {
+    emitirFactura: function emitirFactura(OrdenServicio) {
       var _this4 = this;
 
-      servicio.facturado = 1;
-      axios.put("/api/home/".concat(servicio.id), servicio).then(function (res) {
-        var index = _this4.servicios.findIndex(function (item) {
-          return item.id === servicio.id;
+      OrdenServicio.facturado = 1;
+      axios.put("/api/home/".concat(OrdenServicio.id), OrdenServicio).then(function (res) {
+        var index = _this4.OrdenesServicios.findIndex(function (item) {
+          return item.id === OrdenServicio.id;
         });
 
-        _this4.servicios[index] = res.data;
-        _this4.textomensaje = "Se ha actualizado Exitosamente";
-        _this4.mensaje = "mostrar";
+        _this4.OrdenesServicios[index] = res.data;
+        _this4.textomensajef = "Se ha actualizado Exitosamente";
+        _this4.mensajef = "mostrar";
 
         _this4.cargartotalservicio();
 
         _this4.cargarServicios(0);
       });
     },
-    emitirPago: function emitirPago(servicio) {
+    emitirPago: function emitirPago(OrdenServicio) {
       var _this5 = this;
 
-      servicio.facturado = 0;
-      axios.put("/api/home/".concat(servicio.id), servicio).then(function (res) {
-        var index = _this5.servicios.findIndex(function (item) {
-          return item.id === servicio.id;
+      OrdenServicio.facturado = 0;
+      axios.put("/api/home/".concat(OrdenServicio.id), OrdenServicio).then(function (res) {
+        var index = _this5.OrdenesServicios.findIndex(function (item) {
+          return item.id === OrdenServicio.id;
         });
 
-        _this5.servicios[index] = res.data;
+        _this5.OrdenesServicios[index] = res.data;
         _this5.textomensaje = "Se ha actualizado Exitosamente";
         _this5.mensaje = "mostrar";
 
         _this5.cargarServicios(1);
       });
     },
-    liquidarservicio: function liquidarservicio(servicio) {
+    liquidarservicio: function liquidarservicio(OrdenServicio) {
       var _this6 = this;
 
-      servicio.facturado = 2;
-      axios.put("/api/home/".concat(servicio.id), servicio).then(function (res) {
-        var index = _this6.servicios.findIndex(function (item) {
-          return item.id === servicio.id;
+      OrdenServicio.facturado = 2;
+      axios.put("/api/home/".concat(OrdenServicio.id), OrdenServicio).then(function (res) {
+        var index = _this6.OrdenesServicios.findIndex(function (item) {
+          return item.id === OrdenServicio.id;
         });
 
-        _this6.servicios[index] = res.data;
+        _this6.OrdenesServicios[index] = res.data;
         _this6.textomensaje = "Se ha actualizado Exitosamente";
         _this6.mensaje = "mostrar";
 
@@ -3604,7 +3606,7 @@ __webpack_require__.r(__webpack_exports__);
       window.open(url);
     },
     enviarid: function enviarid(id) {
-      this.servicio = this.servicios[id];
+      this.OrdenServicio = this.OrdenesServicios[id];
       var fecha = new Date();
       var mes = fecha.getMonth() + 1;
       var dia = fecha.getDate();
@@ -3618,15 +3620,17 @@ __webpack_require__.r(__webpack_exports__);
         mes = '0' + mes;
       }
 
-      this.servicio.fecha_factura1 = ano + "-" + mes + "-" + dia;
-      this.servicio.fecha_pago1 = ano + "-" + mes + "-" + dia;
+      this.OrdenServicio.fecha_factura1 = ano + "-" + mes + "-" + dia;
+      this.OrdenServicio.fecha_pago1 = ano + "-" + mes + "-" + dia;
       this.textomensaje = "";
       this.mensaje = "hidden";
     },
     limpiarFormulario: function limpiarFormulario() {
       this.textomensaje = "";
       this.mensaje = "hidden";
-      this.servicios = [], this.servicio = {
+      this.textomensajef = "";
+      this.mensajef = "hidden";
+      this.OrdenesServicios = [], this.OrdenServicio = {
         id: 0,
         fecha_servicio: null,
         ruc: "",
@@ -44413,7 +44417,7 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "container-fluid" }, [
     _c("div", { staticClass: "row" }, [
-      _c("h3", { staticClass: "text-dark" }, [_vm._v("Servicios")]),
+      _c("h3", { staticClass: "text-dark" }, [_vm._v("Ordenes de Servicios")]),
       _vm._v(" "),
       _c("div", { staticClass: "tile_count" }, [
         _c("div", { staticClass: "col-md-2  tile_stats_count" }, [
@@ -44430,7 +44434,7 @@ var render = function() {
           _c("div", { staticClass: "count" }, [_vm._v(_vm._s(_vm.totpago))])
         ]),
         _vm._v(" "),
-        _c("div", { staticClass: "col-md-2  tile_stats_count" }, [
+        _c("div", { staticClass: "col-md-3  tile_stats_count" }, [
           _vm._m(2),
           _vm._v(" "),
           _c("div", { staticClass: "count" }, [
@@ -44488,7 +44492,7 @@ var render = function() {
                 },
                 [
                   _c("option", { attrs: { selected: "", value: "0" } }, [
-                    _vm._v("Servicios pendiente de facturación")
+                    _vm._v("Pendiente de facturación")
                   ]),
                   _vm._v(" "),
                   _c("option", { attrs: { value: "1" } }, [
@@ -44545,7 +44549,7 @@ var render = function() {
                 _vm._v(" "),
                 _c(
                   "tbody",
-                  _vm._l(_vm.servicios, function(item, index) {
+                  _vm._l(_vm.OrdenesServicios, function(item, index) {
                     return _c("tr", { key: index }, [
                       _c("td", [_vm._v(_vm._s(item.id))]),
                       _vm._v(" "),
@@ -44553,10 +44557,10 @@ var render = function() {
                       _vm._v(" "),
                       _c("td", [_vm._v(_vm._s(item.razon_social))]),
                       _vm._v(" "),
-                      _c("td", [_vm._v(_vm._s(item.fecha_servicio))]),
+                      _c("td", [_vm._v(_vm._s(item.fecha))]),
                       _vm._v(" "),
                       _c("td", [
-                        item.facturado == 0
+                        item.fecha_factura == null
                           ? _c(
                               "button",
                               {
@@ -44578,7 +44582,7 @@ var render = function() {
                             )
                           : _vm._e(),
                         _vm._v(" "),
-                        item.facturado == 1 && item.fecha_pago == null
+                        item.fecha_factura !== null && item.fecha_pago == null
                           ? _c(
                               "button",
                               {
@@ -44600,14 +44604,14 @@ var render = function() {
                             )
                           : _vm._e(),
                         _vm._v(" "),
-                        item.facturado == 1 && item.fecha_pago != null
+                        item.fecha_factura !== null && item.fecha_pago != null
                           ? _c(
                               "button",
                               {
                                 staticClass: "btn btn-warning",
                                 attrs: {
                                   type: "button",
-                                  title: "Liquidar Servicio",
+                                  title: "Liquidar OrdenServicio",
                                   "data-toggle": "modal",
                                   "data-target": "#liquidarservicio"
                                 },
@@ -44686,7 +44690,7 @@ var render = function() {
                   on: {
                     submit: function($event) {
                       $event.preventDefault()
-                      return _vm.emitirFactura(_vm.servicio)
+                      return _vm.emitirFactura(_vm.OrdenServicio)
                     }
                   }
                 },
@@ -44698,19 +44702,23 @@ var render = function() {
                           {
                             name: "model",
                             rawName: "v-model",
-                            value: _vm.servicio.id,
-                            expression: "servicio.id"
+                            value: _vm.OrdenServicio.id,
+                            expression: "OrdenServicio.id"
                           }
                         ],
                         staticClass: "form-control",
                         attrs: { type: "hidden", id: "id", required: "" },
-                        domProps: { value: _vm.servicio.id },
+                        domProps: { value: _vm.OrdenServicio.id },
                         on: {
                           input: function($event) {
                             if ($event.target.composing) {
                               return
                             }
-                            _vm.$set(_vm.servicio, "id", $event.target.value)
+                            _vm.$set(
+                              _vm.OrdenServicio,
+                              "id",
+                              $event.target.value
+                            )
                           }
                         }
                       }),
@@ -44724,8 +44732,8 @@ var render = function() {
                           {
                             name: "model",
                             rawName: "v-model",
-                            value: _vm.servicio.fecha_factura,
-                            expression: "servicio.fecha_factura"
+                            value: _vm.OrdenServicio.fecha_factura,
+                            expression: "OrdenServicio.fecha_factura"
                           }
                         ],
                         staticClass: "form-control",
@@ -44734,14 +44742,14 @@ var render = function() {
                           id: "fecha_factura",
                           required: ""
                         },
-                        domProps: { value: _vm.servicio.fecha_factura },
+                        domProps: { value: _vm.OrdenServicio.fecha_factura },
                         on: {
                           input: function($event) {
                             if ($event.target.composing) {
                               return
                             }
                             _vm.$set(
-                              _vm.servicio,
+                              _vm.OrdenServicio,
                               "fecha_factura",
                               $event.target.value
                             )
@@ -44760,8 +44768,8 @@ var render = function() {
                           {
                             name: "model",
                             rawName: "v-model",
-                            value: _vm.servicio.num_factura,
-                            expression: "servicio.num_factura"
+                            value: _vm.OrdenServicio.num_factura,
+                            expression: "OrdenServicio.num_factura"
                           }
                         ],
                         staticClass: "form-control",
@@ -44770,14 +44778,14 @@ var render = function() {
                           id: "num_factura",
                           required: ""
                         },
-                        domProps: { value: _vm.servicio.num_factura },
+                        domProps: { value: _vm.OrdenServicio.num_factura },
                         on: {
                           input: function($event) {
                             if ($event.target.composing) {
                               return
                             }
                             _vm.$set(
-                              _vm.servicio,
+                              _vm.OrdenServicio,
                               "num_factura",
                               $event.target.value
                             )
@@ -44796,8 +44804,8 @@ var render = function() {
                           {
                             name: "model",
                             rawName: "v-model",
-                            value: _vm.servicio.monto_factura,
-                            expression: "servicio.monto_factura"
+                            value: _vm.OrdenServicio.monto_factura,
+                            expression: "OrdenServicio.monto_factura"
                           }
                         ],
                         staticClass: "form-control",
@@ -44805,16 +44813,17 @@ var render = function() {
                           type: "number",
                           id: "monto_factura",
                           min: "0.00",
+                          step: "0.01",
                           required: ""
                         },
-                        domProps: { value: _vm.servicio.monto_factura },
+                        domProps: { value: _vm.OrdenServicio.monto_factura },
                         on: {
                           input: function($event) {
                             if ($event.target.composing) {
                               return
                             }
                             _vm.$set(
-                              _vm.servicio,
+                              _vm.OrdenServicio,
                               "monto_factura",
                               $event.target.value
                             )
@@ -44856,13 +44865,13 @@ var render = function() {
                 "div",
                 {
                   staticClass: "alert alert-success w-100",
-                  class: _vm.mensaje,
+                  class: _vm.mensajef,
                   attrs: { role: "alert" }
                 },
                 [
                   _vm._v(
                     "\n                        " +
-                      _vm._s(_vm.textomensaje) +
+                      _vm._s(_vm.textomensajef) +
                       "\n                    "
                   )
                 ]
@@ -44874,7 +44883,7 @@ var render = function() {
                   on: {
                     submit: function($event) {
                       $event.preventDefault()
-                      return _vm.emitirPago(_vm.servicio)
+                      return _vm.emitirPago(_vm.OrdenServicio)
                     }
                   }
                 },
@@ -44886,19 +44895,23 @@ var render = function() {
                           {
                             name: "model",
                             rawName: "v-model",
-                            value: _vm.servicio.id,
-                            expression: "servicio.id"
+                            value: _vm.OrdenServicio.id,
+                            expression: "OrdenServicio.id"
                           }
                         ],
                         staticClass: "form-control",
                         attrs: { type: "hidden", id: "id", required: "" },
-                        domProps: { value: _vm.servicio.id },
+                        domProps: { value: _vm.OrdenServicio.id },
                         on: {
                           input: function($event) {
                             if ($event.target.composing) {
                               return
                             }
-                            _vm.$set(_vm.servicio, "id", $event.target.value)
+                            _vm.$set(
+                              _vm.OrdenServicio,
+                              "id",
+                              $event.target.value
+                            )
                           }
                         }
                       }),
@@ -44912,20 +44925,20 @@ var render = function() {
                           {
                             name: "model",
                             rawName: "v-model",
-                            value: _vm.servicio.fecha_pago,
-                            expression: "servicio.fecha_pago"
+                            value: _vm.OrdenServicio.fecha_pago,
+                            expression: "OrdenServicio.fecha_pago"
                           }
                         ],
                         staticClass: "form-control",
                         attrs: { type: "date", id: "fecha_pago", required: "" },
-                        domProps: { value: _vm.servicio.fecha_pago },
+                        domProps: { value: _vm.OrdenServicio.fecha_pago },
                         on: {
                           input: function($event) {
                             if ($event.target.composing) {
                               return
                             }
                             _vm.$set(
-                              _vm.servicio,
+                              _vm.OrdenServicio,
                               "fecha_pago",
                               $event.target.value
                             )
@@ -44985,7 +44998,7 @@ var render = function() {
                   on: {
                     submit: function($event) {
                       $event.preventDefault()
-                      return _vm.liquidarservicio(_vm.servicio)
+                      return _vm.liquidarservicio(_vm.OrdenServicio)
                     }
                   }
                 },
@@ -44997,19 +45010,23 @@ var render = function() {
                           {
                             name: "model",
                             rawName: "v-model",
-                            value: _vm.servicio.id,
-                            expression: "servicio.id"
+                            value: _vm.OrdenServicio.id,
+                            expression: "OrdenServicio.id"
                           }
                         ],
                         staticClass: "form-control",
                         attrs: { type: "hidden", id: "id", required: "" },
-                        domProps: { value: _vm.servicio.id },
+                        domProps: { value: _vm.OrdenServicio.id },
                         on: {
                           input: function($event) {
                             if ($event.target.composing) {
                               return
                             }
-                            _vm.$set(_vm.servicio, "id", $event.target.value)
+                            _vm.$set(
+                              _vm.OrdenServicio,
+                              "id",
+                              $event.target.value
+                            )
                           }
                         }
                       }),
@@ -45023,20 +45040,20 @@ var render = function() {
                           {
                             name: "model",
                             rawName: "v-model",
-                            value: _vm.servicio.fecha_pago,
-                            expression: "servicio.fecha_pago"
+                            value: _vm.OrdenServicio.fecha_pago,
+                            expression: "OrdenServicio.fecha_pago"
                           }
                         ],
                         staticClass: "form-control",
                         attrs: { type: "date", id: "fecha_pago", required: "" },
-                        domProps: { value: _vm.servicio.fecha_pago },
+                        domProps: { value: _vm.OrdenServicio.fecha_pago },
                         on: {
                           input: function($event) {
                             if ($event.target.composing) {
                               return
                             }
                             _vm.$set(
-                              _vm.servicio,
+                              _vm.OrdenServicio,
                               "fecha_pago",
                               $event.target.value
                             )
@@ -45081,7 +45098,7 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("span", { staticClass: "count_top" }, [
       _c("i", { staticClass: "fa fa-dollar-sign" }),
-      _vm._v(" Total Costo Servicios")
+      _vm._v(" Total Costo Ordenes Servicios")
     ])
   },
   function() {
@@ -45099,13 +45116,15 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("thead", [
       _c("tr", [
-        _c("th", [_vm._v("Servicio")]),
+        _c("th", [_vm._v("Orden de Servicio")]),
         _vm._v(" "),
         _c("th", { staticClass: "text-left" }, [_vm._v("Ruc")]),
         _vm._v(" "),
         _c("th", { staticClass: "text-left" }, [_vm._v("Razón Social")]),
         _vm._v(" "),
-        _c("th", { staticClass: "text-left" }, [_vm._v("Fecha Servicio")]),
+        _c("th", { staticClass: "text-left" }, [
+          _vm._v("Fecha Orden Servicio")
+        ]),
         _vm._v(" "),
         _c("th", [_vm._v("Acción")])
       ])
@@ -45291,7 +45310,7 @@ var staticRenderFns = [
       _c(
         "h5",
         { staticClass: "modal-title", attrs: { id: "liquidarservicioLabel" } },
-        [_vm._v("Liquidar Servicio")]
+        [_vm._v("Liquidar OrdenServicio")]
       ),
       _vm._v(" "),
       _c(

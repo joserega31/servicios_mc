@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 02-02-2021 a las 01:13:59
+-- Tiempo de generación: 03-02-2021 a las 01:22:49
 -- Versión del servidor: 10.4.11-MariaDB
 -- Versión de PHP: 7.4.2
 
@@ -35,6 +35,14 @@ CREATE TABLE `almacenes` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Volcado de datos para la tabla `almacenes`
+--
+
+INSERT INTO `almacenes` (`id`, `nombre_almacen`, `ingenios_id`, `created_at`, `updated_at`) VALUES
+(1, 'PUNTO BLANCO PIURA', 3, NULL, NULL),
+(2, 'PUNTO BLANCO PIURA', 3, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -155,6 +163,16 @@ CREATE TABLE `ingenios` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Volcado de datos para la tabla `ingenios`
+--
+
+INSERT INTO `ingenios` (`id`, `nombre`, `created_at`, `updated_at`) VALUES
+(1, 'CAÑA BRAVA', NULL, NULL),
+(2, 'COSTEÑO', NULL, NULL),
+(3, 'PUNTO BLANCO', NULL, NULL),
+(4, 'ÁLVARES BOHL', NULL, NULL);
+
 -- --------------------------------------------------------
 
 --
@@ -167,6 +185,15 @@ CREATE TABLE `lineas_productos` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Volcado de datos para la tabla `lineas_productos`
+--
+
+INSERT INTO `lineas_productos` (`id`, `nombre`, `created_at`, `updated_at`) VALUES
+(1, 'ARROZ', NULL, NULL),
+(2, 'AZUCAR', NULL, NULL),
+(3, 'ABARROTES', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -246,6 +273,15 @@ CREATE TABLE `modo_pagos` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Volcado de datos para la tabla `modo_pagos`
+--
+
+INSERT INTO `modo_pagos` (`id`, `nombre`, `created_at`, `updated_at`) VALUES
+(1, 'EFECTIVO', NULL, NULL),
+(2, 'DEPOSITO', NULL, NULL),
+(3, 'CREDITO A 7 DIAS', NULL, NULL);
+
 -- --------------------------------------------------------
 
 --
@@ -318,7 +354,6 @@ CREATE TABLE `servicios` (
   `guia_transportista` varchar(45) COLLATE utf8mb4_unicode_ci NOT NULL,
   `cantidad` double NOT NULL,
   `unidad_id` int(10) UNSIGNED NOT NULL,
-  `precio_extra_estiba` double NOT NULL,
   `precio_servicio` double NOT NULL,
   `precio_total_servicio` double NOT NULL,
   `utilidad` double NOT NULL,
@@ -401,6 +436,13 @@ CREATE TABLE `tarifarios` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Volcado de datos para la tabla `tarifarios`
+--
+
+INSERT INTO `tarifarios` (`id`, `vigente`, `nombre`, `created_at`, `updated_at`) VALUES
+(1, 1, 'GENERICO', NULL, NULL);
+
 -- --------------------------------------------------------
 
 --
@@ -452,6 +494,15 @@ CREATE TABLE `unidades` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Volcado de datos para la tabla `unidades`
+--
+
+INSERT INTO `unidades` (`id`, `descripcion_corta`, `descripcion_larga`, `created_at`, `updated_at`) VALUES
+(1, 'TN', 'TONELADAS', NULL, NULL),
+(2, 'CJ', 'CAJA', NULL, NULL),
+(3, 'CR', 'CARRO', NULL, NULL);
+
 -- --------------------------------------------------------
 
 --
@@ -475,7 +526,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `rol_id`, `remember_token`, `created_at`, `updated_at`) VALUES
-(1, 'Administrador', 'webmaster@mcdigitalperu.com', NULL, '$2y$10$sRoNL.YWTtTYmxYKJGUjceIVpflfqIfZjh3juUamWXSeFQLRpqV2S', 1, NULL, NULL, NULL);
+(1, 'Administrador', 'webmaster@mcdigitalperu.com', NULL, '$2y$10$GB1yma85bOxRbPHXlP0vMOefKcR4Rf4HlrQzBJi6XF79J6I7/sJOq', 1, NULL, NULL, NULL);
 
 --
 -- Índices para tablas volcadas
@@ -643,7 +694,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT de la tabla `almacenes`
 --
 ALTER TABLE `almacenes`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `clientes`
@@ -679,13 +730,13 @@ ALTER TABLE `funcion_roles`
 -- AUTO_INCREMENT de la tabla `ingenios`
 --
 ALTER TABLE `ingenios`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `lineas_productos`
 --
 ALTER TABLE `lineas_productos`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `menus`
@@ -703,7 +754,7 @@ ALTER TABLE `migrations`
 -- AUTO_INCREMENT de la tabla `modo_pagos`
 --
 ALTER TABLE `modo_pagos`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `ordenes_servicios`
@@ -739,7 +790,7 @@ ALTER TABLE `supervisores`
 -- AUTO_INCREMENT de la tabla `tarifarios`
 --
 ALTER TABLE `tarifarios`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de la tabla `tarifarios_listas`
@@ -757,7 +808,7 @@ ALTER TABLE `tipo_servicios`
 -- AUTO_INCREMENT de la tabla `unidades`
 --
 ALTER TABLE `unidades`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `users`

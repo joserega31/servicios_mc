@@ -2,12 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Exports\ServiciosExport;
-use App\Models\Servicio;
-use App\Models\User;
+use App\Models\OrdenesServicio;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Auth;
 
 use Exception;
 use Maatwebsite\Excel\Facades\Excel;
@@ -37,19 +34,19 @@ class HomeController extends Controller
     }
 
     public function serviciopte(){
-        $servicioPte= DB::select('SELECT s.id, s.fecha_servicio, s.facturado, c.ruc, c.razon_social FROM servicios as s INNER JOIN clientes as c ON s.cliente_id= c.id WHERE s.facturado=0');
+        $servicioPte= DB::select('SELECT s.id, s.fecha, s.fecha_factura, c.ruc, c.razon_social FROM ordenes_servicios as s INNER JOIN clientes as c ON s.cliente_id= c.id WHERE s.fecha_factura is null');
         return $servicioPte;
     }
     public function servicioptepago(){
-        $servicioPte= DB::select('SELECT s.id, s.fecha_servicio, s.facturado, c.ruc, c.razon_social FROM servicios as s INNER JOIN clientes as c ON s.cliente_id= c.id WHERE fecha_pago is null and facturado=1');
+        $servicioPte= DB::select('SELECT s.id, s.fecha, s.fecha_factura, c.ruc, c.razon_social FROM ordenes_servicios as s INNER JOIN clientes as c ON s.cliente_id= c.id WHERE s.fecha_pago is null and s.fecha_factura is not null');
         return $servicioPte;
     }
     public function serviciopteliq(){
-        $servicioPte= DB::select('SELECT s.id, s.fecha_servicio, s.facturado, s.fecha_pago, c.ruc, c.razon_social FROM servicios as s INNER JOIN clientes as c ON s.cliente_id= c.id WHERE fecha_liquidacion is null and facturado=1 and fecha_pago is not null');
+        $servicioPte= DB::select('SELECT s.id, s.fecha, s.fecha_factura, s.fecha_pago, c.ruc, c.razon_social FROM ordenes_servicios as s INNER JOIN clientes as c ON s.cliente_id= c.id WHERE s.fecha_liquidacion is null and s.fecha_factura is not null and s.fecha_pago is not null');
         return $servicioPte;
     }
     public function totalservicios(){
-        $servicioPte= DB::select('SELECT COUNT(IF(facturado = 0, 1, NULL)) as totptefacturar, COUNT(IF(estados_pago_id = 1, 1, NULL)) as totpago, COUNT(IF(estados_pago_id = 2, 1, NULL)) as totpagodet, sum(precio_total_servicio) as totalservicio, sum(monto_factura) as totalfacturado, count(id) as totalGeneral  FROM servicios');
+        $servicioPte= DB::select('SELECT COUNT(IF(fecha_factura is null, 1, NULL)) as totptefacturar, COUNT(IF(estados_pago_id = 1 and fecha_factura is null, 1, NULL)) as totpago, COUNT(IF(estados_pago_id = 2, 1, NULL)) as totpagodet, sum(monto_factura) as totalfacturado, count(id) as totalGeneral  FROM ordenes_servicios');
         return $servicioPte;
     }
 
@@ -72,20 +69,21 @@ class HomeController extends Controller
     public function update(Request $request, $id)
     {
         try{
-            $Servicio = Servicio::findOrFail($id);
+            $OrdenesServicio = OrdenesServicio::findOrFail($id);
             if ($request->facturado==0){
-                $Servicio->fecha_pago = $request->fecha_pago;
+                $OrdenesServicio->fecha_pago = $request->fecha_pago;
+
             }else if ($request->facturado==1){
-                $Servicio->fecha_factura = $request->fecha_factura;
-                $Servicio->num_factura = $request->num_factura;
-                $Servicio->monto_factura = $request->monto_factura;
-                $Servicio->facturado = 1;
+                $OrdenesServicio->fecha_factura = $request->fecha_factura;
+                $OrdenesServicio->num_factura = $request->num_factura;
+                $OrdenesServicio->monto_factura = $request->monto_factura;
+
             }else if ($request->facturado==2){
-                $Servicio->fecha_liquidacion = new \DateTime();
+                $OrdenesServicio->fecha_liquidacion = new \DateTime();
             }
-            $Servicio->update();
+            $OrdenesServicio->update();
         } catch (Exception $ex) {
-            return $this->JsonResponseError($ex, 'exception');
+            return $ex;
         }
     }
     
