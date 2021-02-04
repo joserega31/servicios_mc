@@ -46,7 +46,7 @@ class HomeController extends Controller
         return $servicioPte;
     }
     public function totalservicios(){
-        $servicioPte= DB::select('SELECT COUNT(IF(fecha_factura is null, 1, NULL)) as totptefacturar, COUNT(IF(estados_pago_id = 1 and fecha_factura is null, 1, NULL)) as totpago, COUNT(IF(estados_pago_id = 2, 1, NULL)) as totpagodet, sum(monto_factura) as totalfacturado, count(id) as totalGeneral  FROM ordenes_servicios');
+        $servicioPte= DB::select('SELECT COUNT(IF(fecha_factura is null, 1, NULL)) as totptefacturar, COUNT(IF(fecha_pago is null and fecha_factura is not null, 1, NULL)) as totpago, COUNT(IF(fecha_liquidacion is null and fecha_pago is not null and fecha_factura is not null, 1, NULL)) as totpteliquidar, sum(monto_factura) as totalfacturado, count(id) as totalGeneral  FROM ordenes_servicios');
         return $servicioPte;
     }
 

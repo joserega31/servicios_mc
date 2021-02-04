@@ -13,9 +13,9 @@
                         <div class="count">{{totpago}}</div>
                         <!--span class="count_bottom"><i class="green"><i class="fas fa-sort-up"></i>3% </i> Esta semana</span-->
                     </div>
-                    <div class="col-md-3  tile_stats_count">
-                        <span class="count_top"><i class="fa fa-dollar-sign"></i> Total Costo Ordenes Servicios</span>
-                        <div class="count">{{totalservicio}}</div>
+                    <div class="col-md-2 tile_stats_count">
+                        <span class="count_top"><i class="far fa-calendar-check"></i> Pendiente por Liquidar</span>
+                        <div class="count">{{totpteliquidar}}</div>
                         <!--span class="count_bottom"><i class="red"><i class="fas fa-sort-down"></i>12% </i> Esta semana</span-->
                     </div>
                     <div class="col-md-2  tile_stats_count">
@@ -112,8 +112,8 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <div class="alert alert-success w-100" role="alert" :class="mensaje">
-                            {{textomensaje}}
+                        <div class="alert alert-success w-100" role="alert" :class="mensajef">
+                            {{textomensajef}}
                         </div>
                         <form @submit.prevent="emitirFactura(OrdenServicio)">
                             <div class="form-row">
@@ -153,8 +153,8 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <div class="alert alert-success w-100" role="alert" :class="mensajef">
-                            {{textomensajef}}
+                        <div class="alert alert-success w-100" role="alert" :class="mensajep">
+                            {{textomensajep}}
                         </div>
                         <form @submit.prevent="emitirPago(OrdenServicio)">
                             <div class="form-row">
@@ -221,13 +221,16 @@ export default {
             totptefacturar:0, 
             totpago: 0,
             totpagodet: 0, 
+            totpteliquidar:0,
             totalservicio: 0, 
             totalfacturado: 0,
             opcionFiltro:0,
             mensaje:"hidden",
             textomensaje:"",
             mensajef:"hidden",
-            textomensajef:""
+            textomensajef:"",
+            mensajep:"hidden",
+            textomensajep:""
         };
     },
     created: function () {
@@ -247,7 +250,7 @@ export default {
         });
         },
         cargarServicios: function () {
-            this.limpiarFormulario();
+            this.limpiarFormulario(1);
             var org =this.opcionFiltro;
             var url = "api/serviciopte";
             if (org==1){
@@ -272,6 +275,7 @@ export default {
                     this.totpagodet= res.data[0].totpagodet; 
                     this.totalservicio= res.data[0].totalservicio; 
                     this.totalfacturado= res.data[0].totalfacturado; 
+                    this.totpteliquidar = res.data[0].totpteliquidar;
                     if (this.totalservicio== null){
                         this.totalservicio=0;
                     }
@@ -285,24 +289,23 @@ export default {
         },
         emitirFactura: function (OrdenServicio) {
             OrdenServicio.facturado=1;
-            axios.put(`/api/home/${OrdenServicio.id}`, OrdenServicio)
-                .then(res=>{
-                const index = this.OrdenesServicios.findIndex(item => item.id === OrdenServicio.id);
-                this.OrdenesServicios[index] = res.data;
+            axios.put(`/api/home/${OrdenServicio.id}`, OrdenServicio).then(res=>{
                 this.textomensajef= "Se ha actualizado Exitosamente";
                 this.mensajef="mostrar";
+                const index = this.OrdenesServicios.findIndex(item => item.id === OrdenServicio.id);
+                this.OrdenesServicios[index] = res.data;
                 this.cargartotalservicio();
                 this.cargarServicios(0);
             });
         },
         emitirPago: function (OrdenServicio) {
             OrdenServicio.facturado=0;
-            axios.put(`/api/home/${OrdenServicio.id}`, OrdenServicio)
-                .then(res=>{
+            axios.put(`/api/home/${OrdenServicio.id}`, OrdenServicio).then(res=>{
                 const index = this.OrdenesServicios.findIndex(item => item.id === OrdenServicio.id);
                 this.OrdenesServicios[index] = res.data;
-                this.textomensaje= "Se ha actualizado Exitosamente";
-                this.mensaje="mostrar";
+                this.textomensajep= "Se ha actualizado Exitosamente";
+                this.mensajep="mostrar";
+                this.cargartotalservicio();
                 this.cargarServicios(1); 
             });
         },
@@ -314,6 +317,7 @@ export default {
                 this.OrdenesServicios[index] = res.data;
                 this.textomensaje= "Se ha actualizado Exitosamente";
                 this.mensaje="mostrar";
+                this.cargartotalservicio();
                 this.cargarServicios(2);
             });
         },
@@ -340,11 +344,15 @@ export default {
             this.textomensaje= "";
             this.mensaje="hidden";
         },
-        limpiarFormulario: function(){
-            this.textomensaje= "";
-            this.mensaje="hidden";
-            this.textomensajef= "";
-            this.mensajef="hidden";
+        limpiarFormulario: function(org){
+            if (org==0){
+                this.textomensaje= "";
+                this.mensaje="hidden";
+                this.textomensajef= "";
+                this.mensajef="hidden";
+                this.textomensajep= "";
+                this.mensajep="hidden";
+            }
             this.OrdenesServicios= [],
             this.OrdenServicio={id:0, fecha_servicio: null,ruc: "", razon_social: "", fecha_factura:null, num_factura:"", monto_factura:0, fecha_pago:null, facturado:0, fecha_factura1:null, fecha_pago1:null}
         }

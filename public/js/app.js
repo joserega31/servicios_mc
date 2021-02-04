@@ -3479,13 +3479,16 @@ __webpack_require__.r(__webpack_exports__);
       totptefacturar: 0,
       totpago: 0,
       totpagodet: 0,
+      totpteliquidar: 0,
       totalservicio: 0,
       totalfacturado: 0,
       opcionFiltro: 0,
       mensaje: "hidden",
       textomensaje: "",
       mensajef: "hidden",
-      textomensajef: ""
+      textomensajef: "",
+      mensajep: "hidden",
+      textomensajep: ""
     };
   },
   created: function created() {
@@ -3509,7 +3512,7 @@ __webpack_require__.r(__webpack_exports__);
     cargarServicios: function cargarServicios() {
       var _this2 = this;
 
-      this.limpiarFormulario();
+      this.limpiarFormulario(1);
       var org = this.opcionFiltro;
       var url = "api/serviciopte";
 
@@ -3538,6 +3541,7 @@ __webpack_require__.r(__webpack_exports__);
           _this3.totpagodet = res.data[0].totpagodet;
           _this3.totalservicio = res.data[0].totalservicio;
           _this3.totalfacturado = res.data[0].totalfacturado;
+          _this3.totpteliquidar = res.data[0].totpteliquidar;
 
           if (_this3.totalservicio == null) {
             _this3.totalservicio = 0;
@@ -3556,13 +3560,14 @@ __webpack_require__.r(__webpack_exports__);
 
       OrdenServicio.facturado = 1;
       axios.put("/api/home/".concat(OrdenServicio.id), OrdenServicio).then(function (res) {
+        _this4.textomensajef = "Se ha actualizado Exitosamente";
+        _this4.mensajef = "mostrar";
+
         var index = _this4.OrdenesServicios.findIndex(function (item) {
           return item.id === OrdenServicio.id;
         });
 
         _this4.OrdenesServicios[index] = res.data;
-        _this4.textomensajef = "Se ha actualizado Exitosamente";
-        _this4.mensajef = "mostrar";
 
         _this4.cargartotalservicio();
 
@@ -3579,8 +3584,10 @@ __webpack_require__.r(__webpack_exports__);
         });
 
         _this5.OrdenesServicios[index] = res.data;
-        _this5.textomensaje = "Se ha actualizado Exitosamente";
-        _this5.mensaje = "mostrar";
+        _this5.textomensajep = "Se ha actualizado Exitosamente";
+        _this5.mensajep = "mostrar";
+
+        _this5.cargartotalservicio();
 
         _this5.cargarServicios(1);
       });
@@ -3597,6 +3604,8 @@ __webpack_require__.r(__webpack_exports__);
         _this6.OrdenesServicios[index] = res.data;
         _this6.textomensaje = "Se ha actualizado Exitosamente";
         _this6.mensaje = "mostrar";
+
+        _this6.cargartotalservicio();
 
         _this6.cargarServicios(2);
       });
@@ -3625,11 +3634,16 @@ __webpack_require__.r(__webpack_exports__);
       this.textomensaje = "";
       this.mensaje = "hidden";
     },
-    limpiarFormulario: function limpiarFormulario() {
-      this.textomensaje = "";
-      this.mensaje = "hidden";
-      this.textomensajef = "";
-      this.mensajef = "hidden";
+    limpiarFormulario: function limpiarFormulario(org) {
+      if (org == 0) {
+        this.textomensaje = "";
+        this.mensaje = "hidden";
+        this.textomensajef = "";
+        this.mensajef = "hidden";
+        this.textomensajep = "";
+        this.mensajep = "hidden";
+      }
+
       this.OrdenesServicios = [], this.OrdenServicio = {
         id: 0,
         fecha_servicio: null,
@@ -44434,11 +44448,11 @@ var render = function() {
           _c("div", { staticClass: "count" }, [_vm._v(_vm._s(_vm.totpago))])
         ]),
         _vm._v(" "),
-        _c("div", { staticClass: "col-md-3  tile_stats_count" }, [
+        _c("div", { staticClass: "col-md-2 tile_stats_count" }, [
           _vm._m(2),
           _vm._v(" "),
           _c("div", { staticClass: "count" }, [
-            _vm._v(_vm._s(_vm.totalservicio))
+            _vm._v(_vm._s(_vm.totpteliquidar))
           ])
         ]),
         _vm._v(" "),
@@ -44672,13 +44686,13 @@ var render = function() {
                 "div",
                 {
                   staticClass: "alert alert-success w-100",
-                  class: _vm.mensaje,
+                  class: _vm.mensajef,
                   attrs: { role: "alert" }
                 },
                 [
                   _vm._v(
                     "\n                        " +
-                      _vm._s(_vm.textomensaje) +
+                      _vm._s(_vm.textomensajef) +
                       "\n                    "
                   )
                 ]
@@ -44865,13 +44879,13 @@ var render = function() {
                 "div",
                 {
                   staticClass: "alert alert-success w-100",
-                  class: _vm.mensajef,
+                  class: _vm.mensajep,
                   attrs: { role: "alert" }
                 },
                 [
                   _vm._v(
                     "\n                        " +
-                      _vm._s(_vm.textomensajef) +
+                      _vm._s(_vm.textomensajep) +
                       "\n                    "
                   )
                 ]
@@ -45097,8 +45111,8 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("span", { staticClass: "count_top" }, [
-      _c("i", { staticClass: "fa fa-dollar-sign" }),
-      _vm._v(" Total Costo Ordenes Servicios")
+      _c("i", { staticClass: "far fa-calendar-check" }),
+      _vm._v(" Pendiente por Liquidar")
     ])
   },
   function() {
