@@ -52,7 +52,6 @@ class ServicioController extends Controller
             $servicio->unidad_id = $request->unidad_id;
             $servicio->precio_servicio = $request->precio_servicio;
             $servicio->precio_total_servicio = $request->precio_total_servicio;
-            $servicio->utilidad = $request->utilidad;
             $servicio->igv = $request->igv;
             $servicio->lineas_productos_id = $request->lineas_productos_id;
             $servicio->tipo_servicio_id = $request->tipo_servicio_id;
@@ -98,7 +97,7 @@ class ServicioController extends Controller
     {
         try{
             $servicio = Servicio::findOrFail($id);
-            $servicio->conductor = $request->conductor;
+            /*$servicio->conductor = $request->conductor;
             $servicio->placa_unidad = $request->placa_unidad;
             $servicio->placa_carretera = $request->placa_carretera;
             $servicio->guia_transportista = $request->guia_transportista;
@@ -110,7 +109,8 @@ class ServicioController extends Controller
             $servicio->igv = $request->igv;
             $servicio->lineas_productos_id = $request->lineas_productos_id;
             $servicio->tipo_servicio_id = $request->tipo_servicio_id;
-            $servicio->observaciones = $request->observaciones;
+            $servicio->observaciones = $request->observaciones;*/
+            $servicio->utilidad = $request->utilidad;
             $servicio->update();
             return $servicio;
         } catch (Exception $ex) {

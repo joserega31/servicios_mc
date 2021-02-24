@@ -24,7 +24,7 @@ class CreateServiciosTable extends Migration
             $table->foreign('unidad_id')->references('id')->on('unidades');
             $table->double('precio_servicio');
             $table->double('precio_total_servicio');
-            $table->double('utilidad');
+            $table->double('utilidad')->nullable();
             $table->double('igv');
             $table->string('observaciones', 255)->nullable();
             $table->integer('lineas_productos_id')->unsigned();   

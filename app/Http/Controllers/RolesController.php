@@ -42,6 +42,7 @@ class RolesController extends Controller
         try{
             $Roles = new Roles();
             $Roles->nombre = $request->nombre;
+            $Roles->crear_utilidad_os= $request->crear_utilidad_os;
             $Roles->save();
             return $Roles;
         } catch (Exception $ex) {
@@ -84,6 +85,7 @@ class RolesController extends Controller
         try{
             $Roles = Roles::findOrFail($id);
             $Roles->nombre = $request->nombre;
+            $Roles->crear_utilidad_os= $request->crear_utilidad_os;
             $Roles->update();
         } catch (Exception $ex) {
             return $this->JsonResponseError($ex, 'exception');

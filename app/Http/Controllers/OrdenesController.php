@@ -21,7 +21,7 @@ class OrdenesController extends Controller
         return $OrdenesServicio;
     }
     public function cargarServiciosOrden($id){
-        $servicios= DB::select('SELECT * FROM servicios WHERE ordenes_servicios_id="'.$id.'"');
+        $servicios= DB::select('SELECT s.*, ts.nombre as tipo_servicio FROM servicios as s INNER JOIN tipo_servicios as ts ON s.tipo_servicio_id= ts.id WHERE ordenes_servicios_id="'.$id.'"');
         return $servicios;
     }
     /**

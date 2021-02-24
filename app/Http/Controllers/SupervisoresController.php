@@ -48,6 +48,7 @@ class SupervisoresController extends Controller
             $Supervisores->numcuenta = $request->numcuenta;
             $Supervisores->cci = $request->cci;
             $Supervisores->banco = $request->banco;
+            $Supervisores->usuario_id= $request->usuario_id;
             $Supervisores->save();
             return $Supervisores;
         } catch (Exception $ex) {
@@ -94,6 +95,7 @@ class SupervisoresController extends Controller
             $Supervisores->numcuenta = $request->numcuenta;
             $Supervisores->cci = $request->cci;
             $Supervisores->banco = $request->banco;
+            $Supervisores->usuario_id= $request->usuario_id;
             $Supervisores->update();
             return $Supervisores;
         } catch (Exception $ex) {

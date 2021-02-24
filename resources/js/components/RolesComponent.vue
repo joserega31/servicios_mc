@@ -20,7 +20,6 @@
                                 <td>{{ index + 1 }}</td>
                                 <td>{{ item.nombre }}</td>
                                 <td>
-                                    {{permisos.editar}}
                                     <button type="button" class="btn btn-warning" title="Editar" @click="editar(index)"  v-if="permiso_editar==1">
                                         <i class="far fa-edit"></i>
                                     </button>
@@ -63,10 +62,17 @@
             <div class="card-body">
                     <form @submit.prevent="guardar(Rol)">
                         <div class="form-row">
-                            <div class="form-group col-md-12">
+                            <div class="form-group col-md-8">
                                 <input type="hidden" class="form-control" id="id" required  v-model="Rol.id">
                                 <label for="nombre">Nombres</label>
                                 <input type="text" class="form-control" id="nombre" required  v-model="Rol.nombre" @input="Rol.nombre = $event.target.value.toUpperCase()">
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label for="nombre">Permisos Especiales</label><br>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input checkbox" type="checkbox" id="crear_utilidad_os" value="1" v-model="Rol.crear_utilidad_os">
+                                    <label class="form-check-label" for="crear_utilidad_os">Ingresar Utilidad Orden de Servicio</label>
+                                </div>
                             </div>
                         </div>
                         <button type="submit" class="btn btn-primary">Guardar</button>
@@ -84,7 +90,7 @@ export default {
     data() {
         return {
             Roles: [],
-            Rol: { id: 0, nombre: ""}, 
+            Rol: { id: 0, nombre: "", crear_utilidad_os:0}, 
             editmodo:false,
             mensaje:"hidden",
             textomensaje:"",

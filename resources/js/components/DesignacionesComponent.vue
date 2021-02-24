@@ -117,6 +117,7 @@ export default {
         this.getKeeps();
         this.cargarSupervisores();
         this.cargarIngenios();
+        this.cargarUsuarios();
     },
   methods: {
     getKeeps: function () {

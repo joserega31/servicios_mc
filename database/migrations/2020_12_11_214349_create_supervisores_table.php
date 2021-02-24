@@ -21,6 +21,8 @@ class CreateSupervisoresTable extends Migration
             $table->string('numcuenta', 45)->nullable();
             $table->string('cci', 45)->nullable();
             $table->string('banco', 45)->nullable();
+            $table->integer('usuario_id')->unsigned();   
+            $table->foreign('usuario_id')->references('id')->on('users');
             $table->timestamps();
         });
     }

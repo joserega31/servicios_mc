@@ -2575,6 +2575,7 @@ __webpack_require__.r(__webpack_exports__);
     this.getKeeps();
     this.cargarSupervisores();
     this.cargarIngenios();
+    this.cargarUsuarios();
   },
   methods: {
     getKeeps: function getKeeps() {
@@ -4425,53 +4426,34 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
+  props: ['user'],
+  data: function data() {
+    return {
+      subnemu: [],
+      mensaje: "hidden",
+      textomensaje: "",
+      emailuser: this.user.email
+    };
+  },
+  created: function created() {
+    this.cargarSubmenu(3);
+  },
   methods: {
-    exportar: function exportar(org) {
-      var url = "";
+    cargarSubmenu: function cargarSubmenu(id) {
+      var _this = this;
 
-      if (org == 0) {
-        url = "api/exportarlstcli";
-      } else if (org == 1) {
-        url = "api/exportarlstsup";
-      } else if (org == 2) {
-        url = "api/exportarlstuser";
-      } else if (org == 3) {
-        url = "api/exportarlstroles";
-      }
-
-      window.open(url);
+      axios.get("api/submenuxusuario/".concat(id, "/").concat(this.emailuser)).then(function (res) {
+        if (res.data) {
+          _this.subnemu = res.data;
+        } else {
+          console.log("No se encontro registros");
+        }
+      });
     }
+  },
+  mounted: function mounted() {
+    console.log("Component mounted.");
   }
 });
 
@@ -4566,6 +4548,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['user'],
   data: function data() {
@@ -4573,7 +4561,8 @@ __webpack_require__.r(__webpack_exports__);
       Roles: [],
       Rol: {
         id: 0,
-        nombre: ""
+        nombre: "",
+        crear_utilidad_os: 0
       },
       editmodo: false,
       mensaje: "hidden",
@@ -5010,8 +4999,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['user'],
   data: function data() {
@@ -5074,10 +5061,17 @@ __webpack_require__.r(__webpack_exports__);
       mensaje: "hidden",
       textomensajemodal: "",
       mensajemodal: "hidden",
+      mensajeuti: "hidden",
+      textomensajeuti: "",
       botonmodal: false,
       editmodo: false,
       textomensajecli: "",
-      mensajecli: "hidden"
+      mensajecli: "hidden",
+      permiso_crear: 0,
+      permiso_editar: 0,
+      permiso_eliminar: 0,
+      emailuser: this.user.email,
+      crear_utilidad_os: 0
     };
   },
   created: function created() {
@@ -5089,6 +5083,7 @@ __webpack_require__.r(__webpack_exports__);
     this.cargaUnidades();
     this.cargarModosPago();
     this.cargaTarifarios();
+    this.cargarPermisosUser();
     var fecha = new Date();
     var mes = fecha.getMonth() + 1;
     var dia = fecha.getDate();
@@ -5118,95 +5113,109 @@ __webpack_require__.r(__webpack_exports__);
         }
       });
     },
-    cargarAlmacenes: function cargarAlmacenes(id) {
+    cargarPermisosUser: function cargarPermisosUser() {
       var _this2 = this;
+
+      axios.get("api/cargarPermisosUser/servicio/".concat(this.emailuser)).then(function (res) {
+        if (res.data[0]) {
+          _this2.permiso_crear = res.data[0].crear;
+          _this2.permiso_editar = res.data[0].editar;
+          _this2.permiso_eliminar = res.data[0].eliminar;
+          _this2.crear_utilidad_os = res.data[0].crear_utilidad_os;
+        } else {
+          console.log("No se encontro registros");
+        }
+      });
+    },
+    cargarAlmacenes: function cargarAlmacenes(id) {
+      var _this3 = this;
 
       axios.get("api/almacenesxingenio/".concat(id)).then(function (res) {
         if (res.data) {
-          _this2.Almacenes = res.data;
+          _this3.Almacenes = res.data;
         } else {
           console.log("No se encontro registros");
         }
       });
     },
     cargarServiciosOrden: function cargarServiciosOrden(id) {
-      var _this3 = this;
+      var _this4 = this;
 
       axios.get("api/cargarServiciosOrden/".concat(id)).then(function (res) {
         if (res.data) {
-          _this3.Servicios = res.data;
+          _this4.Servicios = res.data;
         } else {
           console.log("No se encontro registros");
         }
       });
     },
     cargarLineasProd: function cargarLineasProd() {
-      var _this4 = this;
+      var _this5 = this;
 
       var url = "api/LineasProd";
       axios.get(url).then(function (res) {
         if (res.data[0]) {
-          _this4.LineasProductos = res.data;
+          _this5.LineasProductos = res.data;
         } else {
           console.log("No se encontro registros");
         }
       });
     },
     cargarTiposServicios: function cargarTiposServicios() {
-      var _this5 = this;
+      var _this6 = this;
 
       var url = "api/tiposserv";
       axios.get(url).then(function (res) {
         if (res.data[0]) {
-          _this5.TiposServicios = res.data;
+          _this6.TiposServicios = res.data;
         } else {
           console.log("No se encontro registros");
         }
       });
     },
     cargarEstadosPago: function cargarEstadosPago() {
-      var _this6 = this;
+      var _this7 = this;
 
       var url = "api/estpagos";
       axios.get(url).then(function (res) {
         if (res.data[0]) {
-          _this6.EstadosPago = res.data;
+          _this7.EstadosPago = res.data;
         } else {
           console.log("No se encontro registros");
         }
       });
     },
     cargarModosPago: function cargarModosPago() {
-      var _this7 = this;
+      var _this8 = this;
 
       var url = "api/metpagos";
       axios.get(url).then(function (res) {
         if (res.data[0]) {
-          _this7.ModosPago = res.data;
+          _this8.ModosPago = res.data;
         } else {
           console.log("No se encontro registros");
         }
       });
     },
     cargaringenios: function cargaringenios() {
-      var _this8 = this;
+      var _this9 = this;
 
       var url = "api/ingenios";
       axios.get(url).then(function (res) {
         if (res.data[0]) {
-          _this8.Ingenios = res.data;
+          _this9.Ingenios = res.data;
         } else {
           console.log("No se encontro registros de Ingenios");
         }
       });
     },
     cargaUnidades: function cargaUnidades() {
-      var _this9 = this;
+      var _this10 = this;
 
       var url = "api/unidades";
       axios.get(url).then(function (res) {
         if (res.data[0]) {
-          _this9.Unidades = res.data;
+          _this10.Unidades = res.data;
         } else {
           console.log("No se encontro registros de Unidades");
         }
@@ -5216,24 +5225,24 @@ __webpack_require__.r(__webpack_exports__);
       this.Servicio.tipo_servicio = event.target.options[event.target.options.selectedIndex].text;
     },
     cargarClientes: function cargarClientes() {
-      var _this10 = this;
+      var _this11 = this;
 
       axios.get("api/clientes/".concat(this.orden.cliente), '0').then(function (res) {
         if (res.data[0]) {
-          _this10.Clientesb = res.data;
-          _this10.ocultar = "mostrar";
+          _this11.Clientesb = res.data;
+          _this11.ocultar = "mostrar";
         } else {
           console.log("No se encontro registros");
         }
       });
     },
     cargaTarifarios: function cargaTarifarios() {
-      var _this11 = this;
+      var _this12 = this;
 
       var url = "api/tarifarios";
       axios.get(url).then(function (res) {
         if (res.data[0].id) {
-          _this11.Tarifarios = res.data;
+          _this12.Tarifarios = res.data;
         } else {
           console.log("No se encontro registros");
         }
@@ -5256,7 +5265,8 @@ __webpack_require__.r(__webpack_exports__);
       this.ocultar = "hidden";
     },
     cargarServicio: function cargarServicio(Servicio) {
-      if (Servicio.conductor == "" || Servicio.placa_unidad == "" || Servicio.placa_carretera == "" || Servicio.guia_transportista == "" || Servicio.unidad == 0 || Servicio.lineas_productos_id == 0) {
+      //this.Servicios.push(Servicio);
+      if (Servicio.conductor == "" || Servicio.placa_unidad == "" || Servicio.placa_carretera == "" || Servicio.guia_transportista == "") {
         this.textomensajemodal = "Por favor, Complete todos los campos";
         this.mensajemodal = "mostrar";
         console.log(Servicio.conductor + " " + Servicio.placa_unidad + " " + Servicio.placa_carretera + " " + Servicio.guia_transportista + " " + Servicio.unidad + " " + Servicio.lineas_productos_id);
@@ -5307,6 +5317,8 @@ __webpack_require__.r(__webpack_exports__);
       this.botonmodal = false; //this.Servicio= {id:0,empresa_transporte:"",conductor:"",placa_unidad:"",placa_carretera:"",guia_transportista:"",almacen:"",cantidad:1,unidad:"",costo_unitario_estiba:0,costo_operativo_extra_estiba:0,costo_flat_estiba:0,costo_total_servicio:0,costo_extra_estiba:0,precio_extra_estiba:0,precio_servicio:0,precio_total_servicio:0,utilidad:0,igv:0,fecha_servicio:null,fecha_pago:null,fecha_liquidacion:null,facturado:0,num_factura:"",lineas_productos_id:null,cliente_id:null,tipo_servicio_id:null, ordenes_servicios_id:0, observaciones:""};
     },
     verServicio: function verServicio(id) {
+      this.textomensajemodal = "";
+      this.mensajemodal = "hidden";
       this.Servicio = this.Servicios[id];
       this.botonmodal = true;
       this.calcularsubtotal();
@@ -5319,25 +5331,25 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     guardar: function guardar(orden) {
-      var _this12 = this;
+      var _this13 = this;
 
       if (this.editmodo == false) {
         axios.post("/api/ordenes", this.orden).then(function (res) {
-          _this12.Ordenes.push(orden); //GUARDAR LOS SERVICIOS
+          _this13.Ordenes.push(orden); //GUARDAR LOS SERVICIOS
 
 
-          console.log(_this12.Servicios);
+          console.log(_this13.Servicios);
 
-          for (var i in _this12.Servicios) {
-            _this12.Servicios[i].ordenes_servicios_id = res.data.id;
-            console.log(_this12.Servicios[i]);
-            axios.post("/api/servicios", _this12.Servicios[i]).then(function (res) {});
+          for (var i in _this13.Servicios) {
+            _this13.Servicios[i].ordenes_servicios_id = res.data.id;
+            console.log(_this13.Servicios[i]);
+            axios.post("/api/servicios", _this13.Servicios[i]).then(function (res) {});
           }
 
-          _this12.textomensaje = "Se ha creado Exitosamente";
-          _this12.mensaje = "mostrar";
+          _this13.textomensaje = "Se ha creado Exitosamente";
+          _this13.mensaje = "mostrar";
 
-          _this12.limpiarFormulario(0);
+          _this13.limpiarFormulario(0);
         });
       } else {
         /*axios.put(`/api/servicios/${this.Servicio.id}`, Servicio)
@@ -5350,30 +5362,45 @@ __webpack_require__.r(__webpack_exports__);
         });*/
       }
     },
+    editarservicio: function editarservicio(Servicio) {
+      var _this14 = this;
+
+      axios.put("/api/servicios/".concat(Servicio.id), Servicio).then(function (res) {
+        var index = _this14.Servicios.findIndex(function (item) {
+          return item.id === Servicio.id;
+        });
+
+        _this14.Servicio[index] = res.data;
+        _this14.textomensajemodal = "Se ha actualizado Exitosamente";
+        _this14.mensajemodal = "mostrar";
+
+        _this14.getKeeps();
+      });
+    },
     eliminar: function eliminar(orden, index) {
-      var _this13 = this;
+      var _this15 = this;
 
       var confirmacion = confirm("Eliminar la orden numero:  ".concat(orden.id));
 
       if (confirmacion) {
         axios["delete"]("/api/ordenes/".concat(orden.id)).then(function () {
-          _this13.Ordenes.splice(index, 1);
+          _this15.Ordenes.splice(index, 1);
 
-          _this13.textomensaje = "Se ha eliminado Exitosamente";
-          _this13.mensaje = "mostrar";
+          _this15.textomensaje = "Se ha eliminado Exitosamente";
+          _this15.mensaje = "mostrar";
         });
       }
     },
     guardarCliente: function guardarCliente(cliente) {
-      var _this14 = this;
+      var _this16 = this;
 
       axios.post("/api/clientes", this.cliente).then(function (res) {
-        _this14.Clientesb.push(cliente);
+        _this16.Clientesb.push(cliente);
 
-        _this14.textomensajecli = "Se ha creado Exitosamente";
-        _this14.mensajecli = "mostrar";
+        _this16.textomensajecli = "Se ha creado Exitosamente";
+        _this16.mensajecli = "mostrar";
 
-        _this14.limpiarFrmCliente(1);
+        _this16.limpiarFrmCliente(1);
       });
     },
     limpiarFormulario: function limpiarFormulario(org) {
@@ -5441,6 +5468,9 @@ __webpack_require__.r(__webpack_exports__);
         this.textomensajecli = "";
         this.mensajecli = "hidden";
       }
+    },
+    limpiarFrmUtilidad: function limpiarFrmUtilidad() {
+      this.Servicio.utilidad = 0;
     }
   },
   mounted: function mounted() {
@@ -5562,6 +5592,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['user'],
   data: function data() {
@@ -5574,11 +5612,22 @@ __webpack_require__.r(__webpack_exports__);
         apellidos: "",
         numcuenta: "",
         cci: "",
-        banco: ""
+        banco: "",
+        usuario_id: null
       },
       editmodo: false,
       mensaje: "hidden",
       textomensaje: "",
+      usuarios: [],
+      usuario: {
+        id: 0,
+        name: "",
+        email: "",
+        rol_id: 0,
+        rol: "",
+        password: "",
+        reppassword: ""
+      },
       emailuser: this.user.email,
       permiso_crear: 0,
       permiso_editar: 0,
@@ -5588,6 +5637,7 @@ __webpack_require__.r(__webpack_exports__);
   created: function created() {
     this.cargarPermisosUser();
     this.getKeeps();
+    this.cargarUsuarios();
   },
   methods: {
     getKeeps: function getKeeps() {
@@ -5602,14 +5652,26 @@ __webpack_require__.r(__webpack_exports__);
         }
       });
     },
-    cargarPermisosUser: function cargarPermisosUser() {
+    cargarUsuarios: function cargarUsuarios() {
       var _this2 = this;
+
+      var url = "api/usuarios";
+      axios.get(url).then(function (res) {
+        if (res.data[0].id) {
+          _this2.usuarios = res.data;
+        } else {
+          console.log("No se encontro registros");
+        }
+      });
+    },
+    cargarPermisosUser: function cargarPermisosUser() {
+      var _this3 = this;
 
       axios.get("api/cargarPermisosUser/supervisores/".concat(this.emailuser)).then(function (res) {
         if (res.data[0]) {
-          _this2.permiso_crear = res.data[0].crear;
-          _this2.permiso_editar = res.data[0].editar;
-          _this2.permiso_eliminar = res.data[0].eliminar;
+          _this3.permiso_crear = res.data[0].crear;
+          _this3.permiso_editar = res.data[0].editar;
+          _this3.permiso_eliminar = res.data[0].eliminar;
         } else {
           console.log("No se encontro registros");
         }
@@ -5620,7 +5682,7 @@ __webpack_require__.r(__webpack_exports__);
       this.supervisor = this.supervisores[id];
     },
     guardar: function guardar(supervisor) {
-      var _this3 = this;
+      var _this4 = this;
 
       if (supervisor.dni.length > 8) {
         alert('DNI invalido');
@@ -5633,21 +5695,21 @@ __webpack_require__.r(__webpack_exports__);
             axios.post("/api/supervisores", this.supervisor).then(function (res) {
               console.log(res.data);
 
-              _this3.supervisores.push(supervisor);
+              _this4.supervisores.push(supervisor);
 
-              _this3.textomensaje = "Se ha creado Exitosamente";
-              _this3.mensaje = "mostrar";
+              _this4.textomensaje = "Se ha creado Exitosamente";
+              _this4.mensaje = "mostrar";
             });
           }
         } else {
           axios.put("/api/supervisores/".concat(this.supervisor.id), supervisor).then(function (res) {
-            var index = _this3.supervisores.findIndex(function (item) {
+            var index = _this4.supervisores.findIndex(function (item) {
               return item.id === supervisor.id;
             });
 
-            _this3.supervisor[index] = res.data;
-            _this3.textomensaje = "Se ha actualizado Exitosamente";
-            _this3.mensaje = "mostrar";
+            _this4.supervisor[index] = res.data;
+            _this4.textomensaje = "Se ha actualizado Exitosamente";
+            _this4.mensaje = "mostrar";
           });
         }
 
@@ -5655,16 +5717,16 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     eliminar: function eliminar(supervisor, index) {
-      var _this4 = this;
+      var _this5 = this;
 
       var confirmacion = confirm("Eliminar el supervisor ".concat(supervisor.nombres + " " + supervisor.apellidos));
 
       if (confirmacion) {
         axios["delete"]("/api/supervisores/".concat(supervisor.id)).then(function () {
-          _this4.supervisores.splice(index, 1);
+          _this5.supervisores.splice(index, 1);
 
-          _this4.textomensaje = "Se ha eliminado Exitosamente";
-          _this4.mensaje = "mostrar";
+          _this5.textomensaje = "Se ha eliminado Exitosamente";
+          _this5.mensaje = "mostrar";
         });
       }
     },
@@ -46516,67 +46578,33 @@ var render = function() {
   return _c("div", { staticClass: "container-fluid" }, [
     _vm._m(0),
     _vm._v(" "),
-    _c("div", { staticClass: "row" }, [
-      _c("div", { staticClass: "col-md-3 col-sm-4 col-xs-12 mb-3" }, [
-        _c(
+    _c(
+      "div",
+      { staticClass: "row" },
+      _vm._l(_vm.subnemu, function(item, index) {
+        return _c(
           "div",
-          {
-            staticClass: "card shadow",
-            on: {
-              click: function($event) {
-                return _vm.exportar(0)
-              }
-            }
-          },
-          [_vm._m(1)]
+          { key: index, staticClass: "col-md-3 col-sm-4 col-xs-12 mb-3" },
+          [
+            _c("div", { staticClass: "card shadow" }, [
+              _c("div", { staticClass: "card-body acc_directo" }, [
+                _c(
+                  "a",
+                  { staticClass: "nav-link", attrs: { href: "/" + item.url } },
+                  [
+                    _c("i", { class: item.icono }),
+                    _c("br"),
+                    _vm._v(" "),
+                    _c("span", [_vm._v(" " + _vm._s(item.nombre))])
+                  ]
+                )
+              ])
+            ])
+          ]
         )
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "col-md-3 col-sm-4 col-xs-12 mb-3" }, [
-        _c(
-          "div",
-          {
-            staticClass: "card shadow",
-            on: {
-              click: function($event) {
-                return _vm.exportar(1)
-              }
-            }
-          },
-          [_vm._m(2)]
-        )
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "col-md-3 col-sm-4 col-xs-12 mb-3" }, [
-        _c(
-          "div",
-          {
-            staticClass: "card shadow",
-            on: {
-              click: function($event) {
-                return _vm.exportar(2)
-              }
-            }
-          },
-          [_vm._m(3)]
-        )
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "col-md-3 col-sm-4 col-xs-12 mb-3" }, [
-        _c(
-          "div",
-          {
-            staticClass: "card shadow",
-            on: {
-              click: function($event) {
-                return _vm.exportar(3)
-              }
-            }
-          },
-          [_vm._m(4)]
-        )
-      ])
-    ]),
+      }),
+      0
+    ),
     _vm._v(" "),
     _c("br"),
     _c("br")
@@ -46590,58 +46618,6 @@ var staticRenderFns = [
     return _c("div", { staticClass: "row" }, [
       _c("div", { staticClass: "col-md-12 col-sm-12 col-xs-12" }, [
         _c("h3", { staticClass: "text-dark mb-4" }, [_vm._v("Reportes")])
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "card-body acc_directo" }, [
-      _c("a", { staticClass: "nav-link", attrs: { href: "#" } }, [
-        _c("i", { staticClass: "far fa-address-card" }),
-        _c("br"),
-        _vm._v(" "),
-        _c("span", [_vm._v("Lista de Clientes")])
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "card-body acc_directo" }, [
-      _c("a", { staticClass: "nav-link", attrs: { href: "#" } }, [
-        _c("i", { staticClass: "fas fa-clipboard-list" }),
-        _c("br"),
-        _vm._v(" "),
-        _c("span", [_vm._v("Lista de Supervisores")])
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "card-body acc_directo" }, [
-      _c("a", { staticClass: "nav-link", attrs: { href: "#" } }, [
-        _c("i", { staticClass: "fas fa-user" }),
-        _c("br"),
-        _vm._v(" "),
-        _c("span", [_vm._v("Lista de Usuarios")])
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "card-body acc_directo" }, [
-      _c("a", { staticClass: "nav-link", attrs: { href: "#" } }, [
-        _c("i", { staticClass: "fas fa-users" }),
-        _c("br"),
-        _vm._v(" "),
-        _c("span", [_vm._v("Lista de Roles")])
       ])
     ])
   }
@@ -46711,11 +46687,6 @@ var render = function() {
                       _c("td", [_vm._v(_vm._s(item.nombre))]),
                       _vm._v(" "),
                       _c("td", [
-                        _vm._v(
-                          "\n                                " +
-                            _vm._s(_vm.permisos.editar) +
-                            "\n                                "
-                        ),
                         _vm.permiso_editar == 1
                           ? _c(
                               "button",
@@ -46802,7 +46773,7 @@ var render = function() {
           },
           [
             _c("div", { staticClass: "form-row" }, [
-              _c("div", { staticClass: "form-group col-md-12" }, [
+              _c("div", { staticClass: "form-group col-md-8" }, [
                 _c("input", {
                   directives: [
                     {
@@ -46853,6 +46824,74 @@ var render = function() {
                     ]
                   }
                 })
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "form-group col-md-4" }, [
+                _c("label", { attrs: { for: "nombre" } }, [
+                  _vm._v("Permisos Especiales")
+                ]),
+                _c("br"),
+                _vm._v(" "),
+                _c("div", { staticClass: "form-check form-check-inline" }, [
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.Rol.crear_utilidad_os,
+                        expression: "Rol.crear_utilidad_os"
+                      }
+                    ],
+                    staticClass: "form-check-input checkbox",
+                    attrs: {
+                      type: "checkbox",
+                      id: "crear_utilidad_os",
+                      value: "1"
+                    },
+                    domProps: {
+                      checked: Array.isArray(_vm.Rol.crear_utilidad_os)
+                        ? _vm._i(_vm.Rol.crear_utilidad_os, "1") > -1
+                        : _vm.Rol.crear_utilidad_os
+                    },
+                    on: {
+                      change: function($event) {
+                        var $$a = _vm.Rol.crear_utilidad_os,
+                          $$el = $event.target,
+                          $$c = $$el.checked ? true : false
+                        if (Array.isArray($$a)) {
+                          var $$v = "1",
+                            $$i = _vm._i($$a, $$v)
+                          if ($$el.checked) {
+                            $$i < 0 &&
+                              _vm.$set(
+                                _vm.Rol,
+                                "crear_utilidad_os",
+                                $$a.concat([$$v])
+                              )
+                          } else {
+                            $$i > -1 &&
+                              _vm.$set(
+                                _vm.Rol,
+                                "crear_utilidad_os",
+                                $$a.slice(0, $$i).concat($$a.slice($$i + 1))
+                              )
+                          }
+                        } else {
+                          _vm.$set(_vm.Rol, "crear_utilidad_os", $$c)
+                        }
+                      }
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c(
+                    "label",
+                    {
+                      staticClass: "form-check-label",
+                      attrs: { for: "crear_utilidad_os" }
+                    },
+                    [_vm._v("Ingresar Utilidad Orden de Servicio")]
+                  )
+                ])
               ])
             ]),
             _vm._v(" "),
@@ -47043,33 +47082,37 @@ var render = function() {
                       ),
                       _vm._v(" "),
                       _c("td", [
-                        _c(
-                          "button",
-                          {
-                            staticClass: "btn btn-warning",
-                            attrs: { type: "button", title: "Editar" },
-                            on: {
-                              click: function($event) {
-                                return _vm.editar(index)
-                              }
-                            }
-                          },
-                          [_c("i", { staticClass: "far fa-edit" })]
-                        ),
+                        _vm.permiso_editar == 1
+                          ? _c(
+                              "button",
+                              {
+                                staticClass: "btn btn-warning",
+                                attrs: { type: "button", title: "Editar" },
+                                on: {
+                                  click: function($event) {
+                                    return _vm.editar(index)
+                                  }
+                                }
+                              },
+                              [_c("i", { staticClass: "far fa-edit" })]
+                            )
+                          : _vm._e(),
                         _vm._v(" "),
-                        _c(
-                          "button",
-                          {
-                            staticClass: "btn btn-danger",
-                            attrs: { type: "button", title: "Eliminar" },
-                            on: {
-                              click: function($event) {
-                                return _vm.eliminar(item, index)
-                              }
-                            }
-                          },
-                          [_c("i", { staticClass: "far fa-trash-alt" })]
-                        )
+                        _vm.permiso_eliminar == 1
+                          ? _c(
+                              "button",
+                              {
+                                staticClass: "btn btn-danger",
+                                attrs: { type: "button", title: "Eliminar" },
+                                on: {
+                                  click: function($event) {
+                                    return _vm.eliminar(item, index)
+                                  }
+                                }
+                              },
+                              [_c("i", { staticClass: "far fa-trash-alt" })]
+                            )
+                          : _vm._e()
                       ])
                     ])
                   }),
@@ -48051,45 +48094,6 @@ var render = function() {
                   _vm._v(" "),
                   _c("div", { staticClass: "form-row" }, [
                     _c("div", { staticClass: "form-group col-md-4" }, [
-                      _c("label", { attrs: { for: "utilidad" } }, [
-                        _vm._v("Utilidad")
-                      ]),
-                      _vm._v(" "),
-                      _c("input", {
-                        directives: [
-                          {
-                            name: "model",
-                            rawName: "v-model",
-                            value: _vm.Servicio.utilidad,
-                            expression: "Servicio.utilidad"
-                          }
-                        ],
-                        staticClass: "form-control",
-                        attrs: {
-                          type: "number",
-                          id: "utilidad",
-                          step: "0.1",
-                          min: "1",
-                          value: "0.00",
-                          required: ""
-                        },
-                        domProps: { value: _vm.Servicio.utilidad },
-                        on: {
-                          input: function($event) {
-                            if ($event.target.composing) {
-                              return
-                            }
-                            _vm.$set(
-                              _vm.Servicio,
-                              "utilidad",
-                              $event.target.value
-                            )
-                          }
-                        }
-                      })
-                    ]),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "form-group col-md-4" }, [
                       _c("label", { attrs: { for: "igv" } }, [_vm._v("IGV")]),
                       _vm._v(" "),
                       _c("input", {
@@ -48158,10 +48162,8 @@ var render = function() {
                           }
                         }
                       })
-                    ])
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "form-row" }, [
+                    ]),
+                    _vm._v(" "),
                     _c("div", { staticClass: "form-group col-md-4" }, [
                       _c("label", { attrs: { for: "precio_total_servicio" } }, [
                         _vm._v("Precio Total Servicio")
@@ -48197,8 +48199,10 @@ var render = function() {
                           }
                         }
                       })
-                    ]),
-                    _vm._v(" "),
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "form-row" }, [
                     _c("div", { staticClass: "form-group col-md-8" }, [
                       _c("label", { attrs: { for: "observaciones" } }, [
                         _vm._v("Observaciones")
@@ -48228,22 +48232,81 @@ var render = function() {
                           }
                         }
                       })
-                    ])
+                    ]),
+                    _vm._v(" "),
+                    _vm.crear_utilidad_os == 1
+                      ? _c("div", { staticClass: "form-group col-md-4" }, [
+                          _c("label", { attrs: { for: "utilidad" } }, [
+                            _vm._v("Utilidad")
+                          ]),
+                          _vm._v(" "),
+                          _c("input", {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.Servicio.utilidad,
+                                expression: "Servicio.utilidad"
+                              }
+                            ],
+                            staticClass: "form-control",
+                            attrs: {
+                              type: "number",
+                              id: "utilidad",
+                              step: "0.1",
+                              min: "1",
+                              value: "0.00",
+                              required: ""
+                            },
+                            domProps: { value: _vm.Servicio.utilidad },
+                            on: {
+                              input: function($event) {
+                                if ($event.target.composing) {
+                                  return
+                                }
+                                _vm.$set(
+                                  _vm.Servicio,
+                                  "utilidad",
+                                  $event.target.value
+                                )
+                              }
+                            }
+                          })
+                        ])
+                      : _vm._e()
                   ]),
                   _vm._v(" "),
-                  _c(
-                    "button",
-                    {
-                      staticClass: "btn btn-primary",
-                      attrs: { type: "button", disabled: _vm.botonmodal },
-                      on: {
-                        click: function($event) {
-                          return _vm.cargarServicio(_vm.Servicio)
-                        }
-                      }
-                    },
-                    [_vm._v("Agregar")]
-                  ),
+                  _vm.crear_utilidad_os == 1
+                    ? _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-primary",
+                          attrs: { type: "button" },
+                          on: {
+                            click: function($event) {
+                              return _vm.editarservicio(_vm.Servicio)
+                            }
+                          }
+                        },
+                        [_vm._v("Guardar")]
+                      )
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _vm.crear_utilidad_os == 0
+                    ? _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-primary",
+                          attrs: { type: "button", disabled: _vm.botonmodal },
+                          on: {
+                            click: function($event) {
+                              return _vm.cargarServicio(_vm.Servicio)
+                            }
+                          }
+                        },
+                        [_vm._v("Agregar")]
+                      )
+                    : _vm._e(),
                   _vm._v(" "),
                   _c(
                     "button",
@@ -49061,6 +49124,57 @@ var render = function() {
                     ]
                   }
                 })
+              ])
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "form-row" }, [
+              _c("div", { staticClass: "form-group col-md-4" }, [
+                _c("label", { attrs: { for: "supervisores_id" } }, [
+                  _vm._v("Usuario")
+                ]),
+                _vm._v(" "),
+                _c(
+                  "select",
+                  {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.supervisor.usuario_id,
+                        expression: "supervisor.usuario_id"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    attrs: { id: "usuario_id", required: "" },
+                    on: {
+                      change: function($event) {
+                        var $$selectedVal = Array.prototype.filter
+                          .call($event.target.options, function(o) {
+                            return o.selected
+                          })
+                          .map(function(o) {
+                            var val = "_value" in o ? o._value : o.value
+                            return val
+                          })
+                        _vm.$set(
+                          _vm.supervisor,
+                          "usuario_id",
+                          $event.target.multiple
+                            ? $$selectedVal
+                            : $$selectedVal[0]
+                        )
+                      }
+                    }
+                  },
+                  _vm._l(_vm.usuarios, function(item, index) {
+                    return _c(
+                      "option",
+                      { key: index, domProps: { value: item.id } },
+                      [_vm._v(_vm._s(item.name))]
+                    )
+                  }),
+                  0
+                )
               ])
             ]),
             _vm._v(" "),

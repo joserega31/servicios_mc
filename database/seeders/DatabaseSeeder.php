@@ -132,6 +132,35 @@ class DatabaseSeeder extends Seeder
             'orden' => 11,
         ]);
 
+        DB::table('sub_menus')->insert([
+            'menu_id' => 3,
+            'nombre' => 'Lista de Clientes',
+            'icono' => 'far fa-address-card',
+            'url' => 'exportarlstcli',
+            'orden' => 1,
+        ]);
+        DB::table('sub_menus')->insert([
+            'menu_id' => 3,
+            'nombre' => 'Lista de Supervisores',
+            'icono' => 'fas fa-clipboard-list',
+            'url' => 'exportarlstsup',
+            'orden' => 2,
+        ]);
+        DB::table('sub_menus')->insert([
+            'menu_id' => 3,
+            'nombre' => 'Lista de Usuarios',
+            'icono' => 'fas fa-user',
+            'url' => 'exportarlstuser',
+            'orden' => 3,
+        ]);
+        DB::table('sub_menus')->insert([
+            'menu_id' => 3,
+            'nombre' => 'Lista de Roles',
+            'icono' => 'fas fa-users',
+            'url' => 'exportarlstroles',
+            'orden' => 4,
+        ]);
+
         //Configuracion
         DB::table('sub_menus')->insert([
             'menu_id' => 4,
@@ -158,9 +187,11 @@ class DatabaseSeeder extends Seeder
         //Roles
         DB::table('roles')->insert([
             'nombre' => 'Administrador',
+            'crear_utilidad_os' => 1
         ]);
         DB::table('roles')->insert([
             'nombre' => 'Supervisor',
+            'crear_utilidad_os' => 0
         ]);
 
         //USUARIO
@@ -180,6 +211,14 @@ class DatabaseSeeder extends Seeder
         ]);
 
         //ACCESOS PERFIL ADMINISTRADOR
+        DB::table('funcion_roles')->insert([
+            'rol_id' => '1',
+            'menu_id' => '1',
+            'sub_menu_id' => '1',
+            'crear' => '1',
+            'editar' => '1',
+            'eliminar' => '1'
+        ]);
         DB::table('funcion_roles')->insert([
             'rol_id' => '1',
             'menu_id' => '2',
@@ -271,7 +310,7 @@ class DatabaseSeeder extends Seeder
         DB::table('funcion_roles')->insert([
             'rol_id' => '1',
             'menu_id' => '4',
-            'sub_menu_id' => '11',
+            'sub_menu_id' => '17',
             'crear' => '1',
             'editar' => '1',
             'eliminar' => '1'
@@ -279,7 +318,7 @@ class DatabaseSeeder extends Seeder
         DB::table('funcion_roles')->insert([
             'rol_id' => '1',
             'menu_id' => '4',
-            'sub_menu_id' => '12',
+            'sub_menu_id' => '18',
             'crear' => '1',
             'editar' => '1',
             'eliminar' => '1'
@@ -287,12 +326,44 @@ class DatabaseSeeder extends Seeder
         DB::table('funcion_roles')->insert([
             'rol_id' => '1',
             'menu_id' => '4',
+            'sub_menu_id' => '19',
+            'crear' => '1',
+            'editar' => '1',
+            'eliminar' => '1'
+        ]);
+        //ACCESO A REPORTES
+        DB::table('funcion_roles')->insert([
+            'rol_id' => '1',
+            'menu_id' => '3',
             'sub_menu_id' => '13',
             'crear' => '1',
             'editar' => '1',
             'eliminar' => '1'
         ]);
-
+        DB::table('funcion_roles')->insert([
+            'rol_id' => '1',
+            'menu_id' => '3',
+            'sub_menu_id' => '14',
+            'crear' => '1',
+            'editar' => '1',
+            'eliminar' => '1'
+        ]);
+        DB::table('funcion_roles')->insert([
+            'rol_id' => '1',
+            'menu_id' => '3',
+            'sub_menu_id' => '15',
+            'crear' => '1',
+            'editar' => '1',
+            'eliminar' => '1'
+        ]);
+        DB::table('funcion_roles')->insert([
+            'rol_id' => '1',
+            'menu_id' => '3',
+            'sub_menu_id' => '16',
+            'crear' => '1',
+            'editar' => '1',
+            'eliminar' => '1'
+        ]);
         //TIPOS DE TRANSPORTE
         DB::table('tipo_servicios')->insert([
             'nombre' => 'CARGA'

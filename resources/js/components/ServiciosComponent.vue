@@ -22,10 +22,10 @@
                             <td>{{ item.cliente }}</td>
                             <td class="text-left d-xl-flex flex-row justify-content-xl-start align-items-xl-end">{{ item.fecha }}</td>
                             <td>
-                                <button type="button" class="btn btn-warning" title="Editar" @click="editar(index)">
+                                <button type="button" class="btn btn-warning" title="Editar" @click="editar(index)"  v-if="permiso_editar==1">
                                     <i class="far fa-edit"></i>
                                 </button>
-                                <button type="button" class="btn btn-danger" title="Eliminar" @click="eliminar(item, index)">
+                                <button type="button" class="btn btn-danger" title="Eliminar" @click="eliminar(item, index)" v-if="permiso_eliminar==1">
                                     <i class="far fa-trash-alt"></i>
                                 </button>
                             </td>
@@ -238,10 +238,6 @@
                         </div>
                         <div class="form-row">
                             <div class="form-group col-md-4">
-                                <label for="utilidad">Utilidad</label>
-                                <input type="number" class="form-control" id="utilidad" step="0.1" min="1" value="0.00" required v-model="Servicio.utilidad">
-                            </div>
-                            <div class="form-group col-md-4">
                                 <label for="igv">IGV</label>
                                 <input type="number" class="form-control" id="igv" step="0.1" min="1" value="0.00" required v-model="Servicio.igv" readonly>
                             </div>
@@ -249,18 +245,23 @@
                                 <label for="Subtotal">Subtotal</label>
                                 <input type="number" class="form-control" id="Subtotal" value="0.00" v-model="Servicio.Subtotal" readonly>
                             </div>
-                        </div>  
-                        <div class="form-row">
                             <div class="form-group col-md-4">
                                 <label for="precio_total_servicio">Precio Total Servicio</label>
                                 <input type="number" class="form-control" id="precio_total_servicio" value="0.00" v-model="Servicio.precio_total_servicio" readonly>
                             </div>
+                        </div>  
+                        <div class="form-row">
                             <div class="form-group col-md-8">
                                 <label for="observaciones">Observaciones</label>
                                 <textarea class="form-control" v-model="Servicio.observaciones"></textarea>
                             </div>
+                            <div class="form-group col-md-4"  v-if="crear_utilidad_os==1">
+                                <label for="utilidad">Utilidad</label>
+                                <input type="number" class="form-control" id="utilidad" step="0.1" min="1" value="0.00" required v-model="Servicio.utilidad">
+                            </div>
                         </div>
-                        <button type="button" class="btn btn-primary" @click="cargarServicio(Servicio)" :disabled="botonmodal">Agregar</button>
+                        <button type="button" class="btn btn-primary" v-if="crear_utilidad_os==1" @click="editarservicio(Servicio)">Guardar</button>
+                        <button type="button" class="btn btn-primary" v-if="crear_utilidad_os==0" @click="cargarServicio(Servicio)" :disabled="botonmodal">Agregar</button>
                         <button type="reset" class="btn btn-default"  @click="limpiarFormulario(1)" :disabled="botonmodal">Limpiar</button>
                     </form>
                 </div>
@@ -306,9 +307,6 @@
         </div>
     </div>
 
-
-
-
 </div>   
 </template>
 
@@ -338,10 +336,17 @@ export default {
             mensaje: "hidden",
             textomensajemodal: "",
             mensajemodal: "hidden",
+            mensajeuti: "hidden", 
+            textomensajeuti: "",
             botonmodal:false,
             editmodo:false,
             textomensajecli:"",
             mensajecli: "hidden",
+            permiso_crear:0,
+            permiso_editar:0,
+            permiso_eliminar:0,
+            emailuser: this.user.email,
+            crear_utilidad_os:0
         };
     },
     created: function () {
@@ -353,6 +358,7 @@ export default {
         this.cargaUnidades();
         this.cargarModosPago();
         this.cargaTarifarios();
+        this.cargarPermisosUser();
 
         var fecha = new Date(); 
         var mes = fecha.getMonth()+1; 
@@ -373,6 +379,18 @@ export default {
         if (res.data[0]){
           this.Ordenes = res.data;
           this
+        }else{
+          console.log("No se encontro registros");
+        }
+      });
+    },
+    cargarPermisosUser: function () {
+      axios.get(`api/cargarPermisosUser/servicio/${this.emailuser}`).then((res) => {
+        if (res.data[0]){
+          this.permiso_crear = res.data[0].crear;
+          this.permiso_editar = res.data[0].editar;
+          this.permiso_eliminar = res.data[0].eliminar;
+          this.crear_utilidad_os = res.data[0].crear_utilidad_os;
         }else{
           console.log("No se encontro registros");
         }
@@ -496,7 +514,8 @@ export default {
         this.ocultar= "hidden";
     },
     cargarServicio: function(Servicio){
-        if (Servicio.conductor=="" || Servicio.placa_unidad=="" || Servicio.placa_carretera=="" || Servicio.guia_transportista=="" || Servicio.unidad==0 || Servicio.lineas_productos_id==0){
+        //this.Servicios.push(Servicio);
+        if (Servicio.conductor=="" || Servicio.placa_unidad=="" || Servicio.placa_carretera=="" || Servicio.guia_transportista==""){
             this.textomensajemodal= "Por favor, Complete todos los campos";
             this.mensajemodal="mostrar";
             console.log(Servicio.conductor + " " + Servicio.placa_unidad + " " + Servicio.placa_carretera + " " + Servicio.guia_transportista + " " + Servicio.unidad + " " + Servicio.lineas_productos_id);
@@ -519,6 +538,8 @@ export default {
         //this.Servicio= {id:0,empresa_transporte:"",conductor:"",placa_unidad:"",placa_carretera:"",guia_transportista:"",almacen:"",cantidad:1,unidad:"",costo_unitario_estiba:0,costo_operativo_extra_estiba:0,costo_flat_estiba:0,costo_total_servicio:0,costo_extra_estiba:0,precio_extra_estiba:0,precio_servicio:0,precio_total_servicio:0,utilidad:0,igv:0,fecha_servicio:null,fecha_pago:null,fecha_liquidacion:null,facturado:0,num_factura:"",lineas_productos_id:null,cliente_id:null,tipo_servicio_id:null, ordenes_servicios_id:0, observaciones:""};
     },
     verServicio:function(id){
+        this.textomensajemodal= "";
+        this.mensajemodal="hidden";
         this.Servicio= this.Servicios[id];
         this.botonmodal= true;
         this.calcularsubtotal();
@@ -557,6 +578,16 @@ export default {
             });*/
         }
         
+    },
+    editarservicio: function(Servicio){
+        axios.put(`/api/servicios/${Servicio.id}`, Servicio)
+            .then(res=>{
+            const index = this.Servicios.findIndex(item => item.id === Servicio.id);
+            this.Servicio[index] = res.data;
+            this.textomensajemodal= "Se ha actualizado Exitosamente";
+            this.mensajemodal="mostrar";
+            this.getKeeps();
+        });
     },
     eliminar: function(orden, index){
         const confirmacion = confirm(`Eliminar la orden numero:  ${orden.id}`);
@@ -597,7 +628,12 @@ export default {
             this.textomensajecli= "";
             this.mensajecli="hidden";
         }
+    },
+    limpiarFrmUtilidad:function(){
+        this.Servicio.utilidad= 0;
     }
+
+    
   },
   mounted() {
     console.log("Component mounted.");

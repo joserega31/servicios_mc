@@ -92,6 +92,14 @@
                                 <input type="text" class="form-control" id="banco" required  v-model="supervisor.banco" @input="supervisor.banco = $event.target.value.toUpperCase()">
                             </div>
                         </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-4">
+                                <label for="supervisores_id">Usuario</label>
+                                <select class="form-control" id="usuario_id" required  v-model="supervisor.usuario_id">
+                                    <option v-for="(item, index) in usuarios" :key="index" :value="item.id">{{ item.name}}</option>
+                                </select>
+                            </div>
+                        </div>
                         <button type="submit" class="btn btn-primary">Guardar</button>
                         <button type="buttom" class="btn btn-default" @click="limpiarFormulario(1)">Limpiar</button>
                     </form>
@@ -107,10 +115,12 @@ export default {
     data() {
         return {
             supervisores: [],
-            supervisor: { id: 0, dni: "", nombres: "", apellidos: "", numcuenta: "", cci: "", banco: ""},
+            supervisor: { id: 0, dni: "", nombres: "", apellidos: "", numcuenta: "", cci: "", banco: "", usuario_id:null},
             editmodo:false,
             mensaje:"hidden",
             textomensaje:"",
+            usuarios: [],
+            usuario: { id: 0, name: "", email: "", rol_id: 0, rol:"", password:"", reppassword:""},
             emailuser: this.user.email,
             permiso_crear:0,
             permiso_editar:0,
@@ -120,6 +130,7 @@ export default {
     created: function () {
         this.cargarPermisosUser();
         this.getKeeps();
+        this.cargarUsuarios();
     },
   methods: {
     getKeeps: function () {
@@ -127,6 +138,16 @@ export default {
       axios.get(url).then((res) => {
         if (res.data[0].id){
           this.supervisores = res.data;
+        }else{
+          console.log("No se encontro registros");
+        }
+      });
+    },
+    cargarUsuarios: function () {
+      var url = "api/usuarios";
+      axios.get(url).then((res) => {
+        if (res.data[0].id){
+          this.usuarios = res.data;
         }else{
           console.log("No se encontro registros");
         }
