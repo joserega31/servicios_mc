@@ -10,7 +10,7 @@
                 <div class="card shadow">
                     <div class="card-body acc_directo">
                         <a class="nav-link" :href="'/' + item.url">
-                            <i :class=item.icono></i><br>
+                            <i :class=item.icono></i><br> 
                             <span> {{ item.nombre }}</span>
                         </a>
                     </div>
