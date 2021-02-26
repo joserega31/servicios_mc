@@ -48,6 +48,7 @@ class DatabaseSeeder extends Seeder
             'nombre' => 'Orden de Servicio',
             'icono' => 'fas fa-hand-holding',
             'url' => 'servicio',
+            'parametros'  => 0,
             'orden' => 1,
         ]);
 
@@ -57,6 +58,7 @@ class DatabaseSeeder extends Seeder
             'nombre' => 'Clientes',
             'icono' => 'fa fa-user',
             'url' => 'clientes',
+            'parametros'  => 0,
             'orden' => 1,
         ]);
         DB::table('sub_menus')->insert([
@@ -64,6 +66,7 @@ class DatabaseSeeder extends Seeder
             'nombre' => 'Supervisores',
             'icono' => 'fas fa-user-tie',
             'url' => 'supervisores',
+            'parametros'  => 0,
             'orden' => 2,
         ]);
         DB::table('sub_menus')->insert([
@@ -71,6 +74,7 @@ class DatabaseSeeder extends Seeder
             'nombre' => 'Ingenios',
             'icono' => 'fa fa-flask',
             'url' => 'ingenios',
+            'parametros'  => 0,
             'orden' => 3,
         ]);
         DB::table('sub_menus')->insert([
@@ -78,6 +82,7 @@ class DatabaseSeeder extends Seeder
             'nombre' => 'Tarifarios',
             'icono' => 'far fa-calendar-alt',
             'url' => 'tarifarios',
+            'parametros'  => 0,
             'orden' => 4,
         ]);
         DB::table('sub_menus')->insert([
@@ -85,6 +90,7 @@ class DatabaseSeeder extends Seeder
             'nombre' => 'Lineas de Productos',
             'icono' => 'fas fa-shopping-basket',
             'url' => 'lineasprod',
+            'parametros'  => 0,
             'orden' => 5,
         ]);
         DB::table('sub_menus')->insert([
@@ -92,6 +98,7 @@ class DatabaseSeeder extends Seeder
             'nombre' => 'Modos de Pago',
             'icono' => 'fas fa-money-check-alt',
             'url' => 'metpagos',
+            'parametros'  => 0,
             'orden' => 6,
         ]);
         DB::table('sub_menus')->insert([
@@ -99,6 +106,7 @@ class DatabaseSeeder extends Seeder
             'nombre' => 'Estados de Pago',
             'icono' => 'fab fa-bitcoin',
             'url' => 'estpagos',
+            'parametros'  => 0,
             'orden' => 7,
         ]);
         DB::table('sub_menus')->insert([
@@ -106,6 +114,7 @@ class DatabaseSeeder extends Seeder
             'nombre' => 'Tipos de Servicios',
             'icono' => 'fas fa-hand-holding-heart',
             'url' => 'tiposserv',
+            'parametros'  => 0,
             'orden' => 8,
         ]);
         DB::table('sub_menus')->insert([
@@ -113,6 +122,7 @@ class DatabaseSeeder extends Seeder
             'nombre' => 'Designaciones',
             'icono' => 'far fa-calendar-alt',
             'url' => 'designaciones',
+            'parametros'  => 0,
             'orden' => 9,
         ]);
 
@@ -121,6 +131,7 @@ class DatabaseSeeder extends Seeder
             'nombre' => 'Almacenes',
             'icono' => 'fas fa-warehouse',
             'url' => 'almacenes',
+            'parametros'  => 0,
             'orden' => 10,
         ]);
 
@@ -129,6 +140,7 @@ class DatabaseSeeder extends Seeder
             'nombre' => 'Unidades',
             'icono' => 'fas fa-box-open',
             'url' => 'unidades',
+            'parametros'  => 0,
             'orden' => 11,
         ]);
 
@@ -137,6 +149,7 @@ class DatabaseSeeder extends Seeder
             'nombre' => 'Lista de Clientes',
             'icono' => 'far fa-address-card',
             'url' => 'exportarlstcli',
+            'parametros'  => 0,
             'orden' => 1,
         ]);
         DB::table('sub_menus')->insert([
@@ -144,6 +157,7 @@ class DatabaseSeeder extends Seeder
             'nombre' => 'Lista de Supervisores',
             'icono' => 'fas fa-clipboard-list',
             'url' => 'exportarlstsup',
+            'parametros'  => 0,
             'orden' => 2,
         ]);
         DB::table('sub_menus')->insert([
@@ -151,6 +165,7 @@ class DatabaseSeeder extends Seeder
             'nombre' => 'Lista de Usuarios',
             'icono' => 'fas fa-user',
             'url' => 'exportarlstuser',
+            'parametros'  => 0,
             'orden' => 3,
         ]);
         DB::table('sub_menus')->insert([
@@ -158,15 +173,25 @@ class DatabaseSeeder extends Seeder
             'nombre' => 'Lista de Roles',
             'icono' => 'fas fa-users',
             'url' => 'exportarlstroles',
+            'parametros'  => 0,
             'orden' => 4,
         ]);
 
+        DB::table('sub_menus')->insert([
+            'menu_id' => 3,
+            'nombre' => 'Reporte General',
+            'icono' => 'far fa-file-alt',
+            'url' => 'exreportegeneral',
+            'parametros'  => 1,
+            'orden' => 5,
+        ]);
         //Configuracion
         DB::table('sub_menus')->insert([
             'menu_id' => 4,
             'nombre' => 'Usuarios',
             'icono' => 'fa fa-user',
             'url' => 'usuarios',
+            'parametros'  => 0,
             'orden' => 1,
         ]);
         DB::table('sub_menus')->insert([
@@ -174,6 +199,7 @@ class DatabaseSeeder extends Seeder
             'nombre' => 'Roles',
             'icono' => 'fa fa-users',
             'url' => 'roles',
+            'parametros'  => 0,
             'orden' => 2,
         ]);
         DB::table('sub_menus')->insert([
@@ -181,6 +207,7 @@ class DatabaseSeeder extends Seeder
             'nombre' => 'Funciones del Rol',
             'icono' => 'fas fa-bars',
             'url' => 'funcionrol',
+            'parametros'  => 0,
             'orden' => 3,
         ]);
 
@@ -310,14 +337,6 @@ class DatabaseSeeder extends Seeder
         DB::table('funcion_roles')->insert([
             'rol_id' => '1',
             'menu_id' => '4',
-            'sub_menu_id' => '17',
-            'crear' => '1',
-            'editar' => '1',
-            'eliminar' => '1'
-        ]);
-        DB::table('funcion_roles')->insert([
-            'rol_id' => '1',
-            'menu_id' => '4',
             'sub_menu_id' => '18',
             'crear' => '1',
             'editar' => '1',
@@ -327,6 +346,14 @@ class DatabaseSeeder extends Seeder
             'rol_id' => '1',
             'menu_id' => '4',
             'sub_menu_id' => '19',
+            'crear' => '1',
+            'editar' => '1',
+            'eliminar' => '1'
+        ]);
+        DB::table('funcion_roles')->insert([
+            'rol_id' => '1',
+            'menu_id' => '4',
+            'sub_menu_id' => '20',
             'crear' => '1',
             'editar' => '1',
             'eliminar' => '1'
@@ -360,6 +387,14 @@ class DatabaseSeeder extends Seeder
             'rol_id' => '1',
             'menu_id' => '3',
             'sub_menu_id' => '16',
+            'crear' => '1',
+            'editar' => '1',
+            'eliminar' => '1'
+        ]);
+        DB::table('funcion_roles')->insert([
+            'rol_id' => '1',
+            'menu_id' => '3',
+            'sub_menu_id' => '17',
             'crear' => '1',
             'editar' => '1',
             'eliminar' => '1'
@@ -409,7 +444,7 @@ class DatabaseSeeder extends Seeder
             'ingenios_id' => '3',
         ]);
         DB::table('almacenes')->insert([
-            'nombre_almacen' => 'PUNTO BLANCO PIURA',
+            'nombre_almacen' => 'PUNTO BLANCO TUMBES',
             'ingenios_id' => '3',
         ]);
 

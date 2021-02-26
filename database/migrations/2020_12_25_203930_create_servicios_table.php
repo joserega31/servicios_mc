@@ -33,7 +33,7 @@ class CreateServiciosTable extends Migration
             $table->foreign('ordenes_servicios_id')->references('id')->on('ordenes_servicios');
             $table->integer('tipo_servicio_id')->unsigned();   
             $table->foreign('tipo_servicio_id')->references('id')->on('tipo_servicios');
-
+            $table->double('costo_total')->nullable();
             $table->timestamps();
         });
     }

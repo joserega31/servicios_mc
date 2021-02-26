@@ -191,21 +191,21 @@
                         <div class="form-row">
                             <div class="form-group col-md-4">
                                 <label for="conductor">Conductor</label>
-                                <input type="text" class="form-control" id="conductor" required  v-model="Servicio.conductor">
+                                <input type="text" class="form-control" id="conductor" required  v-model="Servicio.conductor" @input="Servicio.conductor = $event.target.value.toUpperCase()">
                             </div>
                             <div class="form-group col-md-4">
                                 <label for="placa_unidad">Placa Unidad</label>
-                                <input type="text" class="form-control" id="placa_unidad" required  v-model="Servicio.placa_unidad">
+                                <input type="text" class="form-control" id="placa_unidad" required  v-model="Servicio.placa_unidad" @input="Servicio.placa_unidad = $event.target.value.toUpperCase()">
                             </div>
                             <div class="form-group col-md-4">
                                 <label for="placa_carretera">Placa Carretera</label>
-                                <input type="text" class="form-control" id="placa_carretera" required  v-model="Servicio.placa_carretera">
+                                <input type="text" class="form-control" id="placa_carretera" required  v-model="Servicio.placa_carretera" @input="Servicio.placa_carretera = $event.target.value.toUpperCase()">
                             </div>
                         </div>
                         <div class="form-row">
                             <div class="form-group col-md-4">
                                 <label for="guia">Gu&iacute;a Transport&iacute;sta</label>
-                                <input type="text" class="form-control" id="guia" required  v-model="Servicio.guia_transportista">
+                                <input type="text" class="form-control" id="guia" required  v-model="Servicio.guia_transportista"  @input="Servicio.guia_transportista = $event.target.value.toUpperCase()">
                             </div>
                             <div class="form-group col-md-4">
                                 <label for="cantidad">Cantidad</label>
@@ -251,17 +251,21 @@
                             </div>
                         </div>  
                         <div class="form-row">
-                            <div class="form-group col-md-8">
+                            <div class="form-group col-md-12">
                                 <label for="observaciones">Observaciones</label>
-                                <textarea class="form-control" v-model="Servicio.observaciones"></textarea>
+                                <textarea class="form-control" v-model="Servicio.observaciones" @input="Servicio.observaciones = $event.target.value.toUpperCase()"></textarea>
                             </div>
-                            <div class="form-group col-md-4"  v-if="crear_utilidad_os==1">
-                                <label for="utilidad">Utilidad</label>
-                                <input type="number" class="form-control" id="utilidad" step="0.1" min="1" value="0.00" required v-model="Servicio.utilidad">
+                            <div class="form-group col-md-4"  v-if="crear_utilidad_os==1 && editmodo==true">
+                                <label for="costo_total">Costo Total</label>
+                                <input type="number" class="form-control" id="costo_total" step="0.1" min="1" value="0.00" required v-model="Servicio.costo_total"  @change="calcularGanancia()">
+                            </div>
+                            <div class="form-group col-md-4"  v-if="crear_utilidad_os==1 && editmodo==true">
+                                <label for="utilidad">Ganancia</label>
+                                <input type="number" class="form-control" id="utilidad" step="0.1" min="1" value="0.00" required v-model="Servicio.utilidad" readonly>
                             </div>
                         </div>
-                        <button type="button" class="btn btn-primary" v-if="crear_utilidad_os==1" @click="editarservicio(Servicio)">Guardar</button>
-                        <button type="button" class="btn btn-primary" v-if="crear_utilidad_os==0" @click="cargarServicio(Servicio)" :disabled="botonmodal">Agregar</button>
+                        <button type="button" class="btn btn-primary" v-if="crear_utilidad_os==1 && editmodo==true" @click="editarservicio(Servicio)">Guardar</button>
+                        <button type="button" class="btn btn-primary" v-if="crear_utilidad_os==0 || editmodo==false" @click="cargarServicio(Servicio)" :disabled="botonmodal">Agregar</button>
                         <button type="reset" class="btn btn-default"  @click="limpiarFormulario(1)" :disabled="botonmodal">Limpiar</button>
                     </form>
                 </div>
@@ -318,7 +322,7 @@ export default {
             Ordenes:[],
             orden: {id:0, fecha:null, cliente_id:0, igv:0, estatus:0, cliente:"", ingenio_id:0, estados_pago_id:0, modos_pagos_id:0, almacen_id:null},
             Servicios: [],
-            Servicio: {id:0,conductor:"",placa_unidad:"",placa_carretera:"",guia_transportista:"", cantidad:1,precio_servicio:0,precio_total_servicio:0,utilidad:0,igv:0,lineas_productos_id:null,tipo_servicio_id:null, ordenes_servicios_id:0, unidad_id:null, observaciones:"", Subtotal:0, tipo_servicio:""},
+            Servicio: {id:0,conductor:"",placa_unidad:"",placa_carretera:"",guia_transportista:"", cantidad:1,precio_servicio:0,precio_total_servicio:0,utilidad:0,igv:0,lineas_productos_id:null,tipo_servicio_id:null, ordenes_servicios_id:0, unidad_id:null, observaciones:"", Subtotal:0, tipo_servicio:"", costo_total:0},
             cliente: { id: 0, ruc: "", razon_social: "" },
             Clientesb: { id: 0, ruc: "", razon_social: "" },
             LineasProductos: [],
@@ -507,6 +511,9 @@ export default {
             this.Servicio.igv= Number(0).toFixed(2);
             this.Servicio.precio_total_servicio= Number(parseFloat(this.Servicio.Subtotal) + parseFloat(this.Servicio.igv)).toFixed(2);
         }
+    },
+    calcularGanancia: function (){
+        this.Servicio.utilidad= Number(parseFloat(this.Servicio.Subtotal) - parseFloat(this.Servicio.costo_total)).toFixed(2);
     },
     cargarIdClientes: function (id, cliente) {
         this.orden.cliente_id= id;

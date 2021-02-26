@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Exports\ClientesExport;
+use App\Exports\ReporteGeneral2Export;
+use App\Exports\ReporteGeneralExport;
 use App\Exports\RolesExport;
 use App\Exports\ServiciosExport;
 use App\Exports\SupervisoresExport;
@@ -107,6 +109,14 @@ class ReportesController extends Controller
     public function exportarlstroles() 
     {
         return Excel::download(new RolesExport, 'Lista_roles.xlsx');
+    }
+    public function exreportegeneral($fd, $fh, $ing_id, $ult) 
+    {
+        if ($ult==0){
+            return Excel::download(new ReporteGeneralExport($fd, $fh, $ing_id), 'Reporte_General.xlsx');
+        }else{
+            return Excel::download(new ReporteGeneral2Export($fd, $fh, $ing_id), 'Reporte_General.xlsx');
+        }
     }
     
 }

@@ -4426,18 +4426,66 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['user'],
   data: function data() {
     return {
       subnemu: [],
+      filtro: {
+        fecha_desde: null,
+        fecha_hasta: null,
+        ingenio_id: null
+      },
       mensaje: "hidden",
       textomensaje: "",
-      emailuser: this.user.email
+      emailuser: this.user.email,
+      Ingenios: [],
+      crear_utilidad_os: ""
     };
   },
   created: function created() {
     this.cargarSubmenu(3);
+    this.cargaringenios();
+    this.cargarPermisosUser();
+    var fecha = new Date();
+    var mes = fecha.getMonth() + 1;
+    var dia = fecha.getDate();
+    var ano = fecha.getFullYear();
+
+    if (dia < 10) {
+      dia = '0' + dia;
+    }
+
+    if (mes < 10) {
+      mes = '0' + mes;
+    }
+
+    this.filtro.fecha_desde = ano + "-" + mes + "-" + dia;
+    this.filtro.fecha_hasta = ano + "-" + mes + "-" + dia;
   },
   methods: {
     cargarSubmenu: function cargarSubmenu(id) {
@@ -4450,6 +4498,38 @@ __webpack_require__.r(__webpack_exports__);
           console.log("No se encontro registros");
         }
       });
+    },
+    cargarPermisosUser: function cargarPermisosUser() {
+      var _this2 = this;
+
+      axios.get("api/cargarPermisosUser/servicio/".concat(this.emailuser)).then(function (res) {
+        if (res.data[0]) {
+          _this2.crear_utilidad_os = res.data[0].crear_utilidad_os;
+        } else {
+          console.log("No se encontro registros");
+        }
+      });
+    },
+    cargaringenios: function cargaringenios() {
+      var _this3 = this;
+
+      var url = "api/ingenios";
+      axios.get(url).then(function (res) {
+        if (res.data[0]) {
+          _this3.Ingenios = res.data;
+        } else {
+          console.log("No se encontro registros de Ingenios");
+        }
+      });
+    },
+    cargarReporte: function cargarReporte(url, p) {
+      alert(this.crear_utilidad_os);
+
+      if (p == 1) {
+        window.open('api/' + url + '/' + this.filtro.fecha_desde + '/' + this.filtro.fecha_hasta + '/' + this.filtro.ingenio_id + '/' + this.crear_utilidad_os, '_blank');
+      } else {
+        window.open('api/' + url, '_blank');
+      }
     }
   },
   mounted: function mounted() {
@@ -4999,6 +5079,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['user'],
   data: function data() {
@@ -5034,7 +5118,8 @@ __webpack_require__.r(__webpack_exports__);
         unidad_id: null,
         observaciones: "",
         Subtotal: 0,
-        tipo_servicio: ""
+        tipo_servicio: "",
+        costo_total: 0
       },
       cliente: {
         id: 0,
@@ -5258,6 +5343,9 @@ __webpack_require__.r(__webpack_exports__);
         this.Servicio.igv = Number(0).toFixed(2);
         this.Servicio.precio_total_servicio = Number(parseFloat(this.Servicio.Subtotal) + parseFloat(this.Servicio.igv)).toFixed(2);
       }
+    },
+    calcularGanancia: function calcularGanancia() {
+      this.Servicio.utilidad = Number(parseFloat(this.Servicio.Subtotal) - parseFloat(this.Servicio.costo_total)).toFixed(2);
     },
     cargarIdClientes: function cargarIdClientes(id, cliente) {
       this.orden.cliente_id = id;
@@ -46578,6 +46666,121 @@ var render = function() {
   return _c("div", { staticClass: "container-fluid" }, [
     _vm._m(0),
     _vm._v(" "),
+    _c("div", { staticClass: "card shadow" }, [
+      _c("div", { staticClass: "card-body" }, [
+        _c("form", [
+          _c("div", { staticClass: "form-row" }, [
+            _c("div", { staticClass: "form-group col-md-2" }, [
+              _c("label", { attrs: { for: "fecha_desde" } }, [
+                _vm._v("Fecha Desde")
+              ]),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.filtro.fecha_desde,
+                    expression: "filtro.fecha_desde"
+                  }
+                ],
+                staticClass: "form-control",
+                attrs: { type: "date", id: "fecha_desde", required: "" },
+                domProps: { value: _vm.filtro.fecha_desde },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.filtro, "fecha_desde", $event.target.value)
+                  }
+                }
+              })
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "form-group col-md-2" }, [
+              _c("label", { attrs: { for: "fecha_hasta" } }, [
+                _vm._v("Fecha Hasta")
+              ]),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.filtro.fecha_hasta,
+                    expression: "filtro.fecha_hasta"
+                  }
+                ],
+                staticClass: "form-control",
+                attrs: { type: "date", id: "fecha_hasta", required: "" },
+                domProps: { value: _vm.filtro.fecha_hasta },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.filtro, "fecha_hasta", $event.target.value)
+                  }
+                }
+              })
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "form-group col-md-4" }, [
+              _c("label", { attrs: { for: "ingenio_id" } }, [
+                _vm._v("Ingenios")
+              ]),
+              _vm._v(" "),
+              _c(
+                "select",
+                {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.filtro.ingenio_id,
+                      expression: "filtro.ingenio_id"
+                    }
+                  ],
+                  staticClass: "form-control",
+                  attrs: { id: "ingenio_id", required: "" },
+                  on: {
+                    change: function($event) {
+                      var $$selectedVal = Array.prototype.filter
+                        .call($event.target.options, function(o) {
+                          return o.selected
+                        })
+                        .map(function(o) {
+                          var val = "_value" in o ? o._value : o.value
+                          return val
+                        })
+                      _vm.$set(
+                        _vm.filtro,
+                        "ingenio_id",
+                        $event.target.multiple
+                          ? $$selectedVal
+                          : $$selectedVal[0]
+                      )
+                    }
+                  }
+                },
+                _vm._l(_vm.Ingenios, function(item, index) {
+                  return _c(
+                    "option",
+                    { key: index, domProps: { value: item.id } },
+                    [_vm._v(_vm._s(item.nombre))]
+                  )
+                }),
+                0
+              )
+            ])
+          ])
+        ])
+      ])
+    ]),
+    _vm._v(" "),
+    _c("br"),
+    _vm._v(" "),
     _c(
       "div",
       { staticClass: "row" },
@@ -46590,7 +46793,15 @@ var render = function() {
               _c("div", { staticClass: "card-body acc_directo" }, [
                 _c(
                   "a",
-                  { staticClass: "nav-link", attrs: { href: "/" + item.url } },
+                  {
+                    staticClass: "nav-link",
+                    attrs: { href: "#" },
+                    on: {
+                      click: function($event) {
+                        return _vm.cargarReporte(item.url, item.parametros)
+                      }
+                    }
+                  },
                   [
                     _c("i", { class: item.icono }),
                     _c("br"),
@@ -47733,16 +47944,21 @@ var render = function() {
                         attrs: { type: "text", id: "conductor", required: "" },
                         domProps: { value: _vm.Servicio.conductor },
                         on: {
-                          input: function($event) {
-                            if ($event.target.composing) {
-                              return
+                          input: [
+                            function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.$set(
+                                _vm.Servicio,
+                                "conductor",
+                                $event.target.value
+                              )
+                            },
+                            function($event) {
+                              _vm.Servicio.conductor = $event.target.value.toUpperCase()
                             }
-                            _vm.$set(
-                              _vm.Servicio,
-                              "conductor",
-                              $event.target.value
-                            )
-                          }
+                          ]
                         }
                       })
                     ]),
@@ -47769,16 +47985,21 @@ var render = function() {
                         },
                         domProps: { value: _vm.Servicio.placa_unidad },
                         on: {
-                          input: function($event) {
-                            if ($event.target.composing) {
-                              return
+                          input: [
+                            function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.$set(
+                                _vm.Servicio,
+                                "placa_unidad",
+                                $event.target.value
+                              )
+                            },
+                            function($event) {
+                              _vm.Servicio.placa_unidad = $event.target.value.toUpperCase()
                             }
-                            _vm.$set(
-                              _vm.Servicio,
-                              "placa_unidad",
-                              $event.target.value
-                            )
-                          }
+                          ]
                         }
                       })
                     ]),
@@ -47805,16 +48026,21 @@ var render = function() {
                         },
                         domProps: { value: _vm.Servicio.placa_carretera },
                         on: {
-                          input: function($event) {
-                            if ($event.target.composing) {
-                              return
+                          input: [
+                            function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.$set(
+                                _vm.Servicio,
+                                "placa_carretera",
+                                $event.target.value
+                              )
+                            },
+                            function($event) {
+                              _vm.Servicio.placa_carretera = $event.target.value.toUpperCase()
                             }
-                            _vm.$set(
-                              _vm.Servicio,
-                              "placa_carretera",
-                              $event.target.value
-                            )
-                          }
+                          ]
                         }
                       })
                     ])
@@ -47839,16 +48065,21 @@ var render = function() {
                         attrs: { type: "text", id: "guia", required: "" },
                         domProps: { value: _vm.Servicio.guia_transportista },
                         on: {
-                          input: function($event) {
-                            if ($event.target.composing) {
-                              return
+                          input: [
+                            function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.$set(
+                                _vm.Servicio,
+                                "guia_transportista",
+                                $event.target.value
+                              )
+                            },
+                            function($event) {
+                              _vm.Servicio.guia_transportista = $event.target.value.toUpperCase()
                             }
-                            _vm.$set(
-                              _vm.Servicio,
-                              "guia_transportista",
-                              $event.target.value
-                            )
-                          }
+                          ]
                         }
                       })
                     ]),
@@ -48203,7 +48434,7 @@ var render = function() {
                   ]),
                   _vm._v(" "),
                   _c("div", { staticClass: "form-row" }, [
-                    _c("div", { staticClass: "form-group col-md-8" }, [
+                    _c("div", { staticClass: "form-group col-md-12" }, [
                       _c("label", { attrs: { for: "observaciones" } }, [
                         _vm._v("Observaciones")
                       ]),
@@ -48220,24 +48451,73 @@ var render = function() {
                         staticClass: "form-control",
                         domProps: { value: _vm.Servicio.observaciones },
                         on: {
-                          input: function($event) {
-                            if ($event.target.composing) {
-                              return
+                          input: [
+                            function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.$set(
+                                _vm.Servicio,
+                                "observaciones",
+                                $event.target.value
+                              )
+                            },
+                            function($event) {
+                              _vm.Servicio.observaciones = $event.target.value.toUpperCase()
                             }
-                            _vm.$set(
-                              _vm.Servicio,
-                              "observaciones",
-                              $event.target.value
-                            )
-                          }
+                          ]
                         }
                       })
                     ]),
                     _vm._v(" "),
-                    _vm.crear_utilidad_os == 1
+                    _vm.crear_utilidad_os == 1 && _vm.editmodo == true
+                      ? _c("div", { staticClass: "form-group col-md-4" }, [
+                          _c("label", { attrs: { for: "costo_total" } }, [
+                            _vm._v("Costo Total")
+                          ]),
+                          _vm._v(" "),
+                          _c("input", {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.Servicio.costo_total,
+                                expression: "Servicio.costo_total"
+                              }
+                            ],
+                            staticClass: "form-control",
+                            attrs: {
+                              type: "number",
+                              id: "costo_total",
+                              step: "0.1",
+                              min: "1",
+                              value: "0.00",
+                              required: ""
+                            },
+                            domProps: { value: _vm.Servicio.costo_total },
+                            on: {
+                              change: function($event) {
+                                return _vm.calcularGanancia()
+                              },
+                              input: function($event) {
+                                if ($event.target.composing) {
+                                  return
+                                }
+                                _vm.$set(
+                                  _vm.Servicio,
+                                  "costo_total",
+                                  $event.target.value
+                                )
+                              }
+                            }
+                          })
+                        ])
+                      : _vm._e(),
+                    _vm._v(" "),
+                    _vm.crear_utilidad_os == 1 && _vm.editmodo == true
                       ? _c("div", { staticClass: "form-group col-md-4" }, [
                           _c("label", { attrs: { for: "utilidad" } }, [
-                            _vm._v("Utilidad")
+                            _vm._v("Ganancia")
                           ]),
                           _vm._v(" "),
                           _c("input", {
@@ -48256,7 +48536,8 @@ var render = function() {
                               step: "0.1",
                               min: "1",
                               value: "0.00",
-                              required: ""
+                              required: "",
+                              readonly: ""
                             },
                             domProps: { value: _vm.Servicio.utilidad },
                             on: {
@@ -48276,7 +48557,7 @@ var render = function() {
                       : _vm._e()
                   ]),
                   _vm._v(" "),
-                  _vm.crear_utilidad_os == 1
+                  _vm.crear_utilidad_os == 1 && _vm.editmodo == true
                     ? _c(
                         "button",
                         {
@@ -48292,7 +48573,7 @@ var render = function() {
                       )
                     : _vm._e(),
                   _vm._v(" "),
-                  _vm.crear_utilidad_os == 0
+                  _vm.crear_utilidad_os == 0 || _vm.editmodo == false
                     ? _c(
                         "button",
                         {

@@ -20,6 +20,7 @@ class CreateSubMenusTable extends Migration
             $table->string('nombre');
             $table->string('icono')->nullable();
             $table->string('url');
+            $table->tinyInteger('parametros')->nullable();
             $table->integer('orden');
             $table->timestamps();
         });

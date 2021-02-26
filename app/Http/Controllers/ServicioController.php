@@ -110,6 +110,7 @@ class ServicioController extends Controller
             $servicio->lineas_productos_id = $request->lineas_productos_id;
             $servicio->tipo_servicio_id = $request->tipo_servicio_id;
             $servicio->observaciones = $request->observaciones;*/
+            $servicio->costo_total = $request->costo_total;
             $servicio->utilidad = $request->utilidad;
             $servicio->update();
             return $servicio;
