@@ -110,12 +110,12 @@ class ReportesController extends Controller
     {
         return Excel::download(new RolesExport, 'Lista_roles.xlsx');
     }
-    public function exreportegeneral($fd, $fh, $ing_id, $ult) 
+    public function exreportegeneral($fd, $fh, $ing_id,$des_ing, $ult) 
     {
         if ($ult==0){
-            return Excel::download(new ReporteGeneralExport($fd, $fh, $ing_id), 'Reporte_General.xlsx');
+            return Excel::download(new ReporteGeneralExport($fd, $fh, $ing_id, $des_ing), 'Reporte_General.xlsx');
         }else{
-            return Excel::download(new ReporteGeneral2Export($fd, $fh, $ing_id), 'Reporte_General.xlsx');
+            return Excel::download(new ReporteGeneral2Export($fd, $fh, $ing_id, $des_ing), 'Reporte_General.xlsx');
         }
     }
     

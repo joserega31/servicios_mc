@@ -20,7 +20,7 @@
                             </div>
                             <div class="form-group col-md-4">
                                 <label for="ingenio_id">Ingenios</label>
-                                <select class="form-control" id="ingenio_id" required  v-model="filtro.ingenio_id">
+                                <select class="form-control" id="ingenio_id" required  v-model="filtro.ingenio_id" @change="llenardesingenio($event)">
                                     <option v-for="(item, index) in Ingenios" :key="index" :value="item.id">{{ item.nombre}}</option>
                                 </select>
                             </div>
@@ -57,7 +57,8 @@ export default {
             textomensaje:"",
             emailuser: this.user.email,
             Ingenios:[],
-            crear_utilidad_os:""
+            crear_utilidad_os:"",
+            des_ing:""
         };
     },
     created: function () {
@@ -108,10 +109,12 @@ export default {
         }
       });
     },
+    llenardesingenio: function(event){
+        this.des_ing= event.target.options[event.target.options.selectedIndex].text;
+    },
     cargarReporte: function(url, p){
-        alert(this.crear_utilidad_os);
         if (p==1){
-            window.open('api/'+ url + '/' + this.filtro.fecha_desde + '/' + this.filtro.fecha_hasta + '/' + this.filtro.ingenio_id + '/' + this.crear_utilidad_os, '_blank');
+            window.open('api/'+ url + '/' + this.filtro.fecha_desde + '/' + this.filtro.fecha_hasta + '/' + this.filtro.ingenio_id + '/' + this.des_ing + '/' + this.crear_utilidad_os, '_blank');
         }else{
             window.open('api/'+ url, '_blank');
         }

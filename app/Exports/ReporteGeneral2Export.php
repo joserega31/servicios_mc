@@ -6,14 +6,19 @@ use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
+use Maatwebsite\Excel\Concerns\WithCustomStartCell;
+use Maatwebsite\Excel\Concerns\WithEvents;
+use Maatwebsite\Excel\Events\AfterSheet;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
 
-class ReporteGeneral2Export implements FromCollection,WithHeadings, ShouldAutoSize
+class ReporteGeneral2Export implements FromCollection,WithHeadings, ShouldAutoSize,WithCustomStartCell, WithEvents
 {
-    public function __construct($fd, $fh, $ing_id)
+    public function __construct($fd, $fh, $ing_id, $des_ing)
     {
         $this->fd = $fd;
         $this->fh = $fh;
         $this->ing_id = $ing_id;
+        $this->des_ing = $des_ing;
         return $this;
     }
     /**
@@ -37,24 +42,58 @@ class ReporteGeneral2Export implements FromCollection,WithHeadings, ShouldAutoSi
         ->get();
         return $type ;
     }
-     public function headings(): array
+
+    public function startCell(): string
     {
+        return 'A2';
+    }
+
+    public function headings(): array
+    {
+        return [['REPORTE GENERAL DE ORDENES DE SERVICIO'],
+                ['FECHA DESDE: ' . $this->fd . '       HASTA: '. $this->fh],
+                ['INGENIO: ' . $this->des_ing],
+                [],
+                [
+                    'Nro',
+                    'Fecha',
+                    'Empresa de transporte',
+                    'Ruc',
+                    'Conductor',
+                    'Placa Unidad',
+                    'Placa Carretera',
+                    'Guia Transportista',
+                    'Peso (TM)',
+                    'Cantidad de cajas',
+                    'Mercancia',
+                    'Igv',
+                    'Total',
+                    'Costo Total',
+                    'Ganancia'
+        ]];
+    }
+
+    public function registerEvents(): array
+    {
+
         return [
-            'Nro',
-            'Fecha',
-            'Empresa de transporte',
-            'Ruc',
-            'Conductor',
-            'Placa Unidad',
-            'Placa Carretera',
-            'Guia Transportista',
-            'Peso (TM)',
-            'Cantidad de cajas',
-            'Mercancia',
-            'Igv',
-            'Total',
-            'Costo Total',
-            'Ganancia'
+            AfterSheet::class => function(AfterSheet $event) {
+                $event->sheet->mergeCells('A2:O2');
+                $event->sheet->getStyle('A2')->getFont()->setBold(true);
+                $event->sheet->getDelegate()->getStyle('A2')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+                $event->sheet->mergeCells('A3:O3');
+                $event->sheet->getStyle('A3')->getFont()->setBold(true);
+                $event->sheet->getDelegate()->getStyle('A3')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+                $event->sheet->mergeCells('A4:O4');
+                $event->sheet->getStyle('A4')->getFont()->setBold(true);
+                $event->sheet->getDelegate()->getStyle('A4')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+                $event->sheet->getStyle('A6:O6')->getFont()->setBold(true);
+                $event->sheet->setCellValue('L'. ($event->sheet->getHighestRow()+1), '=SUM(L7:L'.$event->sheet->getHighestRow().')');
+                $event->sheet->setCellValue('M'. ($event->sheet->getHighestRow()), '=SUM(M7:M'.($event->sheet->getHighestRow()-1).')');
+                $event->sheet->setCellValue('N'. ($event->sheet->getHighestRow()), '=SUM(N7:N'.($event->sheet->getHighestRow()-1).')');
+                $event->sheet->setCellValue('O'. ($event->sheet->getHighestRow()), '=SUM(O7:O'.($event->sheet->getHighestRow()-1).')');
+            }
         ];
     }
+    
 }

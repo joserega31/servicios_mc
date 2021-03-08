@@ -131,7 +131,7 @@
                         <h5 class="card-title">Servicios</h5>
                     </div>  
                     <div class="form-group col-md-2 text-right">
-                        <button type="button" class="btn btn-info" data-toggle="modal" data-target=".modal-servicio" @click="agregarNuevoServicio()">Agregar Servicio</button>
+                        <button type="button" class="btn btn-info" data-toggle="modal" data-target=".modal-servicio" @click="agregarNuevoServicio()" v-if="editmodo==false">Agregar Servicio</button>
                     </div>
                     <div class="form-group col-md-12">
                         <div class="table-responsive table mt-2" id="dataTable" role="grid" aria-describedby="dataTable_info">
@@ -169,7 +169,7 @@
                     </div>
                 </div>
                 <br><br>
-                <button type="submit" class="btn btn-primary">Guardar</button>
+                <button type="submit" class="btn btn-primary" v-if="editmodo==false">Guardar</button>
                 <button type="buttom" class="btn btn-default" @click="limpiarFormulario(1)">Limpiar</button>
             </form>
         </div>
@@ -609,10 +609,10 @@ export default {
     },
     guardarCliente: function(cliente){
         axios.post(`/api/clientes`, this.cliente).then((res) => {
-            this.Clientesb.push(cliente);
+            this.Clientes.push(cliente);
             this.textomensajecli= "Se ha creado Exitosamente";
             this.mensajecli="mostrar";
-            this.limpiarFrmCliente(1);
+            this.limpiarFrmCliente(0);
         });
     },
     limpiarFormulario: function(org){
@@ -620,7 +620,6 @@ export default {
             this.textomensaje= "";
             this.mensaje="hidden";
         }
-        this.getKeeps();
         this.Servicios= [];
         this.ocultar="hidden";
         this.textomensaje= "";
@@ -628,6 +627,8 @@ export default {
         this.Servicios= null;
         this.orden= {id:0, fecha:null, cliente_id:0, igv:0, estatus:0, cliente:"", ingenio_id:0, estados_pago_id:0, modos_pagos_id:0};
         this.Servicio= {id:0,empresa_transporte:"",conductor:"",placa_unidad:"",placa_carretera:"",guia_transportista:"",almacen:"",cantidad:1,unidad:"",costo_unitario_estiba:0,costo_operativo_extra_estiba:0,costo_flat_estiba:0,costo_total_servicio:0,costo_extra_estiba:0,precio_servicio:0,precio_total_servicio:0,utilidad:0,igv:0,fecha_servicio:null,fecha_pago:null,fecha_liquidacion:null,facturado:0,num_factura:"",lineas_productos_id:null,cliente_id:null,tipo_servicio_id:null, ordenes_servicios_id:0, observaciones:""};
+        this.editmodo= false;
+        this.getKeeps();
     },
     limpiarFrmCliente:function(org){
         this.cliente= { id: 0, ruc: "", razon_social: "" };

@@ -4464,7 +4464,8 @@ __webpack_require__.r(__webpack_exports__);
       textomensaje: "",
       emailuser: this.user.email,
       Ingenios: [],
-      crear_utilidad_os: ""
+      crear_utilidad_os: "",
+      des_ing: ""
     };
   },
   created: function created() {
@@ -4522,11 +4523,12 @@ __webpack_require__.r(__webpack_exports__);
         }
       });
     },
+    llenardesingenio: function llenardesingenio(event) {
+      this.des_ing = event.target.options[event.target.options.selectedIndex].text;
+    },
     cargarReporte: function cargarReporte(url, p) {
-      alert(this.crear_utilidad_os);
-
       if (p == 1) {
-        window.open('api/' + url + '/' + this.filtro.fecha_desde + '/' + this.filtro.fecha_hasta + '/' + this.filtro.ingenio_id + '/' + this.crear_utilidad_os, '_blank');
+        window.open('api/' + url + '/' + this.filtro.fecha_desde + '/' + this.filtro.fecha_hasta + '/' + this.filtro.ingenio_id + '/' + this.des_ing + '/' + this.crear_utilidad_os, '_blank');
       } else {
         window.open('api/' + url, '_blank');
       }
@@ -5483,12 +5485,12 @@ __webpack_require__.r(__webpack_exports__);
       var _this16 = this;
 
       axios.post("/api/clientes", this.cliente).then(function (res) {
-        _this16.Clientesb.push(cliente);
+        _this16.Clientes.push(cliente);
 
         _this16.textomensajecli = "Se ha creado Exitosamente";
         _this16.mensajecli = "mostrar";
 
-        _this16.limpiarFrmCliente(1);
+        _this16.limpiarFrmCliente(0);
       });
     },
     limpiarFormulario: function limpiarFormulario(org) {
@@ -5497,7 +5499,6 @@ __webpack_require__.r(__webpack_exports__);
         this.mensaje = "hidden";
       }
 
-      this.getKeeps();
       this.Servicios = [];
       this.ocultar = "hidden";
       this.textomensaje = "";
@@ -5544,6 +5545,8 @@ __webpack_require__.r(__webpack_exports__);
         ordenes_servicios_id: 0,
         observaciones: ""
       };
+      this.editmodo = false;
+      this.getKeeps();
     },
     limpiarFrmCliente: function limpiarFrmCliente(org) {
       this.cliente = {
@@ -46745,23 +46748,28 @@ var render = function() {
                   staticClass: "form-control",
                   attrs: { id: "ingenio_id", required: "" },
                   on: {
-                    change: function($event) {
-                      var $$selectedVal = Array.prototype.filter
-                        .call($event.target.options, function(o) {
-                          return o.selected
-                        })
-                        .map(function(o) {
-                          var val = "_value" in o ? o._value : o.value
-                          return val
-                        })
-                      _vm.$set(
-                        _vm.filtro,
-                        "ingenio_id",
-                        $event.target.multiple
-                          ? $$selectedVal
-                          : $$selectedVal[0]
-                      )
-                    }
+                    change: [
+                      function($event) {
+                        var $$selectedVal = Array.prototype.filter
+                          .call($event.target.options, function(o) {
+                            return o.selected
+                          })
+                          .map(function(o) {
+                            var val = "_value" in o ? o._value : o.value
+                            return val
+                          })
+                        _vm.$set(
+                          _vm.filtro,
+                          "ingenio_id",
+                          $event.target.multiple
+                            ? $$selectedVal
+                            : $$selectedVal[0]
+                        )
+                      },
+                      function($event) {
+                        return _vm.llenardesingenio($event)
+                      }
+                    ]
                   }
                 },
                 _vm._l(_vm.Ingenios, function(item, index) {
@@ -47754,23 +47762,25 @@ var render = function() {
               _vm._m(4),
               _vm._v(" "),
               _c("div", { staticClass: "form-group col-md-2 text-right" }, [
-                _c(
-                  "button",
-                  {
-                    staticClass: "btn btn-info",
-                    attrs: {
-                      type: "button",
-                      "data-toggle": "modal",
-                      "data-target": ".modal-servicio"
-                    },
-                    on: {
-                      click: function($event) {
-                        return _vm.agregarNuevoServicio()
-                      }
-                    }
-                  },
-                  [_vm._v("Agregar Servicio")]
-                )
+                _vm.editmodo == false
+                  ? _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-info",
+                        attrs: {
+                          type: "button",
+                          "data-toggle": "modal",
+                          "data-target": ".modal-servicio"
+                        },
+                        on: {
+                          click: function($event) {
+                            return _vm.agregarNuevoServicio()
+                          }
+                        }
+                      },
+                      [_vm._v("Agregar Servicio")]
+                    )
+                  : _vm._e()
               ]),
               _vm._v(" "),
               _c("div", { staticClass: "form-group col-md-12" }, [
@@ -47861,11 +47871,13 @@ var render = function() {
             _c("br"),
             _c("br"),
             _vm._v(" "),
-            _c(
-              "button",
-              { staticClass: "btn btn-primary", attrs: { type: "submit" } },
-              [_vm._v("Guardar")]
-            ),
+            _vm.editmodo == false
+              ? _c(
+                  "button",
+                  { staticClass: "btn btn-primary", attrs: { type: "submit" } },
+                  [_vm._v("Guardar")]
+                )
+              : _vm._e(),
             _vm._v(" "),
             _c(
               "button",

@@ -54,5 +54,5 @@ Route::middleware('cors')->group(function(){
     Route::get('exportarlstsup', 'App\Http\Controllers\ReportesController@exportarlstsup');
     Route::get('exportarlstuser', 'App\Http\Controllers\ReportesController@exportarlstuser');
     Route::get('exportarlstroles', 'App\Http\Controllers\ReportesController@exportarlstroles');   
-    Route::get('exreportegeneral/{fd}/{fh}/{ing_id}/{ult}', 'App\Http\Controllers\ReportesController@exreportegeneral');  
+    Route::get('exreportegeneral/{fd}/{fh}/{ing_id}/{des_ing}/{ult}', 'App\Http\Controllers\ReportesController@exreportegeneral');  
 });

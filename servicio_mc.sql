@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 03-02-2021 a las 01:22:49
+-- Tiempo de generación: 27-02-2021 a las 01:26:45
 -- Versión del servidor: 10.4.11-MariaDB
 -- Versión de PHP: 7.4.2
 
@@ -42,7 +42,7 @@ CREATE TABLE `almacenes` (
 
 INSERT INTO `almacenes` (`id`, `nombre_almacen`, `ingenios_id`, `created_at`, `updated_at`) VALUES
 (1, 'PUNTO BLANCO PIURA', 3, NULL, NULL),
-(2, 'PUNTO BLANCO PIURA', 3, NULL, NULL);
+(2, 'PUNTO BLANCO TUMBES', 3, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -135,20 +135,26 @@ CREATE TABLE `funcion_roles` (
 --
 
 INSERT INTO `funcion_roles` (`id`, `rol_id`, `menu_id`, `sub_menu_id`, `crear`, `editar`, `eliminar`, `created_at`, `updated_at`) VALUES
-(1, 1, 2, 2, 1, 1, 1, NULL, NULL),
-(2, 1, 2, 3, 1, 1, 1, NULL, NULL),
-(3, 1, 2, 4, 1, 1, 1, NULL, NULL),
-(4, 1, 2, 5, 1, 1, 1, NULL, NULL),
-(5, 1, 2, 6, 1, 1, 1, NULL, NULL),
-(6, 1, 2, 7, 1, 1, 1, NULL, NULL),
-(7, 1, 2, 8, 1, 1, 1, NULL, NULL),
-(8, 1, 2, 9, 1, 1, 1, NULL, NULL),
-(9, 1, 2, 10, 1, 1, 1, NULL, NULL),
-(10, 1, 2, 11, 1, 1, 1, NULL, NULL),
-(11, 1, 2, 12, 1, 1, 1, NULL, NULL),
-(12, 1, 4, 11, 1, 1, 1, NULL, NULL),
-(13, 1, 4, 12, 1, 1, 1, NULL, NULL),
-(14, 1, 4, 13, 1, 1, 1, NULL, NULL);
+(1, 1, 1, 1, 1, 1, 1, NULL, NULL),
+(2, 1, 2, 2, 1, 1, 1, NULL, NULL),
+(3, 1, 2, 3, 1, 1, 1, NULL, NULL),
+(4, 1, 2, 4, 1, 1, 1, NULL, NULL),
+(5, 1, 2, 5, 1, 1, 1, NULL, NULL),
+(6, 1, 2, 6, 1, 1, 1, NULL, NULL),
+(7, 1, 2, 7, 1, 1, 1, NULL, NULL),
+(8, 1, 2, 8, 1, 1, 1, NULL, NULL),
+(9, 1, 2, 9, 1, 1, 1, NULL, NULL),
+(10, 1, 2, 10, 1, 1, 1, NULL, NULL),
+(11, 1, 2, 11, 1, 1, 1, NULL, NULL),
+(12, 1, 2, 12, 1, 1, 1, NULL, NULL),
+(13, 1, 4, 18, 1, 1, 1, NULL, NULL),
+(14, 1, 4, 19, 1, 1, 1, NULL, NULL),
+(15, 1, 4, 20, 1, 1, 1, NULL, NULL),
+(16, 1, 3, 13, 1, 1, 1, NULL, NULL),
+(17, 1, 3, 14, 1, 1, 1, NULL, NULL),
+(18, 1, 3, 15, 1, 1, 1, NULL, NULL),
+(19, 1, 3, 16, 1, 1, 1, NULL, NULL),
+(20, 1, 3, 17, 1, 1, 1, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -328,6 +334,7 @@ CREATE TABLE `password_resets` (
 CREATE TABLE `roles` (
   `id` int(10) UNSIGNED NOT NULL,
   `nombre` varchar(45) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `crear_utilidad_os` tinyint(1) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -336,9 +343,9 @@ CREATE TABLE `roles` (
 -- Volcado de datos para la tabla `roles`
 --
 
-INSERT INTO `roles` (`id`, `nombre`, `created_at`, `updated_at`) VALUES
-(1, 'Administrador', NULL, NULL),
-(2, 'Supervisor', NULL, NULL);
+INSERT INTO `roles` (`id`, `nombre`, `crear_utilidad_os`, `created_at`, `updated_at`) VALUES
+(1, 'Administrador', 1, NULL, NULL),
+(2, 'Supervisor', 0, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -356,12 +363,13 @@ CREATE TABLE `servicios` (
   `unidad_id` int(10) UNSIGNED NOT NULL,
   `precio_servicio` double NOT NULL,
   `precio_total_servicio` double NOT NULL,
-  `utilidad` double NOT NULL,
+  `utilidad` double DEFAULT NULL,
   `igv` double NOT NULL,
   `observaciones` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `lineas_productos_id` int(10) UNSIGNED NOT NULL,
   `ordenes_servicios_id` int(10) UNSIGNED NOT NULL,
   `tipo_servicio_id` int(10) UNSIGNED NOT NULL,
+  `costo_total` double DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -378,6 +386,7 @@ CREATE TABLE `sub_menus` (
   `nombre` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `icono` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `url` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `parametros` tinyint(4) DEFAULT NULL,
   `orden` int(11) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
@@ -387,22 +396,27 @@ CREATE TABLE `sub_menus` (
 -- Volcado de datos para la tabla `sub_menus`
 --
 
-INSERT INTO `sub_menus` (`id`, `menu_id`, `nombre`, `icono`, `url`, `orden`, `created_at`, `updated_at`) VALUES
-(1, 1, 'Orden de Servicio', 'fas fa-hand-holding', 'servicio', 1, NULL, NULL),
-(2, 2, 'Clientes', 'fa fa-user', 'clientes', 1, NULL, NULL),
-(3, 2, 'Supervisores', 'fas fa-user-tie', 'supervisores', 2, NULL, NULL),
-(4, 2, 'Ingenios', 'fa fa-flask', 'ingenios', 3, NULL, NULL),
-(5, 2, 'Tarifarios', 'far fa-calendar-alt', 'tarifarios', 4, NULL, NULL),
-(6, 2, 'Lineas de Productos', 'fas fa-shopping-basket', 'lineasprod', 5, NULL, NULL),
-(7, 2, 'Modos de Pago', 'fas fa-money-check-alt', 'metpagos', 6, NULL, NULL),
-(8, 2, 'Estados de Pago', 'fab fa-bitcoin', 'estpagos', 7, NULL, NULL),
-(9, 2, 'Tipos de Servicios', 'fas fa-hand-holding-heart', 'tiposserv', 8, NULL, NULL),
-(10, 2, 'Designaciones', 'far fa-calendar-alt', 'designaciones', 9, NULL, NULL),
-(11, 2, 'Almacenes', 'fas fa-warehouse', 'almacenes', 10, NULL, NULL),
-(12, 2, 'Unidades', 'fas fa-box-open', 'unidades', 11, NULL, NULL),
-(13, 4, 'Usuarios', 'fa fa-user', 'usuarios', 1, NULL, NULL),
-(14, 4, 'Roles', 'fa fa-users', 'roles', 2, NULL, NULL),
-(15, 4, 'Funciones del Rol', 'fas fa-bars', 'funcionrol', 3, NULL, NULL);
+INSERT INTO `sub_menus` (`id`, `menu_id`, `nombre`, `icono`, `url`, `parametros`, `orden`, `created_at`, `updated_at`) VALUES
+(1, 1, 'Orden de Servicio', 'fas fa-hand-holding', 'servicio', 0, 1, NULL, NULL),
+(2, 2, 'Clientes', 'fa fa-user', 'clientes', 0, 1, NULL, NULL),
+(3, 2, 'Supervisores', 'fas fa-user-tie', 'supervisores', 0, 2, NULL, NULL),
+(4, 2, 'Ingenios', 'fa fa-flask', 'ingenios', 0, 3, NULL, NULL),
+(5, 2, 'Tarifarios', 'far fa-calendar-alt', 'tarifarios', 0, 4, NULL, NULL),
+(6, 2, 'Lineas de Productos', 'fas fa-shopping-basket', 'lineasprod', 0, 5, NULL, NULL),
+(7, 2, 'Modos de Pago', 'fas fa-money-check-alt', 'metpagos', 0, 6, NULL, NULL),
+(8, 2, 'Estados de Pago', 'fab fa-bitcoin', 'estpagos', 0, 7, NULL, NULL),
+(9, 2, 'Tipos de Servicios', 'fas fa-hand-holding-heart', 'tiposserv', 0, 8, NULL, NULL),
+(10, 2, 'Designaciones', 'far fa-calendar-alt', 'designaciones', 0, 9, NULL, NULL),
+(11, 2, 'Almacenes', 'fas fa-warehouse', 'almacenes', 0, 10, NULL, NULL),
+(12, 2, 'Unidades', 'fas fa-box-open', 'unidades', 0, 11, NULL, NULL),
+(13, 3, 'Lista de Clientes', 'far fa-address-card', 'exportarlstcli', 0, 1, NULL, NULL),
+(14, 3, 'Lista de Supervisores', 'fas fa-clipboard-list', 'exportarlstsup', 0, 2, NULL, NULL),
+(15, 3, 'Lista de Usuarios', 'fas fa-user', 'exportarlstuser', 0, 3, NULL, NULL),
+(16, 3, 'Lista de Roles', 'fas fa-users', 'exportarlstroles', 0, 4, NULL, NULL),
+(17, 3, 'Reporte General', 'far fa-file-alt', 'exreportegeneral', 1, 5, NULL, NULL),
+(18, 4, 'Usuarios', 'fa fa-user', 'usuarios', 0, 1, NULL, NULL),
+(19, 4, 'Roles', 'fa fa-users', 'roles', 0, 2, NULL, NULL),
+(20, 4, 'Funciones del Rol', 'fas fa-bars', 'funcionrol', 0, 3, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -418,6 +432,7 @@ CREATE TABLE `supervisores` (
   `numcuenta` varchar(45) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `cci` varchar(45) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `banco` varchar(45) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `usuario_id` int(10) UNSIGNED NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -510,7 +525,7 @@ INSERT INTO `unidades` (`id`, `descripcion_corta`, `descripcion_larga`, `created
 --
 
 CREATE TABLE `users` (
-  `id` bigint(20) UNSIGNED NOT NULL,
+  `id` int(10) UNSIGNED NOT NULL,
   `name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `email` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `email_verified_at` timestamp NULL DEFAULT NULL,
@@ -526,7 +541,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `rol_id`, `remember_token`, `created_at`, `updated_at`) VALUES
-(1, 'Administrador', 'webmaster@mcdigitalperu.com', NULL, '$2y$10$GB1yma85bOxRbPHXlP0vMOefKcR4Rf4HlrQzBJi6XF79J6I7/sJOq', 1, NULL, NULL, NULL);
+(1, 'Administrador', 'webmaster@mcdigitalperu.com', NULL, '$2y$10$JrNnS25Frst9JxqG2J6lMejGK/Ysggw0twBZiY9C7YGavZZp9BeBe', 1, NULL, NULL, NULL);
 
 --
 -- Índices para tablas volcadas
@@ -650,7 +665,8 @@ ALTER TABLE `sub_menus`
 -- Indices de la tabla `supervisores`
 --
 ALTER TABLE `supervisores`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `supervisores_usuario_id_foreign` (`usuario_id`);
 
 --
 -- Indices de la tabla `tarifarios`
@@ -724,7 +740,7 @@ ALTER TABLE `failed_jobs`
 -- AUTO_INCREMENT de la tabla `funcion_roles`
 --
 ALTER TABLE `funcion_roles`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT de la tabla `ingenios`
@@ -778,7 +794,7 @@ ALTER TABLE `servicios`
 -- AUTO_INCREMENT de la tabla `sub_menus`
 --
 ALTER TABLE `sub_menus`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT de la tabla `supervisores`
@@ -814,7 +830,7 @@ ALTER TABLE `unidades`
 -- AUTO_INCREMENT de la tabla `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- Restricciones para tablas volcadas
@@ -871,6 +887,12 @@ ALTER TABLE `servicios`
 --
 ALTER TABLE `sub_menus`
   ADD CONSTRAINT `sub_menus_menu_id_foreign` FOREIGN KEY (`menu_id`) REFERENCES `menus` (`id`);
+
+--
+-- Filtros para la tabla `supervisores`
+--
+ALTER TABLE `supervisores`
+  ADD CONSTRAINT `supervisores_usuario_id_foreign` FOREIGN KEY (`usuario_id`) REFERENCES `users` (`id`);
 
 --
 -- Filtros para la tabla `tarifarios_listas`
